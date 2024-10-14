@@ -9,7 +9,7 @@ export const WritingTest = () => {
         
         name=""
         disabled
-        spellcheck="false"
+        spellCheck="false"
         rows={8}
       
         className="w-full text-3xl bg-transparent text-gray-100 leading-loose resize-none overflow-hidden"
@@ -19,7 +19,7 @@ export const WritingTest = () => {
       <textarea
        
         name=""
-        spellcheck="false"
+        spellCheck="false"
      
         rows={8}
         autoFocus

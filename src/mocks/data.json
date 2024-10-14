@@ -1,0 +1,23 @@
+{
+    "without_puntuation": [
+      "lorem ipsum dolor sit amet consectetur adipiscing elit vivamus placerat nulla at urna tempus hendrerit velit ut finibus nibh fusce aliquam odio mauris eget sodales leo pretium proin viverra vehicula est ut ornare ligula sit amet dignissim est nunc sit amet neque suscipit sapien eget gravida ligula aenean venenatis libero eget dolor ultricies",
+      "nulla facilisi cras fermentum odio eu feugiat pretium nibh ipsum consequat quisque id diam vel quam elementum pulvinar etiam non quam lacus suspendisse faucibus interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit morbi tristique senectus et netus et malesuada",
+      "phasellus imperdiet nulla sed quam elementum at justo ut sollicitudin erat pharetra sed dui justo lacinia eget magna sed tincidunt aliquet arcu in hac habitasse platea dictumst etiam non nibh ut odio facilisis tempus sed ultrices nisi euismod nec",
+      "aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis eu non diam phasellus vestibulum lorem sed risus ultricies tristique nulla aliquet enim tortor at auctor",
+      "morbi tincidunt augue interdum velit euismod in pellentesque massa placerat duis ultricies lacus sed turpis tincidunt id aliquet risus feugiat in ante metus dictum at tempor commodo ullamcorper a lacus vestibulum sed arcu non odio euismod lacinia"
+    ],
+    "with_puntuation": [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sit amet eros eget nisi ultricies placerat. Curabitur nec sapien id augue consectetur iaculis. Proin quis tortor vel sapien convallis venenatis, sed ornare nibh nunc ac enim. Quisque nec magna ut lorem tempus feugiat.",
+      "Vivamus lacinia odio vitae vestibulum vestibulum, cras interdum nunc ut neque fermentum, in bibendum turpis euismod. Phasellus id lectus nulla. Mauris pharetra orci non lectus congue, ut aliquam urna hendrerit. Duis vehicula nisi sed nisl tincidunt varius. Sed tincidunt dolor id urna consectetur.",
+      "Curabitur fringilla nisi at metus interdum bibendum. Ut consequat quam sit amet sapien sollicitudin, eget aliquet odio iaculis. Nulla facilisi. Morbi ac enim vulputate, lobortis mi ac, sodales lacus. Suspendisse potenti, orci eget tempus malesuada, velit metus tincidunt lacus.",
+      "Phasellus viverra nulla ut metus varius laoreet. Cras ullamcorper mi at purus auctor, sit amet dictum neque elementum. Nam ut ligula viverra, vehicula mi in, pellentesque lacus. Aliquam erat volutpat. Donec varius quam at dolor pellentesque aliquet.",
+      "Suspendisse potenti. Nullam pulvinar risus vel urna viverra efficitur. Nunc facilisis velit in ultricies iaculis. Duis in est sit amet ante facilisis bibendum. Quisque sagittis dolor ac turpis vulputate, at gravida lacus blandit."
+    ],
+    "with_number": [
+      "Lorem ipsum dolor sit amet, consectetur 1 adipiscing elit. Nulla 2 facilisi. Curabitur venenatis felis eget 3 orci posuere, ac pretium nisl gravida. Phasellus 4 et tortor vulputate, 5 pretium libero nec, consequat odio.",
+      "Morbi tincidunt augue 1 interdum velit euismod in pellentesque massa 2 placerat duis ultricies lacus sed 3 turpis tincidunt id aliquet risus feugiat. In ante metus dictum 4 at tempor commodo ullamcorper a 5 lacus vestibulum.",
+      "Vivamus tristique magna 1 nec justo fermentum, ultricies 2 risus euismod. Cras quis 3 orci vitae urna laoreet 4 vehicula non et metus. Duis 5 facilisis.",
+      "Suspendisse fringilla metus 1 at felis tincidunt, in 2 venenatis libero lacinia. Aliquam in 3 libero facilisis, pulvinar urna 4 vel, placerat dolor. Phasellus sit 5 amet turpis magna.",
+      "Pellentesque commodo dui 1 sit amet quam venenatis, et 2 bibendum velit dapibus. Fusce nec 3 augue vel erat dignissim luctus. 4 Quisque accumsan mi non dui ultricies, eget 5 feugiat mauris pellentesque."
+    ]
+  }
