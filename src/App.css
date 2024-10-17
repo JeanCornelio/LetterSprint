@@ -1,0 +1,10 @@
+#caret {
+    opacity: 1;
+    font-size: 2rem;
+    display: inline;
+    top: 5.5px;
+    left: 8.5px;
+    border-left: solid 5px transparent;
+    border-right: solid 5px transparent;
+    border-bottom: solid 70px #fff;
+}

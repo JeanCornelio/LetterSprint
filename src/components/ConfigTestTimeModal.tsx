@@ -1,5 +1,8 @@
-import { useState } from "react";
+
 import { CloseIcon } from "../icons/Icons";
+
+
+
 
 export const ConfigTestTimeModal = ({dialogState}) => {
 
@@ -21,7 +24,7 @@ export const ConfigTestTimeModal = ({dialogState}) => {
             </h3>
             <button
               type="button"
-              className="text-gray-500 bg-transparent  rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center "
+              className="text-gray-500 bg-transparent  rounded-lg text-sm  ms-auto inline-flex justify-center items-center "
               data-modal-hide="default-modal"
             >
               <button onClick={closeModal} className="hover:text-sprint-blue">
@@ -31,10 +34,18 @@ export const ConfigTestTimeModal = ({dialogState}) => {
             </button>
           </div>
 
-          <div className="p-4 md:p-5 space-y-4"></div>
-
-          <div className="flex items-center p-4 md:p-5  border-gray-200 rounded-b ">
-            <button
+          <div className="p-4 md:p-5 space-y-4">
+            
+            <form className="flex flex-col gap-4">
+            <h3 className="text-xs font-semibold">Infinite Test</h3>
+            <input
+                type="text"
+                name="username"
+                value=""
+                placeholder=""
+                className="bg-sprint-config p-2 rounded-md w-full "
+              />
+               <button
               data-modal-hide="default-modal"
               onClick={closeModal}
               type="button"
@@ -42,7 +53,10 @@ export const ConfigTestTimeModal = ({dialogState}) => {
             >
               OK
             </button>
+            </form>
           </div>
+
+        
         </div>
       </div>
     </div>

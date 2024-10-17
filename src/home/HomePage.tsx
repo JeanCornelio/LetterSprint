@@ -7,7 +7,7 @@ export const HomePage = () => {
         <Nav />
         <TestConfiguration />
       </header>
-      <main className="mt-32">
+      <main>
        <WritingTest/>
       </main>
       <Footer/>

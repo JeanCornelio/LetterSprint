@@ -10,6 +10,7 @@ import {
   ToolsIcon,
 } from "../icons/Icons";
 import { ConfigTestTimeModal } from "./ConfigTestTimeModal";
+import { MODE, TIME, WORD } from "../types/Text";
 
 export const TestConfiguration = () => {
   const {
@@ -94,7 +95,7 @@ export const TestConfiguration = () => {
         </ul>
         <div className="border-r-2 rounded-full border-gray-400"></div>
 
-        {MODES[mode] === "time" && (
+        {MODES[mode as MODE] === "time" && (
           <ul className="flex gap-5 items-center">
             {Object.entries(TIMES).map(([key, time]) => (
               <li
@@ -102,12 +103,12 @@ export const TestConfiguration = () => {
               
                 className={
                   defaultClass +
-                  (TIMES[timeActive] === time
+                  (TIMES[timeActive as TIME] === time
                     ? active
                     : "")
                 }
               >
-                <button   onClick={() => setTime(time)} className="flex items-center gap-1 text-sm">{time}</button>
+                <button   onClick={() => setTime(Number(key) as TIME)} className="flex items-center gap-1 text-sm">{time}</button>
               </li>
             ))}
             <li className="cursor-pointer hover:text-sprint-blue transition">
@@ -118,7 +119,7 @@ export const TestConfiguration = () => {
           </ul>
         )}
 
-        {MODES[mode] === "words" && (
+        {MODES[mode as MODE] === "words" && (
           <ul className="flex gap-5 items-center">
             {Object.entries(WORDS).map(([key, quantity]) => (
               <li
@@ -126,12 +127,12 @@ export const TestConfiguration = () => {
                 key={key}
                 className={
                   defaultClass +
-                  (WORDS[words] === quantity
+                  (WORDS[words as WORD] === quantity
                     ? active
                     : "")
                 }
               >
-                <button onClick={() => setWordQuantity(quantity)} className="flex items-center gap-1 text-sm">
+                <button onClick={() => setWordQuantity(Number(key) as WORD)} className="flex items-center gap-1 text-sm">
                   {quantity}
                 </button>
               </li>
