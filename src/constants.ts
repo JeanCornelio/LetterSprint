@@ -3,6 +3,11 @@ export const  MODES =  {
     words: 'words',
     quote: 'quote',
 }
+export const  TIMER =  {
+    start: 'start',
+    stop: 'stop',
+    pause: 'pause',
+}
 export const  TIMES =  {
     15: 15,
     30: 30,

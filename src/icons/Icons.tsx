@@ -109,4 +109,20 @@ export function UserIcon(props: SVGProps<SVGSVGElement>) {
         />
       </svg>
     )
+}
+
+    export function LoadingIcon(props: SVGProps<SVGSVGElement>) {
+        return (
+            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" {...props} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        )
+ 
+  }
+
+  export function ReloadIcon(props: SVGProps<SVGSVGElement>) {
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" {...props}><path fill="currentColor" d="M15.65 4.35A8 8 0 1 0 17.4 13h-2.22a6 6 0 1 1-1-7.22L11 9h7V2z"/></svg>
+    )
   }

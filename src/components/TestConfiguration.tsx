@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MODES, TIMES, WORDS } from "../constants";
+import { MODES, TIMER, TIMES, WORDS } from "../constants";
 import { useTestConfiguration } from "../hooks/useTestConfiguration";
 import {
   AtIcon,
@@ -11,6 +11,7 @@ import {
 } from "../icons/Icons";
 import { ConfigTestTimeModal } from "./ConfigTestTimeModal";
 import { MODE, TIME, WORD } from "../types/Text";
+import { useTimer } from "../hooks/useTimer";
 
 export const TestConfiguration = () => {
   const {
@@ -32,13 +33,12 @@ export const TestConfiguration = () => {
   const active = " text-sprint-blue font-bold"
 
   const [open, setOpen] = useState(false)
-
+  const {  timerState } = useTimer();
   const handleModal = () =>{
     setOpen(true)
   }
-
   return (
-    <section id="testConfig" className="mt-10  flex justify-center ">
+    <section id="testConfig" className={ (timerState === TIMER['start']  ? 'invisible' : '') + " mt-10  flex justify-center transition-all "}>
       <div className="flex gap-5 bg-sprint-config p-2 px-5 rounded-md justify-center md:w-100">
         <ul className="flex gap-5">
           <li    className={

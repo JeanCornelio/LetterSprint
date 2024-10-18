@@ -8,12 +8,13 @@ import { useAppDispatch, useAppSelector } from "./useStore"
 export const useTestConfiguration = () => {
     const {mode, time, words,  puntuation, number} =  useAppSelector(({test}) => test)
     const dispatch = useAppDispatch()
+
     const setMode = (mode:MODE) =>{
      
       dispatch(setTestMode(mode))
     }
+
     const setTime = (time:TIME) =>{
-     
       dispatch(setTestTime(time))
     }
   
