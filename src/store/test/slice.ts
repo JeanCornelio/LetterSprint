@@ -12,9 +12,9 @@ interface TestInitialState {
 }
 
 const initialState: TestInitialState = {
-  time: TIMES["30"],
+  time: TIMES["120"],
   mode: MODES["time"], // time | words | quote
-  words: WORDS["50"],
+  words: WORDS["100"],
   puntuation: false,
   number: false,
 };
@@ -44,6 +44,7 @@ export const testSlice = createSlice({
     setTestNumber: (state) => {
       state.number = !state.number;
     },
+
   },
 });
 
