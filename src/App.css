@@ -1,26 +1,23 @@
-#sad::after {
+.caret {
     overflow: hidden;
-    content: "";
+   
     /* Ensures the content is not revealed until the animation */
     border-right: 0.15em solid orange;
     /* Keeps the content on a single line */
-    margin: 0 auto;
-
-
+    margin: 0 ;
+    height: 2.3em;
+    position: absolute;
+    
+    //border-radius: var(--roundness);
+    transform-origin: top left;
     /* Adjust as needed */
-    animation: typing 3.5s, blink-caret 1s infinite;
+    animation:  blink-caret 1s infinite;
+    
 }
 
-/* The typing effect */
-@keyframes typing {
-    from {
-        width: 0;
-    }
 
-    to {
-        width: 100%;
-    }
-}
+
+
 
 /* The typewriter cursor effect */
 @keyframes blink-caret {
@@ -49,11 +46,5 @@
     border-bottom-width: 1px;
 }
 
-/* .active {
-    background-color: rgb(63, 61, 61);
-    opacity: 50%;
-} */
 
-.active #key.active {
-    background: rgb(128, 128, 90);
-}
+
