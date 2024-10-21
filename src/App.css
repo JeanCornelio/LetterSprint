@@ -5,7 +5,7 @@
     border-right: 0.15em solid orange;
     /* Keeps the content on a single line */
     margin: 0 ;
-    height: 2.3em;
+    height: 2em;
     position: absolute;
     
     //border-radius: var(--roundness);
@@ -13,6 +13,19 @@
     /* Adjust as needed */
     animation:  blink-caret 1s infinite;
     
+}
+
+#key{
+    letter-spacing: 0.05em;
+}
+
+#word{
+    border-bottom-color: transparent;
+    border-bottom-width: 2px;
+}
+#word.error{
+      border-color: rgb(176, 52, 52);
+    border-bottom-width: 2px;
 }
 
 
@@ -36,15 +49,16 @@
 .incorrect {
     color: rgb(176, 52, 52);
 }
+.incorrect.extra {
+    color: rgb(131 49 49);
+
+}
 
 .correct {
     color: rgb(228 228 231)
 }
 
-.error {
-    border-color: rgb(176, 52, 52);
-    border-bottom-width: 1px;
-}
+
 
 
 
