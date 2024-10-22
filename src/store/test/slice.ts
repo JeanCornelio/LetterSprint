@@ -12,7 +12,7 @@ interface TestInitialState {
 }
 
 const initialState: TestInitialState = {
-  time: TIMES["120"],
+  time: TIMES["15"],
   mode: MODES["time"], // time | words | quote
   words: WORDS["100"],
   puntuation: false,
