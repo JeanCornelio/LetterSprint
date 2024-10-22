@@ -26,7 +26,7 @@ export const WritingTest = () => {
   const [test, setTest] = useState<Word[]>([]);
   const [testResult, setTestResult] = useState(null);
   const { loading, handleLoading } = useLoading();
-  const { seconds, handleTimerState, timerState, handleTimerTime } = useTimer();
+  const { seconds, handleTimerState, timerState, handleTimerTime, timeSelected } = useTimer();
   const testContent = useRef(null);
 
 
@@ -103,146 +103,143 @@ export const WritingTest = () => {
     return () => document.removeEventListener("mousemove", handleMousemove);
   }, []);
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
 
+    //Start Game
+    handleTimerState(TIMER["start"]);
+
+    const { code, key } = event;
+
+    const currentWord: Word = test[wordPosition];
+
+
+    // Las letras de la palabra activa
+    const currentLetters: Letters[] = currentWord.letters;
+
+    //total of words nad total of letters to completed 
+    const totalWordsToCopleted = wordPosition + 1
+    const lastLettersToCompleted = letterPosition.current + 1
+
+    if (totalWordsToCopleted === test.length && currentLetters.length === lastLettersToCompleted) {
+      //Result of test
+      getTetsResult()
+    }
+
+
+
+    if (code === "Space") {
+
+      //next Word State
+      const nextWord = test[wordPosition + 1]
+
+      if (letterPosition.current > 0) {
+        //Reset Letter position
+        letterPosition.current = 0;
+
+        //Go to next word
+        goToNextWord()
+
+        currentWord.state = toCheckWordCorreclyCompleted(currentWord);
+        nextWord.state = "active";
+      }
+
+      return;
+    }
+
+    const updateLetter = currentLetters.map((letter: Letters, index) => {
+      if (index === letterPosition.current && key.length === 1) {
+        //correcta o incorrecta
+        return {
+          ...letter,
+          state: letter.letter === key ? "correct" : "incorrect",
+        };
+      }
+
+      if (index === letterPosition.current - 1 && key === "Backspace") {
+        return {
+          ...letter,
+          state:
+            letter.state === "incorrect" || letter.state === "correct"
+              ? ""
+              : letter.state,
+        };
+      }
+
+      return letter;
+    });
+
+
+
+
+    // write a next word and validations
+    if (key.length === 1 && letterPosition.current < 19) {
+
+      //Push new extra incorrects words 
+      if (letterPosition.current > currentWord.word.length - 1) {
+
+        updateLetter.push({
+          letter: key,
+          state: "incorrect extra",
+          id: `${key}-${crypto.randomUUID()}`,
+        });
+      }
+
+      //next letter
+      letterPosition.current += 1;
+    }
+
+
+
+    const updateWords = { ...currentWord, letters: updateLetter };
+
+    const updateTest = [...test];
+
+    updateTest[wordPosition] = updateWords;
+
+    setTest(updateTest);
+
+
+    if (key === "Backspace") {
+
+      const previouslyWord = test[wordPosition - 1]
+
+      if (letterPosition.current > currentWord.word.length) {
+        updateLetter.pop();
+      }
+
+      // erease if the user wrote a word
+      if (letterPosition.current > 0) {
+        // Removes the active state of the current letter before moving the cursor back
+        currentWord.letters[letterPosition.current - 1].state = "";
+        // move to back position 
+        letterPosition.current -= 1;
+
+        return
+      }
+
+
+      // validate if user made mistake writting a word
+      if (wordPosition > 0 && letterPosition.current === 0 && previouslyWord.state === "error typed") {
+
+        goToPreviouslyWord()
+
+        // Move the letter position to the length of the previous words that were written
+        const PreviouslyLetterPosition = previouslyWord.letters.filter(letter => letter.state !== '').length;
+
+        letterPosition.current = PreviouslyLetterPosition
+
+
+        // Remove the error state and activate the previous word
+        previouslyWord.state = "active";
+        currentWord.state = "";
+
+        setTest([...test]);
+      }
+    }
+  };
 
 
   useEffect(() => {
-
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-
-      //Start Game
-      handleTimerState(TIMER["start"]);
-
-      const { code, key } = event;
-
-      const currentWord: Word = test[wordPosition];
-
-
-      // Las letras de la palabra activa
-      const currentLetters: Letters[] = currentWord.letters;
-
-      //total of words nad total of letters to completed 
-      const totalWordsToCopleted = wordPosition + 1
-      const lastLettersToCompleted = letterPosition.current + 1
-
-      if (totalWordsToCopleted === test.length && currentLetters.length === lastLettersToCompleted) {
-        //Result of test
-        getTetsResult()
-      }
-
-
-
-      if (code === "Space") {
-
-        //next Word State
-        const nextWord = test[wordPosition + 1]
-
-        if (letterPosition.current > 0) {
-          //Reset Letter position
-          letterPosition.current = 0;
-
-          //Go to next word
-          goToNextWord()
-
-          currentWord.state = toCheckWordCorreclyCompleted(currentWord);
-          nextWord.state = "active";
-        }
-
-        return;
-      }
-
-      const updateLetter = currentLetters.map((letter: Letters, index) => {
-        if (index === letterPosition.current && key.length === 1) {
-          //correcta o incorrecta
-          return {
-            ...letter,
-            state: letter.letter === key ? "correct" : "incorrect",
-          };
-        }
-
-        if (index === letterPosition.current - 1 && key === "Backspace") {
-          return {
-            ...letter,
-            state:
-              letter.state === "incorrect" || letter.state === "correct"
-                ? ""
-                : letter.state,
-          };
-        }
-
-        return letter;
-      });
-
-
-
-
-      // write a next word and validations
-      if (key.length === 1 && letterPosition.current < 19) {
-
-        //Push new extra incorrects words 
-        if (letterPosition.current > currentWord.word.length - 1) {
-
-          updateLetter.push({
-            letter: key,
-            state: "incorrect extra",
-            id: `${key}-${crypto.randomUUID()}`,
-          });
-        }
-
-        //next letter
-        letterPosition.current += 1;
-      }
-
-
-
-      const updateWords = { ...currentWord, letters: updateLetter };
-
-      const updateTest = [...test];
-
-      updateTest[wordPosition] = updateWords;
-
-      setTest(updateTest);
-
-
-      if (key === "Backspace") {
-
-        const previouslyWord = test[wordPosition - 1]
-
-        if (letterPosition.current > currentWord.word.length) {
-          updateLetter.pop();
-        }
-
-        // erease if the user wrote a word
-        if (letterPosition.current > 0) {
-          // Removes the active state of the current letter before moving the cursor back
-          currentWord.letters[letterPosition.current - 1].state = "";
-          console.log(currentWord, test[wordPosition])
-          // move to back position 
-          letterPosition.current -= 1;
-
-          return
-        }
-
-
-        // validate if user made mistake writting a word
-        if (wordPosition > 0 && letterPosition.current === 0 && previouslyWord.state === "error typed") {
-
-          goToPreviouslyWord()
-
-          // Move the letter position to the length of the previous words that were written
-          const PreviouslyLetterPosition = previouslyWord.letters.filter(letter => letter.state !== '').length;
-
-          letterPosition.current = PreviouslyLetterPosition
-
-
-          // Remove the error state and activate the previous word
-          previouslyWord.state = "active";
-          currentWord.state = "";
-
-          setTest([...test]);
-        }
-      }
-    };
 
     document.addEventListener("keydown", handleKeyDown);
 
@@ -257,14 +254,57 @@ export const WritingTest = () => {
       getTetsResult()
       setTimeout(resestTest, 200);
     }
-  }, [seconds, test]);
+
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [seconds]);
 
 
   const getTetsResult = () => {
-    console.log('get Results of test')
+    const timeInMinutes = timeSelected / 60;
+
+    const testCopy = structuredClone(test)
+
+    let words = { correct: 0, incorrect: 0, noWrote: 0, extraError: 0 }
+
+    testCopy.forEach(word => {
+
+      word.letters.forEach(letter => {
+        if (letter.state === 'correct') {
+          words.correct += 1
+        }
+
+        if (letter.state === 'incorrect') {
+          words.incorrect += 1
+        }
+        if (letter.state === 'incorrect extra') {
+          words.incorrect += 1
+        }
+
+        if (letter.state === '') {
+          words.noWrote += 1
+        }
+      })
+
+    });
+
+    const totalWords = words.correct + words.incorrect
 
 
-    setTestResult("finish")
+    const accuracy = (words.correct / totalWords) * 100
+
+    // WPM gross
+    const grossWpm = (totalWords / 5) / timeInMinutes
+
+
+    // WPM neto 
+    const netWpm = grossWpm - (words.extraError / timeInMinutes);
+
+
+
+
+    //console.log({ accuracy, grossWpm, netWpm })
+
+    setTestResult({ accuracy, raw: grossWpm, netWpm })
 
   }
 
@@ -285,30 +325,34 @@ export const WritingTest = () => {
         </div>
       ) : (
         <>
-          <div className=" w-full flex flex-wrap     text-pretty" ref={testContent}>
-            {test.map(({ id, letters, state }) => (
-              <div
-                id="word"
-                key={id}
-                className={"my-[.25em] mx-[.3em] text-3xl px-1 " + state}
-              >
-                {letters.map(({ letter, state, id }) => (
-                  <span key={id} id="key" className={state}>
-                    {letter}
-                  </span>
-                ))}
-              </div>
-            ))}
-          </div>
+          {
+            timerState &&
+            <div className=" w-full flex flex-wrap     text-pretty" ref={testContent}>
+              {test.map(({ id, letters, state }) => (
+                <div
+                  id="word"
+                  key={id}
+                  className={"my-[.25em] mx-[.3em] text-3xl px-1 " + state}
+                >
+                  {letters.map(({ letter, state, id }) => (
+                    <span key={id} id="key" className={state}>
+                      {letter}
+                    </span>
+                  ))}
+                </div>
+              ))}
+
+            </div>
+
+
+          }
+          {testResult !== null && <div> <p> ACCURACY: {testResult.accuracy}</p> <p> RAW: {testResult.raw}</p>  <p> WPM: {testResult.netWpm}</p> </div>}
           <div className="flex justify-center mt-10">
             <button className="text-xl  hover:text-sprint-blue">
               <ReloadIcon />
             </button>
           </div>
-          {
 
-            testResult !== null && <h2>finish</h2>
-          }
         </>
       )}
     </section>
