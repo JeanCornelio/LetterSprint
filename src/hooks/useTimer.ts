@@ -42,6 +42,7 @@ export const useTimer = () => {
         handleTimerState:handleState,
         handleTimerTime:handleTime,
         timerState: state,
+        timeSelected:timeActive
        
     }
 }
