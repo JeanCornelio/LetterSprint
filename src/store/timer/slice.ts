@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
+
 export const timerSlice = createSlice({
     name:'timer',
     initialState:{
-    
         state: 'stop',
         seconds:0,
     },

@@ -5,8 +5,9 @@ export const  MODES =  {
 }
 export const  TIMER =  {
     start: 'start',
-    stop: 'stop',
+    reset: 'reset',
     pause: 'pause',
+    finished:'finished'
 }
 export const  TIMES =  {
     15: 15,
