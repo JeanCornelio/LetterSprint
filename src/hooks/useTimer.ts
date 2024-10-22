@@ -27,7 +27,7 @@ export const useTimer = () => {
         if(seconds <= 0) return
 
         
-        if(state ===  'pause' || state === 'stop') return
+        if(state ===  'pause' || state === 'reset' || state === 'finished') return
 
         const timer = setInterval(() =>{
             dispatch(setSeconds(seconds - 1))

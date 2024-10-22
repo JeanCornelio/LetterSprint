@@ -8,27 +8,85 @@
     transition: ease-in-out 0.1s;
 }
 
+
+
 #word.error {
     border-color: rgb(176, 52, 52);
     border-bottom-width: 2px;
+    -webkit-animation: shake-horizontal 0.2s cubic-bezier(0.455, 0.030, 0.515, 0.955);
+    animation: shake-horizontal 0.2s cubic-bezier(0.455, 0.030, 0.515, 0.955);
 }
 
 
 
+@-webkit-keyframes shake-horizontal {
 
-
-/* The typewriter cursor effect */
-@keyframes blink-caret {
-
-    from,
-    to {
-        border-color: transparent;
+    0%,
+    100% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
     }
 
-    50% {
-        border-color: orange;
+    10%,
+    30%,
+    50%,
+    70% {
+        -webkit-transform: translateX(-10px);
+        transform: translateX(-10px);
+    }
+
+    20%,
+    40%,
+    60% {
+        -webkit-transform: translateX(10px);
+        transform: translateX(10px);
+    }
+
+    80% {
+        -webkit-transform: translateX(8px);
+        transform: translateX(8px);
+    }
+
+    90% {
+        -webkit-transform: translateX(-8px);
+        transform: translateX(-8px);
     }
 }
+
+@keyframes shake-horizontal {
+
+    0%,
+    100% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70% {
+        -webkit-transform: translateX(-10px);
+        transform: translateX(-10px);
+    }
+
+    20%,
+    40%,
+    60% {
+        -webkit-transform: translateX(10px);
+        transform: translateX(10px);
+    }
+
+    80% {
+        -webkit-transform: translateX(8px);
+        transform: translateX(8px);
+    }
+
+    90% {
+        -webkit-transform: translateX(-8px);
+        transform: translateX(-8px);
+    }
+}
+
 
 #word.active {
     background-color: rgba(50, 126, 176, 0.324);

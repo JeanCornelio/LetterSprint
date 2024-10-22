@@ -3,14 +3,24 @@ import { useTimer } from "../hooks/useTimer";
 import { useLoading } from "../hooks/useLoading";
 import { LoadingIcon, ReloadIcon } from "../icons/Icons";
 import { TIMER } from "../constants";
+import { Tooltip } from "./Tooltip";
 
 const text =
-  "Creating a paragraph without punctuation involves continuous flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods";
+  "Creating a paragraph without punctuation involves continuous flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods"; // flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods;
 
 interface Letters {
   letter: string;
   state: string;
   id: string;
+}
+interface Result {
+  accuracy: number;
+  raw: number;
+  netWpm: number;
+  correct: number;
+  incorrect: number;
+  extra: number;
+  missed: number;
 }
 
 interface Word {
@@ -24,13 +34,17 @@ export const WritingTest = () => {
   const [wordPosition, setWordPosition] = useState(0);
   const letterPosition = useRef(0);
   const [test, setTest] = useState<Word[]>([]);
-  const [testResult, setTestResult] = useState(null);
+  const [testResult, setTestResult] = useState<Result | null>(null);
   const { loading, handleLoading } = useLoading();
-  const { seconds, handleTimerState, timerState, handleTimerTime, timeSelected } = useTimer();
+  const {
+    seconds,
+    handleTimerState,
+    timerState,
+    handleTimerTime,
+    timeSelected,
+  } = useTimer();
   const testContent = useRef(null);
-
-
-
+  const { accuracy, correct, incorrect, extra, missed, netWpm } = testResult;
 
   const createTest = () => {
     handleLoading(true); // Loanding
@@ -49,7 +63,6 @@ export const WritingTest = () => {
       };
     });
 
-
     //words of the tets
     setTest(words);
 
@@ -59,9 +72,9 @@ export const WritingTest = () => {
     }, 1000);
   };
 
-
   useEffect(() => {
-    createTest();
+    //Reset TIMER
+    resestTest();
   }, []);
 
   const toCheckWordCorreclyCompleted = (word: Word) => {
@@ -78,33 +91,24 @@ export const WritingTest = () => {
 
   const goToNextWord = () => {
     setWordPosition((current) => current + 1);
-  }
+  };
   const goToPreviouslyWord = () => {
     setWordPosition((current) => current - 1);
-  }
-
-  const resestTest = () => {
-    //get New test
-    //createTest();
-    setWordPosition(0);
-    letterPosition.current = 0;
-    //handleTimerTime();
   };
 
-
-
   useEffect(() => {
+    if (timerState !== TIMER["start"]) return;
+
     const handleMousemove = () => {
       handleTimerState(TIMER["pause"]);
     };
 
-    document.addEventListener("mousemove", handleMousemove);
+    document.addEventListener("mouseover", handleMousemove);
 
-    return () => document.removeEventListener("mousemove", handleMousemove);
-  }, []);
+    return () => document.removeEventListener("mouseover", handleMousemove);
+  }, [timerState, handleTimerState]);
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-
     //Start Game
     handleTimerState(TIMER["start"]);
 
@@ -112,32 +116,30 @@ export const WritingTest = () => {
 
     const currentWord: Word = test[wordPosition];
 
-
-    // Las letras de la palabra activa
     const currentLetters: Letters[] = currentWord.letters;
 
-    //total of words nad total of letters to completed 
-    const totalWordsToCopleted = wordPosition + 1
-    const lastLettersToCompleted = letterPosition.current + 1
+    //total of words nad total of letters to completed
+    const totalWordsToCopleted = wordPosition + 1;
+    const lastLettersToCompleted = letterPosition.current + 1;
 
-    if (totalWordsToCopleted === test.length && currentLetters.length === lastLettersToCompleted) {
+    if (
+      totalWordsToCopleted === test.length &&
+      currentLetters.length === lastLettersToCompleted
+    ) {
       //Result of test
-      getTetsResult()
+      getTetsResult();
     }
 
-
-
     if (code === "Space") {
-
       //next Word State
-      const nextWord = test[wordPosition + 1]
+      const nextWord = test[wordPosition + 1];
 
       if (letterPosition.current > 0) {
         //Reset Letter position
         letterPosition.current = 0;
 
         //Go to next word
-        goToNextWord()
+        goToNextWord();
 
         currentWord.state = toCheckWordCorreclyCompleted(currentWord);
         nextWord.state = "active";
@@ -148,7 +150,6 @@ export const WritingTest = () => {
 
     const updateLetter = currentLetters.map((letter: Letters, index) => {
       if (index === letterPosition.current && key.length === 1) {
-        //correcta o incorrecta
         return {
           ...letter,
           state: letter.letter === key ? "correct" : "incorrect",
@@ -168,15 +169,10 @@ export const WritingTest = () => {
       return letter;
     });
 
-
-
-
     // write a next word and validations
     if (key.length === 1 && letterPosition.current < 19) {
-
-      //Push new extra incorrects words 
+      //Push new extra incorrects words
       if (letterPosition.current > currentWord.word.length - 1) {
-
         updateLetter.push({
           letter: key,
           state: "incorrect extra",
@@ -188,8 +184,6 @@ export const WritingTest = () => {
       letterPosition.current += 1;
     }
 
-
-
     const updateWords = { ...currentWord, letters: updateLetter };
 
     const updateTest = [...test];
@@ -198,10 +192,8 @@ export const WritingTest = () => {
 
     setTest(updateTest);
 
-
     if (key === "Backspace") {
-
-      const previouslyWord = test[wordPosition - 1]
+      const previouslyWord = test[wordPosition - 1];
 
       if (letterPosition.current > currentWord.word.length) {
         updateLetter.pop();
@@ -211,23 +203,26 @@ export const WritingTest = () => {
       if (letterPosition.current > 0) {
         // Removes the active state of the current letter before moving the cursor back
         currentWord.letters[letterPosition.current - 1].state = "";
-        // move to back position 
+        // move to back position
         letterPosition.current -= 1;
 
-        return
+        return;
       }
 
-
       // validate if user made mistake writting a word
-      if (wordPosition > 0 && letterPosition.current === 0 && previouslyWord.state === "error typed") {
-
-        goToPreviouslyWord()
+      if (
+        wordPosition > 0 &&
+        letterPosition.current === 0 &&
+        previouslyWord.state === "error typed"
+      ) {
+        goToPreviouslyWord();
 
         // Move the letter position to the length of the previous words that were written
-        const PreviouslyLetterPosition = previouslyWord.letters.filter(letter => letter.state !== '').length;
+        const PreviouslyLetterPosition = previouslyWord.letters.filter(
+          (letter) => letter.state !== ""
+        ).length;
 
-        letterPosition.current = PreviouslyLetterPosition
-
+        letterPosition.current = PreviouslyLetterPosition;
 
         // Remove the error state and activate the previous word
         previouslyWord.state = "active";
@@ -238,81 +233,95 @@ export const WritingTest = () => {
     }
   };
 
-
   useEffect(() => {
+    if (timerState === TIMER["finished"]) {
+      document.removeEventListener("keydown", handleKeyDown);
+      return;
+    }
 
     document.addEventListener("keydown", handleKeyDown);
 
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [test, wordPosition]);
+  }, [test, wordPosition, seconds, timerState]);
 
   useEffect(() => {
-
     if (seconds === 0 && test.length > 0) {
       //reset All and show modal, remove events , reset test and properties
-      handleTimerState(TIMER["stop"]);
-      getTetsResult()
-      setTimeout(resestTest, 200);
+      getTetsResult();
     }
 
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [seconds]);
 
+  const resestTest = () => {
+    handleTimerState(TIMER["reset"]);
+    createTest();
+    setWordPosition(0);
+    letterPosition.current = 0;
+    handleTimerTime();
+  };
 
   const getTetsResult = () => {
+    handleLoading(true); // Loanding
+    handleTimerState(TIMER["finished"]);
     const timeInMinutes = timeSelected / 60;
 
-    const testCopy = structuredClone(test)
+    const testCopy = structuredClone(test);
 
-    let words = { correct: 0, incorrect: 0, noWrote: 0, extraError: 0 }
+    const words = { correct: 0, incorrect: 0, missed: 0, extra: 0 };
 
-    testCopy.forEach(word => {
-
-      word.letters.forEach(letter => {
-        if (letter.state === 'correct') {
-          words.correct += 1
+    testCopy.forEach((word) => {
+      word.letters.forEach((letter) => {
+        if (letter.state === "correct") {
+          words.correct += 1;
         }
 
-        if (letter.state === 'incorrect') {
-          words.incorrect += 1
+        if (letter.state === "incorrect") {
+          words.incorrect += 1;
         }
-        if (letter.state === 'incorrect extra') {
-          words.incorrect += 1
+        if (letter.state === "incorrect extra") {
+          words.incorrect += 1;
         }
 
-        if (letter.state === '') {
-          words.noWrote += 1
+        if (letter.state === "") {
+          words.missed += 1;
         }
-      })
-
+      });
     });
 
-    const totalWords = words.correct + words.incorrect
+    const { correct, incorrect, extra, missed } = words;
 
+    const totalWords = correct + incorrect;
 
-    const accuracy = (words.correct / totalWords) * 100
+    const accuracy = (correct / totalWords) * 100;
 
     // WPM gross
-    const grossWpm = (totalWords / 5) / timeInMinutes
+    const grossWpm = totalWords / 5 / timeInMinutes;
 
-
-    // WPM neto 
-    const netWpm = grossWpm - (words.extraError / timeInMinutes);
-
-
-
+    // WPM neto
+    const netWpm = grossWpm - extra / timeInMinutes;
 
     //console.log({ accuracy, grossWpm, netWpm })
 
-    setTestResult({ accuracy, raw: grossWpm, netWpm })
-
-  }
+    setTestResult({
+      accuracy: Number(accuracy.toFixed(2)),
+      raw: grossWpm,
+      netWpm,
+      correct,
+      incorrect,
+      extra,
+      missed,
+    });
+    handleLoading(false); // stop Loanding
+  };
 
   return (
-    <section className="mt-8  px-5">
+    <section className="mt-8 px-5 h-auto ">
       <h2
         className={
-          (timerState !== TIMER["start"] ? "invisible" : "") +
+          (timerState !== TIMER["start"]
+            ? "animate-fade-out"
+            : "animate-fade-in") +
           " text-center text-4xl mb-5 text-sprint-blue transition-all"
         }
       >
@@ -320,19 +329,70 @@ export const WritingTest = () => {
       </h2>
 
       {loading ? (
-        <div className="w-full flex justify-center mt-14 ">
+        <div className="w-full flex justify-center mt-14">
           <LoadingIcon />
         </div>
       ) : (
         <>
-          {
-            timerState &&
-            <div className=" w-full flex flex-wrap     text-pretty" ref={testContent}>
+          {timerState !== TIMER["finished"] ? ( //===> finished
+            testResult !== null && (
+              <section id="result" className="animate-fade-in-bottom text-4xl">
+                <article className="w-full bg-sprint-blue ">
+                  <h3>Chart</h3>
+                </article>
+                <footer className="flex justify-between">
+                  <div>
+                    <label className=" text-lg">ACCURACY</label>
+                    <Tooltip
+                      label={`${accuracy} % (${correct} correct / ${incorrect} incorrect)`}
+                    >
+                      <p className=" text-sprint-blue font-semibold">
+                        {Math.trunc(accuracy)} %
+                      </p>
+                    </Tooltip>
+                  </div>
+                  
+                  <div>
+                    <label className=" text-lg">WPM</label>
+                    <p className=" text-sprint-blue font-semibold">
+                      {" "}
+                      {netWpm} %
+                    </p>
+                    <Tooltip
+                      label={`${accuracy} % (${correct} correct / ${incorrect} incorrect)`}
+                    >
+                      <p className=" text-sprint-blue font-semibold">
+                      {netWpm} %
+                      </p>
+                    </Tooltip>
+                  </div>
+
+                  <div>
+                    <label className=" text-lg">CHARACTERES</label>
+
+                    <Tooltip label="correct, incorrect, extra, missed">
+                      <p className=" text-sprint-blue font-semibold">
+                        {correct}/{incorrect}/{extra}/{missed}
+                      </p>
+                    </Tooltip>
+                  </div>
+
+                  {/* <p> RAW: {testResult.raw} </p>  */}
+                  <p> WPM: {testResult.netWpm}</p>
+                  <p> Time: {testResult.netWpm}</p>
+                </footer>
+              </section>
+            )
+          ) : (
+            <div
+              className=" w-full flex flex-wrap animate-fade-in-bottom text-prett px-3"
+              ref={testContent}
+            >
               {test.map(({ id, letters, state }) => (
                 <div
                   id="word"
                   key={id}
-                  className={"my-[.25em] mx-[.3em] text-3xl px-1 " + state}
+                  className={"my-[.25em] mx-[.3em] text-3xl px-1.5 " + state}
                 >
                   {letters.map(({ letter, state, id }) => (
                     <span key={id} id="key" className={state}>
@@ -341,18 +401,17 @@ export const WritingTest = () => {
                   ))}
                 </div>
               ))}
-
             </div>
+          )}
 
-
-          }
-          {testResult !== null && <div> <p> ACCURACY: {testResult.accuracy}</p> <p> RAW: {testResult.raw}</p>  <p> WPM: {testResult.netWpm}</p> </div>}
-          <div className="flex justify-center mt-10">
-            <button className="text-xl  hover:text-sprint-blue">
+          <div className="flex justify-center mt-5">
+            <button
+              className="text-xl  hover:text-sprint-blue p-4"
+              onClick={() => resestTest()}
+            >
               <ReloadIcon />
             </button>
           </div>
-
         </>
       )}
     </section>

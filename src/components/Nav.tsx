@@ -11,8 +11,8 @@ export const Nav = () => {
     <nav className="container px-5">
       <div className="flex py-7">
         <a className="mx-auto cursor-pointer ">
-          <h1 className="text-xl lg:text-3xl gap-2 flex font-bold tracking-wide  ">
-            <KeyBoardIcon className=" text-xl lg:text-3xl text-sprint-blue " />{" "}
+          <h1 className="text-xl lg:text-3xl gap-2 flex font-bold tracking-wide  fade-in-bottom">
+            <KeyBoardIcon className=" text-xl lg:text-3xl text-sprint-blue mt-0.5" />{" "}
             LetterSprint
           </h1>
         </a>

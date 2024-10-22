@@ -38,7 +38,7 @@ export const TestConfiguration = () => {
     setOpen(true)
   }
   return (
-    <section id="testConfig" className={ (timerState === TIMER['start']  ? 'invisible' : '') + " mt-10  flex justify-center transition-all "}>
+    <section id="testConfig" className={ (timerState === TIMER['start'] || timerState === TIMER['finished']  ? 'animate-fade-out' : 'animate-fade-in') + " mt-10  flex justify-center transition-all "}>
       <div className="flex gap-5 bg-sprint-config p-2 px-5 rounded-md justify-center md:w-100">
         <ul className="flex gap-5">
           <li    className={
@@ -71,7 +71,7 @@ export const TestConfiguration = () => {
           >
             <button  onClick={() => setMode("time")} className="flex items-center gap-1">
               {" "}
-              <ClockIcon className="text-sm" /> time
+              <ClockIcon className="text-sm" /> Time
             </button>
           </li>
           <li
