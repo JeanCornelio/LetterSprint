@@ -5,7 +5,7 @@ import { LoadingIcon, ReloadIcon } from "../icons/Icons";
 import { TIMER } from "../constants";
 
 const text =
-  "Lorem Ipsum is simply dummy text dummy textost";
+  "Creating a paragraph without punctuation involves continuous flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods";
 
 interface Letters {
   letter: string;
@@ -22,18 +22,18 @@ interface Word {
 
 export const WritingTest = () => {
   const [wordPosition, setWordPosition] = useState(0);
-
-
   const letterPosition = useRef(0);
   const [test, setTest] = useState<Word[]>([]);
-
+  const [testResult, setTestResult] = useState(null);
   const { loading, handleLoading } = useLoading();
-  const { seconds, handleTimerState, timerState, handleTimerTime } = useTimer();
+  const { seconds, handleTimerState, timerState, handleTimerTime, timeSelected } = useTimer();
   const testContent = useRef(null);
 
-  const createTest = () => {
-    handleLoading(true);
 
+
+
+  const createTest = () => {
+    handleLoading(true); // Loanding
     const words: Word[] = text.split(" ").map((word, index) => {
       return {
         word,
@@ -49,18 +49,22 @@ export const WritingTest = () => {
       };
     });
 
+
+    //words of the tets
     setTest(words);
 
+    //Unreal timen to create a delay to 2 seg
     setTimeout(() => {
       handleLoading(false);
     }, 1000);
   };
 
+
   useEffect(() => {
     createTest();
   }, []);
 
-  const tocheckWordCorreclyCompleted = (word: Word) => {
+  const toCheckWordCorreclyCompleted = (word: Word) => {
     const lettersError = word.letters.some(
       (letter) =>
         letter.state === "incorrect" ||
@@ -72,13 +76,22 @@ export const WritingTest = () => {
     return lettersError ? "error typed" : "typed";
   };
 
+  const goToNextWord = () => {
+    setWordPosition((current) => current + 1);
+  }
+  const goToPreviouslyWord = () => {
+    setWordPosition((current) => current - 1);
+  }
+
   const resestTest = () => {
     //get New test
-    createTest();
+    //createTest();
     setWordPosition(0);
     letterPosition.current = 0;
-    handleTimerTime();
+    //handleTimerTime();
   };
+
+
 
   useEffect(() => {
     const handleMousemove = () => {
@@ -90,81 +103,80 @@ export const WritingTest = () => {
     return () => document.removeEventListener("mousemove", handleMousemove);
   }, []);
 
-  useEffect(() => {
-  
+  const handleKeyDown = (event: React.KeyboardEvent) => {
 
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-      //Start Game
-      handleTimerState(TIMER["start"]);
-        
-      //abstraccion of events variables
-      const { code, key } = event;
-      
-      // Cantidad de letras extras permitidas
+    //Start Game
+    handleTimerState(TIMER["start"]);
 
-      // la palabra que esta activa
-      const currentWord: Word = test[wordPosition];
+    const { code, key } = event;
 
-      
-      // Las letras de la palabra activa
-      const letters: Letters[] = currentWord.letters;
-    
-      //total of words nad total of letters to completed 
-      const totalWordsToCopleted = wordPosition + 1 
-      const lastLettersToCompleted =  letterPosition.current + 1
-        
-        if( totalWordsToCopleted === test.length && letters.length === lastLettersToCompleted){
-            console.log(letters, currentWord, 'final')  
-           
-        }
-      
+    const currentWord: Word = test[wordPosition];
 
-      
 
-      //Escapar el espacion que salte la linea, solamente si se ha escrito algo si LetterPosition.current > 0
-      if (code === "Space" && letterPosition.current > 0) {
+    // Las letras de la palabra activa
+    const currentLetters: Letters[] = currentWord.letters;
+
+    //total of words nad total of letters to completed 
+    const totalWordsToCopleted = wordPosition + 1
+    const lastLettersToCompleted = letterPosition.current + 1
+
+    if (totalWordsToCopleted === test.length && currentLetters.length === lastLettersToCompleted) {
+      //Result of test
+      getTetsResult()
+    }
+
+
+
+    if (code === "Space") {
+
+      //next Word State
+      const nextWord = test[wordPosition + 1]
+
+      if (letterPosition.current > 0) {
         //Reset Letter position
         letterPosition.current = 0;
+
         //Go to next word
-        setWordPosition((current) => current + 1);
+        goToNextWord()
 
-        currentWord.state = tocheckWordCorreclyCompleted(currentWord);
-        test[wordPosition + 1].state = "active";
+        currentWord.state = toCheckWordCorreclyCompleted(currentWord);
+        nextWord.state = "active";
       }
 
-      // Cuando se preciona el spacio y no se ha intentando jugar ninguna letra
-      if (code === "Space") {
-        return;
+      return;
+    }
+
+    const updateLetter = currentLetters.map((letter: Letters, index) => {
+      if (index === letterPosition.current && key.length === 1) {
+        //correcta o incorrecta
+        return {
+          ...letter,
+          state: letter.letter === key ? "correct" : "incorrect",
+        };
       }
 
-      const updateLetter = letters.map((letter: string, index) => {
-        if (index === letterPosition.current && key.length === 1) {
-          //correcta o incorrecta
-          return {
-            ...letter,
-            state: letter.letter === key ? "correct" : "incorrect",
-          };
-        }
+      if (index === letterPosition.current - 1 && key === "Backspace") {
+        return {
+          ...letter,
+          state:
+            letter.state === "incorrect" || letter.state === "correct"
+              ? ""
+              : letter.state,
+        };
+      }
 
-        if (index === letterPosition.current - 1 && key === "Backspace") {
-          return {
-            ...letter,
-            state:
-              letter.state === "incorrect" || letter.state === "correct"
-                ? ""
-                : letter.state,
-          };
-        }
+      return letter;
+    });
 
-        return letter;
-      });
 
-      // Agrega una palabra mas cuando lo que escribimos es mayor que la palabrar a completar y que sea menor que 19
-      if (
-        letterPosition.current > currentWord.word.length - 1 &&
-        key.length === 1 && letterPosition.current < 19
-      ) {
-        //console.log('es mayor y tiene que agregar', )
+
+
+    // write a next word and validations
+    if (key.length === 1 && letterPosition.current < 19) {
+
+      //Push new extra incorrects words 
+      if (letterPosition.current > currentWord.word.length - 1) {
+
         updateLetter.push({
           letter: key,
           state: "incorrect extra",
@@ -172,60 +184,62 @@ export const WritingTest = () => {
         });
       }
 
-      // borrar la palabras agregadas y mal escritas
-      if (
-        letterPosition.current > currentWord.word.length &&
-        key === "Backspace"
-      ) {
+      //next letter
+      letterPosition.current += 1;
+    }
+
+
+
+    const updateWords = { ...currentWord, letters: updateLetter };
+
+    const updateTest = [...test];
+
+    updateTest[wordPosition] = updateWords;
+
+    setTest(updateTest);
+
+
+    if (key === "Backspace") {
+
+      const previouslyWord = test[wordPosition - 1]
+
+      if (letterPosition.current > currentWord.word.length) {
         updateLetter.pop();
       }
 
-      const updateWords = { ...currentWord, letters: updateLetter };
+      // erease if the user wrote a word
+      if (letterPosition.current > 0) {
+        // Removes the active state of the current letter before moving the cursor back
+        currentWord.letters[letterPosition.current - 1].state = "";
+        // move to back position 
+        letterPosition.current -= 1;
 
-      const updateTest = [...test];
-
-      updateTest[wordPosition] = updateWords;
-
-      setTest(updateTest);
-
-      //Pasar a la siguiente letra
-      if (key.length === 1) {
-        letterPosition.current += 1;
+        return
       }
 
-      if (key === "Backspace") {
-        // Borrar unicamente cuando la posicion de la letra sea mayor que 0
-        if (letterPosition.current > 0) {
-          // Remover el estado activo de la letra actual antes de mover el cursor hacia atrás
-          test[wordPosition].letters[letterPosition.current - 1].state = ""; // Desactivar el estado de la letra actual
 
-          // Mover la posición hacia atrás
-          letterPosition.current -= 1;
-          //Retur para que no se salte la ultima al final
-          return
-        }
+      // validate if user made mistake writting a word
+      if (wordPosition > 0 && letterPosition.current === 0 && previouslyWord.state === "error typed") {
 
-        // si la palabra escrita anteriormente tuvo un error, manejar la navegación a la palabra anterior
-        if (
-          wordPosition > 0 &&
-          letterPosition.current === 0 &&
-          test[wordPosition - 1].state === "error typed"
-        ) {
-          setWordPosition((current) => current - 1);
-         
-          // Mover la posición de la letra a la longitud de la palabras anteriores que fueron esritas 
-          letterPosition.current = test[wordPosition - 1].letters.filter(letter =>  letter.state !== '').length;
+        goToPreviouslyWord()
 
-          // Remover el estado de error y activar la palabra anterior
-          test[wordPosition - 1].state = "active";
-          test[wordPosition].state = "";
+        // Move the letter position to the length of the previous words that were written
+        const PreviouslyLetterPosition = previouslyWord.letters.filter(letter => letter.state !== '').length;
 
-      
+        letterPosition.current = PreviouslyLetterPosition
 
-          setTest([...test]);
-        }
+
+        // Remove the error state and activate the previous word
+        previouslyWord.state = "active";
+        currentWord.state = "";
+
+        setTest([...test]);
       }
-    };
+    }
+  };
+
+
+  useEffect(() => {
 
     document.addEventListener("keydown", handleKeyDown);
 
@@ -233,17 +247,69 @@ export const WritingTest = () => {
   }, [test, wordPosition]);
 
   useEffect(() => {
-    if (seconds === 0) {
+
+    if (seconds === 0 && test.length > 0) {
       //reset All and show modal, remove events , reset test and properties
       handleTimerState(TIMER["stop"]);
+      getTetsResult()
       setTimeout(resestTest, 200);
     }
+
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [seconds]);
 
-  //EL truco esta en colocar esto en el padre de las letras y borrar la letra anterior h-[204px] overflow-y-clip overflow-x-visible
+
+  const getTetsResult = () => {
+    const timeInMinutes = timeSelected / 60;
+
+    const testCopy = structuredClone(test)
+
+    let words = { correct: 0, incorrect: 0, noWrote: 0, extraError: 0 }
+
+    testCopy.forEach(word => {
+
+      word.letters.forEach(letter => {
+        if (letter.state === 'correct') {
+          words.correct += 1
+        }
+
+        if (letter.state === 'incorrect') {
+          words.incorrect += 1
+        }
+        if (letter.state === 'incorrect extra') {
+          words.incorrect += 1
+        }
+
+        if (letter.state === '') {
+          words.noWrote += 1
+        }
+      })
+
+    });
+
+    const totalWords = words.correct + words.incorrect
+
+
+    const accuracy = (words.correct / totalWords) * 100
+
+    // WPM gross
+    const grossWpm = (totalWords / 5) / timeInMinutes
+
+
+    // WPM neto 
+    const netWpm = grossWpm - (words.extraError / timeInMinutes);
+
+
+
+
+    //console.log({ accuracy, grossWpm, netWpm })
+
+    setTestResult({ accuracy, raw: grossWpm, netWpm })
+
+  }
 
   return (
-    <section className="mt-8">
+    <section className="mt-8  px-5">
       <h2
         className={
           (timerState !== TIMER["start"] ? "invisible" : "") +
@@ -254,31 +320,39 @@ export const WritingTest = () => {
       </h2>
 
       {loading ? (
-        <div className="w-full flex justify-center mt-14">
+        <div className="w-full flex justify-center mt-14 ">
           <LoadingIcon />
         </div>
       ) : (
         <>
-          <div className=" w-full flex flex-wrap   relative  text-pretty" ref={testContent}>
-            {test.map(({ id, letters, state }) => (
-              <div
-                id="word"
-                key={id}
-                className={"my-[.25em] mx-[.3em] text-3xl px-1 " + state}
-              >
-                {letters.map(({ letter, state, id }) => (
-                  <span key={id} id="key" className={state}>
-                    {letter}
-                  </span>
-                ))}
-              </div>
-            ))}
-          </div>
+          {
+            timerState &&
+            <div className=" w-full flex flex-wrap     text-pretty" ref={testContent}>
+              {test.map(({ id, letters, state }) => (
+                <div
+                  id="word"
+                  key={id}
+                  className={"my-[.25em] mx-[.3em] text-3xl px-1 " + state}
+                >
+                  {letters.map(({ letter, state, id }) => (
+                    <span key={id} id="key" className={state}>
+                      {letter}
+                    </span>
+                  ))}
+                </div>
+              ))}
+
+            </div>
+
+
+          }
+          {testResult !== null && <div> <p> ACCURACY: {testResult.accuracy}</p> <p> RAW: {testResult.raw}</p>  <p> WPM: {testResult.netWpm}</p> </div>}
           <div className="flex justify-center mt-10">
             <button className="text-xl  hover:text-sprint-blue">
               <ReloadIcon />
             </button>
           </div>
+
         </>
       )}
     </section>
