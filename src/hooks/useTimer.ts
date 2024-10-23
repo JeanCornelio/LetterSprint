@@ -2,11 +2,12 @@ import  { useEffect } from 'react'
 import { useTestConfiguration } from './useTestConfiguration'
 import { useAppDispatch, useAppSelector } from './useStore'
 import { setSeconds, setState } from '../store/timer/slice'
+import { MODES, TIMER } from '../constants'
 
 export const useTimer = () => {
     const dispatch = useAppDispatch()
     const {seconds, state} = useAppSelector(({timer}) => timer)  
-    const {timeActive} = useTestConfiguration()
+    const {timeActive, mode} = useTestConfiguration()
 
     useEffect(() => {
        
@@ -24,14 +25,14 @@ export const useTimer = () => {
     }
 
     useEffect(() => {
-        if(seconds <= 0) return
+        //if(seconds <= 0) return
 
         
         if(state ===  'pause' || state === 'reset' || state === 'finished') return
 
+     
         const timer = setInterval(() =>{
-            dispatch(setSeconds(seconds - 1))
-;
+                dispatch(setSeconds(mode === MODES['time'] ? seconds - 1 : seconds + 1 ))    ;
         }, 1000);
     
         return () => clearInterval(timer);
@@ -42,7 +43,8 @@ export const useTimer = () => {
         handleTimerState:handleState,
         handleTimerTime:handleTime,
         timerState: state,
-        timeSelected:timeActive
+        timeSelected:timeActive,
+        mode
        
     }
 }

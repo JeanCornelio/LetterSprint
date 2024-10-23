@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useTimer } from "../hooks/useTimer";
 import { useLoading } from "../hooks/useLoading";
 import { LoadingIcon, ReloadIcon } from "../icons/Icons";
-import { TIMER } from "../constants";
+import { MODES, TIMER, WORDS } from "../constants";
 import { Tooltip } from "./Tooltip";
-
-const text =
-  "Creating a paragraph without punctuation involves continuous flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods"; // flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods;
+import { Link } from "react-router-dom";
+import { useTestConfiguration } from "../hooks/useTestConfiguration";
+import { TestConfiguration } from "./TestConfiguration";
 
 interface Letters {
   letter: string;
@@ -30,11 +30,36 @@ interface Word {
   letters: Letters[];
 }
 
+const LETTER_STATES = {
+  ACTIVE: "active",
+  CORRECT: "correct",
+  INCORRECT: "incorrect",
+  INCORRECT_ACTIVE: "incorrect active",
+  EXTRA_INCORRECT: "incorrect extra",
+  MISSED: "",
+  // Agregar más estados si es necesario
+};
+
+const text =
+  "Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods"; // ;
+
+const result: Result = {
+  accuracy: 0,
+  raw: 0,
+  correct: 0,
+  incorrect: 0,
+  extra: 0,
+  missed: 0,
+  netWpm: 0,
+};
+
 export const WritingTest = () => {
   const [wordPosition, setWordPosition] = useState(0);
-  const letterPosition = useRef(0);
+  const [letterPosition, setLetterPosition] = useState(0);
+
   const [test, setTest] = useState<Word[]>([]);
-  const [testResult, setTestResult] = useState<Result | null>(null);
+  const [lettersError, setLettersError] = useState<Letters[]>([]);
+  const [testResult, setTestResult] = useState<Result>(result);
   const { loading, handleLoading } = useLoading();
   const {
     seconds,
@@ -43,16 +68,18 @@ export const WritingTest = () => {
     handleTimerTime,
     timeSelected,
   } = useTimer();
+  const { mode, words: wordSelected } = useTestConfiguration();
   const testContent = useRef(null);
   const { accuracy, correct, incorrect, extra, missed, netWpm } = testResult;
 
   const createTest = () => {
     handleLoading(true); // Loanding
+    //.slice(0, WORDS[wordSelected]) test
     const words: Word[] = text.split(" ").map((word, index) => {
       return {
         word,
         id: `${word}-${crypto.randomUUID()}`,
-        state: index === 0 ? "active" : "",
+        state: index === 0 ? LETTER_STATES.ACTIVE : "",
         letters: word.split("").map((letter) => {
           return {
             letter: letter,
@@ -73,16 +100,16 @@ export const WritingTest = () => {
   };
 
   useEffect(() => {
-    //Reset TIMER
+    //Reset TIMER and Create Game
     resestTest();
-  }, []);
+  }, [mode, wordSelected, timeSelected]);
 
   const toCheckWordCorreclyCompleted = (word: Word) => {
     const lettersError = word.letters.some(
       (letter) =>
-        letter.state === "incorrect" ||
-        letter.state === "incorrect active" ||
-        letter.state === "incorrect extra" ||
+        letter.state === LETTER_STATES.INCORRECT ||
+        letter.state === LETTER_STATES.INCORRECT_ACTIVE ||
+        letter.state === LETTER_STATES.EXTRA_INCORRECT ||
         letter.state === ""
     );
 
@@ -108,7 +135,7 @@ export const WritingTest = () => {
     return () => document.removeEventListener("mouseover", handleMousemove);
   }, [timerState, handleTimerState]);
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
+  const handleKeyDown = (event: KeyboardEvent) => {
     //Start Game
     handleTimerState(TIMER["start"]);
 
@@ -120,7 +147,7 @@ export const WritingTest = () => {
 
     //total of words nad total of letters to completed
     const totalWordsToCopleted = wordPosition + 1;
-    const lastLettersToCompleted = letterPosition.current + 1;
+    const lastLettersToCompleted = letterPosition;
 
     if (
       totalWordsToCopleted === test.length &&
@@ -134,35 +161,42 @@ export const WritingTest = () => {
       //next Word State
       const nextWord = test[wordPosition + 1];
 
-      if (letterPosition.current > 0) {
+      if (letterPosition > 0 && nextWord) {
         //Reset Letter position
-        letterPosition.current = 0;
+        setLetterPosition(0);
 
         //Go to next word
         goToNextWord();
 
         currentWord.state = toCheckWordCorreclyCompleted(currentWord);
-        nextWord.state = "active";
+        nextWord.state = LETTER_STATES.ACTIVE;
       }
 
       return;
     }
 
     const updateLetter = currentLetters.map((letter: Letters, index) => {
-      if (index === letterPosition.current && key.length === 1) {
-        return {
-          ...letter,
-          state: letter.letter === key ? "correct" : "incorrect",
-        };
+      if (index === letterPosition && key.length === 1) {
+        if (letter.letter === key) {
+          return {
+            ...letter,
+            state: LETTER_STATES.CORRECT,
+          };
+        }
+
+        if (letter.letter !== key) {
+          setLettersError((current) => [...current, letter]);
+          return {
+            ...letter,
+            state: LETTER_STATES.INCORRECT,
+          };
+        }
       }
 
-      if (index === letterPosition.current - 1 && key === "Backspace") {
+      if (index === letterPosition - 1 && key === "Backspace") {
         return {
           ...letter,
-          state:
-            letter.state === "incorrect" || letter.state === "correct"
-              ? ""
-              : letter.state,
+          state: LETTER_STATES.MISSED,
         };
       }
 
@@ -170,18 +204,17 @@ export const WritingTest = () => {
     });
 
     // write a next word and validations
-    if (key.length === 1 && letterPosition.current < 19) {
+    if (key.length === 1 && letterPosition < 19) {
       //Push new extra incorrects words
-      if (letterPosition.current > currentWord.word.length - 1) {
+      if (letterPosition > currentWord.word.length - 1) {
         updateLetter.push({
           letter: key,
-          state: "incorrect extra",
+          state: LETTER_STATES.EXTRA_INCORRECT,
           id: `${key}-${crypto.randomUUID()}`,
         });
       }
-
       //next letter
-      letterPosition.current += 1;
+      setLetterPosition((current) => current + 1);
     }
 
     const updateWords = { ...currentWord, letters: updateLetter };
@@ -195,16 +228,16 @@ export const WritingTest = () => {
     if (key === "Backspace") {
       const previouslyWord = test[wordPosition - 1];
 
-      if (letterPosition.current > currentWord.word.length) {
+      if (letterPosition > currentWord.word.length) {
         updateLetter.pop();
       }
 
       // erease if the user wrote a word
-      if (letterPosition.current > 0) {
+      if (letterPosition > 0) {
         // Removes the active state of the current letter before moving the cursor back
-        currentWord.letters[letterPosition.current - 1].state = "";
+        currentWord.letters[letterPosition - 1].state = "";
         // move to back position
-        letterPosition.current -= 1;
+        setLetterPosition((current) => current - 1);
 
         return;
       }
@@ -212,7 +245,7 @@ export const WritingTest = () => {
       // validate if user made mistake writting a word
       if (
         wordPosition > 0 &&
-        letterPosition.current === 0 &&
+        letterPosition === 0 &&
         previouslyWord.state === "error typed"
       ) {
         goToPreviouslyWord();
@@ -222,10 +255,9 @@ export const WritingTest = () => {
           (letter) => letter.state !== ""
         ).length;
 
-        letterPosition.current = PreviouslyLetterPosition;
-
+        setLetterPosition(PreviouslyLetterPosition);
         // Remove the error state and activate the previous word
-        previouslyWord.state = "active";
+        previouslyWord.state = LETTER_STATES.ACTIVE;
         currentWord.state = "";
 
         setTest([...test]);
@@ -245,7 +277,7 @@ export const WritingTest = () => {
   }, [test, wordPosition, seconds, timerState]);
 
   useEffect(() => {
-    if (seconds === 0 && test.length > 0) {
+    if (seconds === 0 && test.length > 0 && mode === MODES["time"]) {
       //reset All and show modal, remove events , reset test and properties
       getTetsResult();
     }
@@ -257,14 +289,16 @@ export const WritingTest = () => {
     handleTimerState(TIMER["reset"]);
     createTest();
     setWordPosition(0);
-    letterPosition.current = 0;
+    setLetterPosition(0);
+
     handleTimerTime();
   };
 
   const getTetsResult = () => {
     handleLoading(true); // Loanding
     handleTimerState(TIMER["finished"]);
-    const timeInMinutes = timeSelected / 60;
+
+    const timeInMinutes = mode === MODES["time"] ? timeSelected : seconds / 60;
 
     const testCopy = structuredClone(test);
 
@@ -272,15 +306,11 @@ export const WritingTest = () => {
 
     testCopy.forEach((word) => {
       word.letters.forEach((letter) => {
-        if (letter.state === "correct") {
+        if (letter.state === LETTER_STATES.CORRECT) {
           words.correct += 1;
         }
-
-        if (letter.state === "incorrect") {
-          words.incorrect += 1;
-        }
-        if (letter.state === "incorrect extra") {
-          words.incorrect += 1;
+        if (letter.state === LETTER_STATES.EXTRA_INCORRECT) {
+          words.extra += 1;
         }
 
         if (letter.state === "") {
@@ -288,6 +318,8 @@ export const WritingTest = () => {
         }
       });
     });
+
+    words.incorrect = lettersError.length;
 
     const { correct, incorrect, extra, missed } = words;
 
@@ -301,12 +333,10 @@ export const WritingTest = () => {
     // WPM neto
     const netWpm = grossWpm - extra / timeInMinutes;
 
-    //console.log({ accuracy, grossWpm, netWpm })
-
     setTestResult({
       accuracy: Number(accuracy.toFixed(2)),
       raw: grossWpm,
-      netWpm,
+      netWpm: netWpm < 0 ? 0 : netWpm,
       correct,
       incorrect,
       extra,
@@ -316,104 +346,142 @@ export const WritingTest = () => {
   };
 
   return (
-    <section className="mt-8 px-5 h-auto ">
-      <h2
-        className={
-          (timerState !== TIMER["start"]
-            ? "animate-fade-out"
-            : "animate-fade-in") +
-          " text-center text-4xl mb-5 text-sprint-blue transition-all"
-        }
-      >
-        {seconds}
-      </h2>
+    <section className="w-full">
 
-      {loading ? (
-        <div className="w-full flex justify-center mt-14">
-          <LoadingIcon />
-        </div>
-      ) : (
-        <>
-          {timerState !== TIMER["finished"] ? ( //===> finished
-            testResult !== null && (
-              <section id="result" className="animate-fade-in-bottom text-4xl">
-                <article className="w-full bg-sprint-blue ">
-                  <h3>Chart</h3>
-                </article>
-                <footer className="flex justify-between">
-                  <div>
-                    <label className=" text-lg">ACCURACY</label>
-                    <Tooltip
-                      label={`${accuracy} % (${correct} correct / ${incorrect} incorrect)`}
-                    >
-                      <p className=" text-sprint-blue font-semibold">
-                        {Math.trunc(accuracy)} %
-                      </p>
-                    </Tooltip>
-                  </div>
-                  
-                  <div>
-                    <label className=" text-lg">WPM</label>
-                    <p className=" text-sprint-blue font-semibold">
-                      {" "}
-                      {netWpm} %
-                    </p>
-                    <Tooltip
-                      label={`${accuracy} % (${correct} correct / ${incorrect} incorrect)`}
-                    >
-                      <p className=" text-sprint-blue font-semibold">
-                      {netWpm} %
-                      </p>
-                    </Tooltip>
-                  </div>
+      <TestConfiguration />
+      <div className=" flex flex-col justify-center  h-[90%]">
+        {mode === MODES["time"] ? (
+          <h2
+            className={
+              (timerState !== TIMER["start"]
+                ? "animate-fade-out"
+                : "animate-fade-in") +
+              " text-center text-4xl mb-5 text-sprint-blue transition-all "
+            }
+          >
+            {seconds}
+          </h2>
+        ) : (
+          <h2
+            className={
+              (timerState !== TIMER["start"]
+                ? "animate-fade-out"
+                : "animate-fade-in") +
+              " text-center text-4xl mb-5 text-sprint-blue transition-all"
+            }
+          >
+            {`${wordPosition} / ${test.length}`}
+          </h2>
+        )}
 
-                  <div>
-                    <label className=" text-lg">CHARACTERES</label>
-
-                    <Tooltip label="correct, incorrect, extra, missed">
-                      <p className=" text-sprint-blue font-semibold">
-                        {correct}/{incorrect}/{extra}/{missed}
-                      </p>
-                    </Tooltip>
-                  </div>
-
-                  {/* <p> RAW: {testResult.raw} </p>  */}
-                  <p> WPM: {testResult.netWpm}</p>
-                  <p> Time: {testResult.netWpm}</p>
-                </footer>
-              </section>
-            )
-          ) : (
-            <div
-              className=" w-full flex flex-wrap animate-fade-in-bottom text-prett px-3"
-              ref={testContent}
-            >
-              {test.map(({ id, letters, state }) => (
-                <div
-                  id="word"
-                  key={id}
-                  className={"my-[.25em] mx-[.3em] text-3xl px-1.5 " + state}
-                >
-                  {letters.map(({ letter, state, id }) => (
-                    <span key={id} id="key" className={state}>
-                      {letter}
-                    </span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="flex justify-center mt-5">
-            <button
-              className="text-xl  hover:text-sprint-blue p-4"
-              onClick={() => resestTest()}
-            >
-              <ReloadIcon />
-            </button>
+        {loading ? (
+          <div className="w-full flex justify-center">
+            <LoadingIcon />
           </div>
-        </>
-      )}
+        ) : (
+          <>
+            {timerState === TIMER["finished"] ? ( //===> finished
+              testResult !== null && (
+                <section id="result" className="animate-fade-in-bottom text-4xl">
+                  <article className="w-full bg-sprint-blue size-96 ">
+                    <h3>Chart</h3>
+                  </article>
+                  <footer>
+                    <div className=" flex justify-between">
+                      <div>
+                        <label className=" text-lg">ACCURACY</label>
+                        <Tooltip
+                          label={`${parseFloat(
+                            accuracy.toFixed(2)
+                          )} % (${correct} correct / ${incorrect} incorrect)`}
+                        >
+                          <span className=" text-sprint-blue font-semibold">
+                            {Math.trunc(accuracy)} %
+                          </span>
+                        </Tooltip>
+                      </div>
+
+                      <div>
+                        <label className=" text-lg">WPM</label>
+
+                        <Tooltip label={`${parseFloat(netWpm.toFixed(2))} WPN`}>
+                          <span className=" text-sprint-blue font-semibold">
+                            {Math.trunc(netWpm)} %
+                          </span>
+                        </Tooltip>
+                      </div>
+
+                      <div>
+                        <label className=" text-lg">CHARACTERES</label>
+
+                        <Tooltip label="correct, incorrect, extra, missed">
+                          <span className=" text-sprint-blue font-semibold">
+                            {correct}/{incorrect}/{extra}/{missed}
+                          </span>
+                        </Tooltip>
+                      </div>
+
+                      {/* <p> RAW: {testResult.raw} </p>  */}
+                      <div>
+                        <label className=" text-lg">TIME</label>
+
+                        <span className=" block text-sprint-blue font-semibold">
+                          {seconds !== 0 ? seconds : timeSelected}s
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-center self-center mt-10 text-lg">
+                      <Link to="/login" className="underline">
+                        Sing in
+                      </Link>{" "}
+                      <span> to save your result</span>
+                    </div>
+                  </footer>
+                </section>
+              )
+            ) : (
+              <div
+                className=" w-full flex flex-wrap animate-fade-in-bottom text-prett "
+                ref={testContent}
+              >
+                {test.map(({ id, letters, state }) => (
+                  <div
+                    id="word"
+                    key={id}
+                    className={"my-[.25em] mx-[.3em] text-3xl px-1.5 " + state}
+                  >
+                    {letters.map(({ letter, state, id }) => (
+                      <span key={id} id="key" className={state}>
+                        {letter}
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="flex justify-center mt-20">
+              <button
+                className="text-xl  text-white"
+                onClick={() => resestTest()}
+              >
+                <Tooltip
+                  label={
+                    timerState === TIMER["finished"]
+                      ? "Repeat test"
+                      : "Restar test"
+                  }
+                >
+                  <span className="text-white hover:text-sprint-blue transition font-semibold ">
+                    <ReloadIcon />
+                  </span>
+                </Tooltip>
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+
     </section>
   );
 };
