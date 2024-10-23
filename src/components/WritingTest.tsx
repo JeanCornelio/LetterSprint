@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTimer } from "../hooks/useTimer";
 import { useLoading } from "../hooks/useLoading";
 import { LoadingIcon, ReloadIcon } from "../icons/Icons";
-import { MODES, TIMER, WORDS } from "../constants";
+import { CORRECT_SOUND, ERROR_SOUND, MODES, TIME_OVER, TIMER} from "../constants";
 import { Tooltip } from "./Tooltip";
 import { Link } from "react-router-dom";
 import { useTestConfiguration } from "../hooks/useTestConfiguration";
@@ -41,7 +41,7 @@ const LETTER_STATES = {
 };
 
 const text =
-  "Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods"; // ;
+  "Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods "; // ;
 
 const result: Result = {
   accuracy: 0,
@@ -71,6 +71,7 @@ export const WritingTest = () => {
   const { mode, words: wordSelected } = useTestConfiguration();
   const testContent = useRef(null);
   const { accuracy, correct, incorrect, extra, missed, netWpm } = testResult;
+  
 
   const createTest = () => {
     handleLoading(true); // Loanding
@@ -135,9 +136,21 @@ export const WritingTest = () => {
     return () => document.removeEventListener("mouseover", handleMousemove);
   }, [timerState, handleTimerState]);
 
+  const playCorrect =() =>{
+    const clone = CORRECT_SOUND.cloneNode(); 
+    clone.play();
+  }
+  const playError =() =>{
+    const clone = ERROR_SOUND.cloneNode();
+    clone.play(); 
+  }
+
   const handleKeyDown = (event: KeyboardEvent) => {
     //Start Game
     handleTimerState(TIMER["start"]);
+
+    
+   
 
     const { code, key } = event;
 
@@ -169,6 +182,10 @@ export const WritingTest = () => {
         goToNextWord();
 
         currentWord.state = toCheckWordCorreclyCompleted(currentWord);
+
+        currentWord.state === 'typed' ?  playCorrect() : playError()
+
+        console.log(currentWord.state)
         nextWord.state = LETTER_STATES.ACTIVE;
       }
 
@@ -177,6 +194,8 @@ export const WritingTest = () => {
 
     const updateLetter = currentLetters.map((letter: Letters, index) => {
       if (index === letterPosition && key.length === 1) {
+
+       
         if (letter.letter === key) {
           return {
             ...letter,
@@ -279,6 +298,7 @@ export const WritingTest = () => {
   useEffect(() => {
     if (seconds === 0 && test.length > 0 && mode === MODES["time"]) {
       //reset All and show modal, remove events , reset test and properties
+      TIME_OVER.play()
       getTetsResult();
     }
 
@@ -290,7 +310,7 @@ export const WritingTest = () => {
     createTest();
     setWordPosition(0);
     setLetterPosition(0);
-
+    setLettersError([])
     handleTimerTime();
   };
 
@@ -318,7 +338,7 @@ export const WritingTest = () => {
         }
       });
     });
-
+    //NOTA DE POSIBLE SOLUCION  PUSHEAR LA CANTIDAD DE DE PALABRAS ESCRITAS, CORRECTAS Y CUANTAS PALABRAS ESCRIBIO EL USUARIO
     words.incorrect = lettersError.length;
 
     const { correct, incorrect, extra, missed } = words;
@@ -347,7 +367,6 @@ export const WritingTest = () => {
 
   return (
     <section className="w-full">
-
       <TestConfiguration />
       <div className=" flex flex-col justify-center  h-[90%]">
         {mode === MODES["time"] ? (
@@ -441,7 +460,7 @@ export const WritingTest = () => {
               )
             ) : (
               <div
-                className=" w-full flex flex-wrap animate-fade-in-bottom text-prett "
+                className=" w-full flex flex-wrap animate-fade-in text-pretty h-96 overflow-clip"
                 ref={testContent}
               >
                 {test.map(({ id, letters, state }) => (
