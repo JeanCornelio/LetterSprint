@@ -25,6 +25,7 @@ export const testSlice = createSlice({
   reducers: {
     setTestMode: (state, action: PayloadAction<MODE>) => {
       const { payload } = action;
+      payload === MODES['words'] ? state.time = 0 :   state.time = 15;
       state.mode = payload;
     },
     setTestTime: (state, action: PayloadAction<TIME>) => {

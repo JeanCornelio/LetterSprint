@@ -1,16 +1,16 @@
-import { Footer, Nav, TestConfiguration, WritingTest } from "../components";
+import { Outlet } from "react-router-dom";
+import { Footer, Nav } from "../components";
 
 export const HomePage = () => {
   return (
-    <div className="container mx-auto flex flex-col h-screen px-5 md:px-0">
-      <header className=" flex flex-col justify-center ">
+    <div className="container mx-auto flex flex-col  h-screen px-5 md:px-0">
+      <header className=" flex flex-col justify-center">
         <Nav />
-        <TestConfiguration />
       </header>
-      <main>
-       <WritingTest/>
+      <main className="flex justify-center  w-full flex-grow">
+        <Outlet />
       </main>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

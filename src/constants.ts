@@ -10,6 +10,7 @@ export const  TIMER =  {
     finished:'finished'
 }
 export const  TIMES =  {
+    0: 0,
     15: 15,
     30: 30,
     60: 60,
