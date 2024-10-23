@@ -33,27 +33,27 @@ export const TestConfiguration = () => {
   const active = " text-sprint-blue font-bold"
 
   const [open, setOpen] = useState(false)
-  const {  timerState } = useTimer();
-  const handleModal = () =>{
+  const { timerState } = useTimer();
+  const handleModal = () => {
     setOpen(true)
   }
   return (
-    <section id="testConfig" className={ (timerState === TIMER['start'] || timerState === TIMER['finished']  ? 'animate-fade-out' : 'animate-fade-in') + " mt-10  flex justify-center transition-all "}>
+    <section id="testConfig" className={(timerState === TIMER['start'] || timerState === TIMER['finished'] ? 'animate-fade-out' : 'animate-fade-in') + "  flex justify-center transition-all "}>
       <div className="flex gap-5 bg-sprint-config p-2 px-5 rounded-md justify-center md:w-100">
         <ul className="flex gap-5">
-          <li    className={
-              defaultClass +
-              (isPuntuatioActive ? active : "")
-            }>
-            <button  className="flex items-center gap-1" onClick={puntuationToggle}>
+          <li className={
+            defaultClass +
+            (isPuntuatioActive ? active : "")
+          }>
+            <button className="flex items-center gap-1" onClick={puntuationToggle}>
               {" "}
               <AtIcon className="text-md" /> Puntuation
             </button>
           </li>
           <li className={
-              defaultClass +
-              (isNumberactive ? active : "")
-            }>
+            defaultClass +
+            (isNumberactive ? active : "")
+          }>
             <button className="flex items-center gap-1" onClick={numberToggle}>
               {" "}
               <NumberIcon className="text-md" /> Numbers
@@ -63,25 +63,25 @@ export const TestConfiguration = () => {
         <div className="border-r-2 rounded-full border-gray-400"></div>
         <ul className="flex gap-5">
           <li
-           
+
             className={
               defaultClass +
               (MODES["time"] === mode ? active : "")
             }
           >
-            <button  onClick={() => setMode("time")} className="flex items-center gap-1">
+            <button onClick={() => setMode("time")} className="flex items-center gap-1">
               {" "}
               <ClockIcon className="text-sm" /> Time
             </button>
           </li>
           <li
-           
+
             className={
               defaultClass +
               (MODES["words"] === mode ? active : "")
             }
           >
-            <button  onClick={() => setMode("words")} className="flex items-center gap-1">
+            <button onClick={() => setMode("words")} className="flex items-center gap-1">
               <HealthiconsAIcon className="text-md" /> Words
             </button>
           </li>
@@ -97,10 +97,10 @@ export const TestConfiguration = () => {
 
         {MODES[mode as MODE] === "time" && (
           <ul className="flex gap-5 items-center">
-            {Object.entries(TIMES).map(([key, time]) => (
+            {Object.entries(TIMES).slice(1).map(([key, time]) => (
               <li
                 key={key}
-              
+
                 className={
                   defaultClass +
                   (TIMES[timeActive as TIME] === time
@@ -108,7 +108,7 @@ export const TestConfiguration = () => {
                     : "")
                 }
               >
-                <button   onClick={() => setTime(Number(key) as TIME)} className="flex items-center gap-1 text-sm">{time}</button>
+                <button onClick={() => setTime(Number(key) as TIME)} className="flex items-center gap-1 text-sm">{time}</button>
               </li>
             ))}
             <li className="cursor-pointer hover:text-sprint-blue transition">
@@ -123,7 +123,7 @@ export const TestConfiguration = () => {
           <ul className="flex gap-5 items-center">
             {Object.entries(WORDS).map(([key, quantity]) => (
               <li
-                
+
                 key={key}
                 className={
                   defaultClass +
@@ -141,9 +141,9 @@ export const TestConfiguration = () => {
         )}
       </div>
       {
-        open && <ConfigTestTimeModal dialogState={setOpen}/>
+        open && <ConfigTestTimeModal dialogState={setOpen} />
       }
-      
+
     </section>
   );
 };
