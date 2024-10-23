@@ -51,10 +51,10 @@ export default {
         },
       },
       animation: {
-        'fade-in-bottom': 'fade-in-bottom 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both',
+        'fade-in-bottom': 'fade-in-bottom 3s cubic-bezier(0.390, 0.575, 0.565, 1.000) both',
         'fade-out-bottom': 'fade-out-bottom 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
         'fade-out': 'fade-out 0.3s ease-out both',
-        'fade-in': 'fade-in 0.4s ease-out both',
+        'fade-in': 'fade-in 0.3s ease-out both',
       },
     },
   },

@@ -23,3 +23,6 @@ export const  WORDS =  {
     100: 100,
 }
     
+export const CORRECT_SOUND = new Audio('src/assets/sounds/correct.mp3')
+export const ERROR_SOUND = new Audio('src/assets/sounds/error.mp3')
+export const TIME_OVER = new Audio('src/assets/sounds/time_over.mp3')
