@@ -17,10 +17,6 @@ interface Result {
   accuracy: number;
   raw: number;
   netWpm: number;
-  correct: number;
-  incorrect: number;
-  extra: number;
-  missed: number;
 }
 
 interface Word {
@@ -41,24 +37,34 @@ const LETTER_STATES = {
 };
 
 const text =
-  "Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods "; // ;
+  "Creating a paragraph flow of like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods Creating a paragraph flow of words that connect ideas seamlessly like a river moving steadily forward without pause conveying thoughts feelings or descriptions in a fluid manner where each element contributes to the whole forming a smooth structure that never halts for commas or periods "; 
 
 const result: Result = {
   accuracy: 0,
   raw: 0,
-  correct: 0,
-  incorrect: 0,
-  extra: 0,
-  missed: 0,
   netWpm: 0,
 };
+
+const letterStates = {
+    incorrect: [],
+    correct:[],
+    extra:[],
+    missed:[]
+}
+
+interface states {
+    incorrect: Letters[];
+    correct: Letters[];
+    extra: Letters[];
+    missed: Letters[];
+  }
 
 export const WritingTest = () => {
   const [wordPosition, setWordPosition] = useState(0);
   const [letterPosition, setLetterPosition] = useState(0);
 
   const [test, setTest] = useState<Word[]>([]);
-  const [lettersError, setLettersError] = useState<Letters[]>([]);
+  const [lettersStates, setLettersStates] = useState<states>(letterStates);
   const [testResult, setTestResult] = useState<Result>(result);
   const { loading, handleLoading } = useLoading();
   const {
@@ -70,7 +76,8 @@ export const WritingTest = () => {
   } = useTimer();
   const { mode, words: wordSelected } = useTestConfiguration();
   const testContent = useRef(null);
-  const { accuracy, correct, incorrect, extra, missed, netWpm } = testResult;
+  const { accuracy, netWpm } = testResult;
+  const { extra, correct, incorrect, missed } = lettersStates;
   
 
   const createTest = () => {
@@ -106,7 +113,7 @@ export const WritingTest = () => {
   }, [mode, wordSelected, timeSelected]);
 
   const toCheckWordCorreclyCompleted = (word: Word) => {
-    const lettersError = word.letters.some(
+    const lettersStates = word.letters.some(
       (letter) =>
         letter.state === LETTER_STATES.INCORRECT ||
         letter.state === LETTER_STATES.INCORRECT_ACTIVE ||
@@ -114,7 +121,7 @@ export const WritingTest = () => {
         letter.state === ""
     );
 
-    return lettersError ? "error typed" : "typed";
+    return lettersStates ? "error typed" : "typed";
   };
 
   const goToNextWord = () => {
@@ -143,6 +150,34 @@ export const WritingTest = () => {
   const playError =() =>{
     const clone = ERROR_SOUND.cloneNode();
     clone.play(); 
+  }
+  
+
+  const rowPosition = (wordPosition)=> {
+
+    let contentChildren = Array.from(testContent.current.children).map((child, index) => {
+        return child.getBoundingClientRect().top
+      });
+      
+      const rowsGroups = Object.groupBy(contentChildren, (el) => el)
+      const totalOfRows = Object.keys(rowsGroups).map((el) => {
+        return rowsGroups[el]
+      })
+   
+    console.log(totalOfRows[0].length - 1 , wordPosition)
+
+    const lettesLength = wordPosition + 1
+
+    if(totalOfRows[0].length   === lettesLength){
+        //Recuerda las palabras perdidas 
+        const newTest = test.slice(lettesLength)
+        
+        //console.log(newTest)
+        setTest(newTest)
+        setWordPosition(0)
+    }
+      
+
   }
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -185,38 +220,50 @@ export const WritingTest = () => {
 
         currentWord.state === 'typed' ?  playCorrect() : playError()
 
-        console.log(currentWord.state)
+     
         nextWord.state = LETTER_STATES.ACTIVE;
       }
 
+      console.log(currentWord) 
+      //No sumplantar las letters ya mieesd, ESTAS TRABAJANDO AQUI PARA ENVIAR LAS PALABRAS PERDIDAS O NO ESCRITAS
+      setLettersStates((current) => { return { ...current, missed:[...current.missed, ...currentWord.letters.filter( letter => letter.state === "")]}});
+      rowPosition(wordPosition)
       return;
     }
 
-    const updateLetter = currentLetters.map((letter: Letters, index) => {
-      if (index === letterPosition && key.length === 1) {
 
+   
+
+    
+
+    const updateLetter = currentLetters.map((letter: Letters, index) => {
+        
        
+      
+        if (index === letterPosition && key.length === 1) {
+        
+            let letterWithNewState = {};
+
         if (letter.letter === key) {
-          return {
-            ...letter,
-            state: LETTER_STATES.CORRECT,
-          };
+
+            letterWithNewState = { ...letter, state: LETTER_STATES.CORRECT};
+            handleResultLetterState(LETTER_STATES.CORRECT, letterWithNewState as Letters)
+
+            return letterWithNewState
+         
         }
 
         if (letter.letter !== key) {
-          setLettersError((current) => [...current, letter]);
-          return {
-            ...letter,
-            state: LETTER_STATES.INCORRECT,
-          };
+
+          letterWithNewState = { ...letter, state: LETTER_STATES.INCORRECT};
+          handleResultLetterState(LETTER_STATES.INCORRECT, letterWithNewState as Letters)
+
+          return letterWithNewState
         }
       }
 
       if (index === letterPosition - 1 && key === "Backspace") {
-        return {
-          ...letter,
-          state: LETTER_STATES.MISSED,
-        };
+        return { ...letter, state: ''}
       }
 
       return letter;
@@ -225,18 +272,27 @@ export const WritingTest = () => {
     // write a next word and validations
     if (key.length === 1 && letterPosition < 19) {
       //Push new extra incorrects words
+
+     
       if (letterPosition > currentWord.word.length - 1) {
-        updateLetter.push({
-          letter: key,
-          state: LETTER_STATES.EXTRA_INCORRECT,
-          id: `${key}-${crypto.randomUUID()}`,
-        });
+
+        const  extraLetter = {
+            letter: key,
+            state: LETTER_STATES.EXTRA_INCORRECT,
+            id: `${key}-${crypto.randomUUID()}`,
+          }
+
+        handleResultLetterState('extra', extraLetter as Letters)
+        updateLetter.push(extraLetter);
+
       }
+
+
       //next letter
       setLetterPosition((current) => current + 1);
     }
 
-    const updateWords = { ...currentWord, letters: updateLetter };
+    const updateWords: Word = { ...currentWord, letters: updateLetter } as Word;
 
     const updateTest = [...test];
 
@@ -284,6 +340,10 @@ export const WritingTest = () => {
     }
   };
 
+  const handleResultLetterState = (property:string, letter: Letters)=>{
+   setLettersStates((current) => { return {...current, [property]:[ ...current[property], letter]}})
+  }
+
   useEffect(() => {
     if (timerState === TIMER["finished"]) {
       document.removeEventListener("keydown", handleKeyDown);
@@ -310,7 +370,7 @@ export const WritingTest = () => {
     createTest();
     setWordPosition(0);
     setLetterPosition(0);
-    setLettersError([])
+    setLettersStates(letterStates)
     handleTimerTime();
   };
 
@@ -322,48 +382,45 @@ export const WritingTest = () => {
 
     const testCopy = structuredClone(test);
 
-    const words = { correct: 0, incorrect: 0, missed: 0, extra: 0 };
+    //let lettersMissed = 0
 
     testCopy.forEach((word) => {
-      word.letters.forEach((letter) => {
-        if (letter.state === LETTER_STATES.CORRECT) {
-          words.correct += 1;
-        }
-        if (letter.state === LETTER_STATES.EXTRA_INCORRECT) {
-          words.extra += 1;
+
+        if(word.state === 'error typed'){
+            word.letters.forEach((letter) => {
+                if (letter.state === "") {
+                    //lettersMissed += 1;
+                }
+              });
         }
 
-        if (letter.state === "") {
-          words.missed += 1;
-        }
-      });
+      
     });
     //NOTA DE POSIBLE SOLUCION  PUSHEAR LA CANTIDAD DE DE PALABRAS ESCRITAS, CORRECTAS Y CUANTAS PALABRAS ESCRIBIO EL USUARIO
-    words.incorrect = lettersError.length;
+ 
+    //setLettersStates((current) => { return {...current, missed:lettersMissed}});
 
-    const { correct, incorrect, extra, missed } = words;
+    const { correct, incorrect, extra } = lettersStates;
 
-    const totalWords = correct + incorrect;
+    const totalWords = correct.length + incorrect.length;
 
-    const accuracy = (correct / totalWords) * 100;
+    const accuracy = (correct.length / totalWords) * 100;
 
     // WPM gross
     const grossWpm = totalWords / 5 / timeInMinutes;
 
     // WPM neto
-    const netWpm = grossWpm - extra / timeInMinutes;
+    const netWpm = grossWpm - extra.length / timeInMinutes;
 
     setTestResult({
       accuracy: Number(accuracy.toFixed(2)),
       raw: grossWpm,
       netWpm: netWpm < 0 ? 0 : netWpm,
-      correct,
-      incorrect,
-      extra,
-      missed,
     });
     handleLoading(false); // stop Loanding
   };
+
+console.log(lettersStates)
 
   return (
     <section className="w-full">
@@ -412,7 +469,7 @@ export const WritingTest = () => {
                         <Tooltip
                           label={`${parseFloat(
                             accuracy.toFixed(2)
-                          )} % (${correct} correct / ${incorrect} incorrect)`}
+                          )} % (${correct.length} correct / ${incorrect.length} incorrect)`}
                         >
                           <span className=" text-sprint-blue font-semibold">
                             {Math.trunc(accuracy)} %
@@ -435,7 +492,7 @@ export const WritingTest = () => {
 
                         <Tooltip label="correct, incorrect, extra, missed">
                           <span className=" text-sprint-blue font-semibold">
-                            {correct}/{incorrect}/{extra}/{missed}
+                            {correct.length}/{incorrect.length}/{extra.length}/{missed}
                           </span>
                         </Tooltip>
                       </div>
@@ -460,14 +517,14 @@ export const WritingTest = () => {
               )
             ) : (
               <div
-                className=" w-full flex flex-wrap animate-fade-in text-pretty h-96 overflow-clip"
+                className=" w-full flex flex-wrap animate-fade-in text-pretty h-96 overflow-y-clip"
                 ref={testContent}
               >
                 {test.map(({ id, letters, state }) => (
                   <div
                     id="word"
                     key={id}
-                    className={"my-[.25em] mx-[.3em] text-3xl px-1.5 " + state}
+                    className={"my-[.25em] mx-[.3em] text-3xl px-1.5 max-h-fit " + state}
                   >
                     {letters.map(({ letter, state, id }) => (
                       <span key={id} id="key" className={state}>
@@ -500,7 +557,6 @@ export const WritingTest = () => {
           </>
         )}
       </div>
-
     </section>
   );
 };
