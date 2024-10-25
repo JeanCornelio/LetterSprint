@@ -91,8 +91,15 @@
 #word.active {
     background-color: rgba(50, 126, 176, 0.324);
     border-radius: 5px;
+    color: rgba(133, 133, 133, 0.721)
+        /*   transform: scale(1.1); */
+}
 
-    /*   transform: scale(1.1); */
+
+#words.blurred {
+    opacity: .25;
+    filter: blur(4px);
+    -webkit-filter: blur(4px);
 }
 
 
