@@ -107,14 +107,14 @@ export const TestConfiguration = () => {
                   </button>
                 </li>
               ))}
-            <li className="cursor-pointer hover:text-sprint-blue transition">
+          {/*   <li className="cursor-pointer hover:text-sprint-blue transition">
               <button
                 onClick={handleModal}
                 className="flex items-center gap-1 text-md"
               >
                 <ToolsIcon />
               </button>
-            </li>
+            </li> */}
           </ul>
         )}
 
