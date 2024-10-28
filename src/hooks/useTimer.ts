@@ -9,12 +9,6 @@ export const useTimer = () => {
   const { seconds, state } = useAppSelector(({ timer }) => timer);
   const { timeActive, mode } = useTestConfiguration();
 
-  useEffect(() => {
-    dispatch(setSeconds(timeActive));
-  }, [timeActive, dispatch]);
-
-  //console.log(seconds)
-
   const handleState = (state: string) => {
     dispatch(setState(state));
   };

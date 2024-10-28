@@ -10,9 +10,9 @@ import {
   TIMER,
 } from "../constants";
 import { Tooltip } from "./Tooltip";
-import { Link } from "react-router-dom";
 import { useTestConfiguration } from "../hooks/useTestConfiguration";
 import { TestConfiguration } from "./TestConfiguration";
+import { TestResult } from "./TestResult";
 
 interface Letters {
   letter: string;
@@ -409,20 +409,22 @@ export const WritingTest = () => {
 
     //Validation
     const invalidWpm =
-      (presition < 20 && netWpm > 100) || missed.length > correct.length;
+      (presition < 20 && netWpm > 100) ||
+      missed.length > correct.length ||
+      netWpm < 0;
 
     setTestResult({
       presition: Number(presition.toFixed(2)),
-      raw: grossWpm,
+      raw: !Number.isFinite(grossWpm) ? 0 : grossWpm,
       netWpm: invalidWpm ? 0 : netWpm,
     });
     handleLoading(false); // stop Loanding
   };
 
   return (
-    <section className="w-full">
+    <section className="w-full ">
       <TestConfiguration />
-      <div className=" flex flex-col justify-center  h-[90%]">
+      <div className=" flex flex-col justify-center  h-[90%] ">
         {loading ? (
           <div className="w-full flex justify-center">
             <LoadingIcon />
@@ -441,7 +443,6 @@ export const WritingTest = () => {
                 {seconds}
               </h2>
             )}
-
             {mode === MODES["words"] && (
               <h2
                 className={
@@ -456,79 +457,20 @@ export const WritingTest = () => {
                 }`}
               </h2>
             )}
-
             {timerState === TIMER["finished"] ? ( //===> finished
-              testResult !== null && (
-                <section
-                  id="result"
-                  className="animate-fade-in-bottom text-4xl"
-                >
-                  <article className="w-full bg-sprint-blue size-96 ">
-                    <h3>Chart</h3>
-                  </article>
-                  <footer>
-                    <div className=" flex justify-between">
-                      <div>
-                        <label className=" text-lg">PRESITION</label>
-                        <Tooltip
-                          label={`${parseFloat(presition.toFixed(2))} % (${
-                            correct.length
-                          } correct / ${incorrect.length} incorrect)`}
-                        >
-                          <span className=" text-sprint-blue font-semibold">
-                            {Math.trunc(presition)} %
-                          </span>
-                        </Tooltip>
-                      </div>
-
-                      <div>
-                        <label className=" text-lg">WPM</label>
-
-                        <Tooltip label={`${parseFloat(netWpm.toFixed(2))} WPN`}>
-                          <span className=" text-sprint-blue font-semibold">
-                            {Math.trunc(netWpm)} %
-                          </span>
-                        </Tooltip>
-                      </div>
-
-                      <div>
-                        <label className=" text-lg">RAW</label>
-
-                        <Tooltip label={`${parseFloat(raw.toFixed(2))} WPN`}>
-                          <span className=" text-sprint-blue font-semibold">
-                            {Math.trunc(raw)}
-                          </span>
-                        </Tooltip>
-                      </div>
-
-                      <div>
-                        <label className=" text-lg">CHARACTERES</label>
-
-                        <Tooltip label="correct, incorrect, extra, missed">
-                          <span className=" text-sprint-blue font-semibold">
-                            {correct.length}/{incorrect.length}/{extra.length}/
-                            {missed.length}
-                          </span>
-                        </Tooltip>
-                      </div>
-
-                      <div>
-                        <label className=" text-lg">TIME</label>
-
-                        <span className=" block text-sprint-blue font-semibold">
-                          {mode === MODES["time"] ? timeSelected : seconds}s
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-center self-center mt-10 text-lg">
-                      <Link to="/login" className="underline">
-                        Sing in
-                      </Link>{" "}
-                      <span> to save your result</span>
-                    </div>
-                  </footer>
-                </section>
-              )
+              <TestResult
+                testReultValues={{
+                  correct,
+                  incorrect,
+                  extra,
+                  missed,
+                  netWpm,
+                  totalWords: wordPosition + originalTotalWordsTest + 1,
+                  presition,
+                  raw,
+                  seconds,
+                }}
+              />
             ) : (
               <div
                 className="w-full flex flex-wrap animate-fade-in text-pretty content-start h-44  overflow-x-visible overflow-y-clip text-gray-600"
@@ -552,7 +494,6 @@ export const WritingTest = () => {
                 ))}
               </div>
             )}
-
             <div className="flex justify-center mt-20">
               <button
                 className="text-xl  text-white"

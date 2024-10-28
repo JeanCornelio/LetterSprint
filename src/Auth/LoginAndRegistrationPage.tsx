@@ -157,14 +157,14 @@ export const LoginAndRegistrationPage = () => {
             <div className="flex flex-col w-full gap-4 mb-4 ">
               <button
                 type="submit"
-                className="border border-gray-700  text-white p-4 rounded flex items-center justify-center gap-2 font-bold hover:border-sprint-blue w-full mt-4"
+                className="border border-gray-700   p-4 rounded flex items-center justify-center gap-2  hover:border-sprint-blue w-full mt-4"
               >
                 <UserAdd01Icon className="font-bold" />
                 Create
               </button>
               <button
                 onClick={() => handleFormState("signIn")}
-                className="border border-gray-700  text-white p-4 rounded flex items-center justify-center gap-2 font-bold hover:border-sprint-blue w-full "
+                className="border border-gray-700   p-4 rounded flex items-center justify-center gap-2  hover:border-sprint-blue w-full "
               >
                 <BackIcon className="font-bold" />
                 Go Back
@@ -173,6 +173,7 @@ export const LoginAndRegistrationPage = () => {
           </form>
         )}
       </div>
+
     </section>
   );
 };
