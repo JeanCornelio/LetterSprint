@@ -74,9 +74,9 @@ export function SignInIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 export function GoogleIcon(props: SVGProps<SVGSVGElement>) {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" {...props}><path fill="currentColor" fill-rule="evenodd" d="M8 7v2.4h3.97c-.16 1.03-1.2 3.02-3.97 3.02c-2.39 0-4.34-1.98-4.34-4.42S5.61 3.58 8 3.58c1.36 0 2.27.58 2.79 1.08l1.9-1.83C11.47 1.69 9.89 1 8 1C4.13 1 1 4.13 1 8s3.13 7 7 7c4.04 0 6.72-2.84 6.72-6.84c0-.46-.05-.81-.11-1.16z" clip-rule="evenodd"/></svg>
-      )
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" {...props}><path fill="currentColor" fill-rule="evenodd" d="M8 7v2.4h3.97c-.16 1.03-1.2 3.02-3.97 3.02c-2.39 0-4.34-1.98-4.34-4.42S5.61 3.58 8 3.58c1.36 0 2.27.58 2.79 1.08l1.9-1.83C11.47 1.69 9.89 1 8 1C4.13 1 1 4.13 1 8s3.13 7 7 7c4.04 0 6.72-2.84 6.72-6.84c0-.46-.05-.81-.11-1.16z" clip-rule="evenodd" /></svg>
+  )
 }
 
 export function UserAdd01Icon(props: SVGProps<SVGSVGElement>) {
@@ -128,25 +128,26 @@ export function ReloadIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 export function TargetIcon(props: SVGProps<SVGSVGElement>) {
-    return (
-      <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 14 14" {...props}><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><path d="M13.48 7.516a6.5 6.5 0 1 1-6.93-7"/><path d="M9.79 8.09A3 3 0 1 1 5.9 4.21M7 7l2.5-2.5m2 .5l-2-.5l-.5-2l2-2l.5 2l2 .5z"/></g></svg>
-    )
-  }
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" {...props}><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"><path d="M13.48 7.516a6.5 6.5 0 1 1-6.93-7" /><path d="M9.79 8.09A3 3 0 1 1 5.9 4.21M7 7l2.5-2.5m2 .5l-2-.5l-.5-2l2-2l.5 2l2 .5z" /></g></svg>
+  )
+}
 
-  export function TimeIcon(props: SVGProps<SVGSVGElement>) {
-    return (
-      <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 512 512" {...props}><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0m0 469.3c-117.8 0-213.3-95.5-213.3-213.3S138.2 42.7 256 42.7S469.3 138.2 469.3 256S373.8 469.3 256 469.3m21.3-256v-128h-42.7V320l128-128l-32-32z"/></svg>
-    )
-  }
+export function TimeIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" {...props}><path fill="currentColor" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0m0 469.3c-117.8 0-213.3-95.5-213.3-213.3S138.2 42.7 256 42.7S469.3 138.2 469.3 256S373.8 469.3 256 469.3m21.3-256v-128h-42.7V320l128-128l-32-32z" /></svg>
+  )
+}
 
-  export function PercentIcon(props: SVGProps<SVGSVGElement>) {
-    return (
-      <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 20L20 4m-11.732.732a2.5 2.5 0 1 1-3.536 3.536a2.5 2.5 0 0 1 3.536-3.536m11 11a2.5 2.5 0 1 1-3.536 3.536a2.5 2.5 0 0 1 3.536-3.536" color="currentColor"/></svg>
-    )
-  }
+export function PercentIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 20L20 4m-11.732.732a2.5 2.5 0 1 1-3.536 3.536a2.5 2.5 0 0 1 3.536-3.536m11 11a2.5 2.5 0 1 1-3.536 3.536a2.5 2.5 0 0 1 3.536-3.536" color="currentColor" /></svg>
+  )
+}
 
-  export function LetterADiamondIcon(props: SVGProps<SVGSVGElement>) {
-    return (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"><path d="M14 12.833L12 7.5l-2 5.333m4 0l1 2.667m-1-2.667h-4M9 15.5l1-2.667"/><path d="M2.707 10.295a2.41 2.41 0 0 0 0 3.41l7.588 7.588a2.41 2.41 0 0 0 3.41 0l7.588-7.588a2.41 2.41 0 0 0 0-3.41l-7.588-7.588a2.41 2.41 0 0 0-3.41 0z"/></g></svg>
-    )
-  }
+export function LetterADiamondIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"><path d="M14 12.833L12 7.5l-2 5.333m4 0l1 2.667m-1-2.667h-4M9 15.5l1-2.667" /><path d="M2.707 10.295a2.41 2.41 0 0 0 0 3.41l7.588 7.588a2.41 2.41 0 0 0 3.41 0l7.588-7.588a2.41 2.41 0 0 0 0-3.41l-7.588-7.588a2.41 2.41 0 0 0-3.41 0z" /></g></svg>
+  )
+}
+

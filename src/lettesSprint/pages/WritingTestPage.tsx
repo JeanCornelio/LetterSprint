@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { useTimer } from "../hooks/useTimer";
-import { useLoading } from "../hooks/useLoading";
-import { LoadingIcon, ReloadIcon } from "../icons/Icons";
+import { useTimer } from "../../hooks/useTimer";
+import { useLoading } from "../../hooks/useLoading";
+import { LoadingIcon, ReloadIcon } from "../../icons/Icons";
 import {
   CORRECT_SOUND,
   ERROR_SOUND,
   MODES,
   TIME_OVER,
   TIMER,
-} from "../constants";
-import { Tooltip } from "./Tooltip";
-import { useTestConfiguration } from "../hooks/useTestConfiguration";
-import { TestConfiguration } from "./TestConfiguration";
-import { TestResult } from "./TestResult";
+} from "../../constants";
+
+import { useTestConfiguration } from "../../hooks/useTestConfiguration";
+import { TestConfiguration } from "../../components";
+import { TestResult } from "../../components/TestResult";
+import { Tooltip } from "../../components/Tooltip";
+
 
 interface Letters {
   letter: string;
@@ -65,7 +67,7 @@ interface states {
   missed: Letters[];
 }
 
-export const WritingTest = () => {
+export const WritingTestPage = () => {
   const [wordPosition, setWordPosition] = useState(0);
   const [letterPosition, setLetterPosition] = useState(0);
   const [test, setTest] = useState<Word[]>([]);
@@ -452,9 +454,8 @@ export const WritingTest = () => {
                   " text-center text-4xl mb-5 text-sprint-blue transition-all"
                 }
               >
-                {`${wordPosition + originalTotalWordsTest + 1} / ${
-                  originalTest.length
-                }`}
+                {`${wordPosition + originalTotalWordsTest + 1} / ${originalTest.length
+                  }`}
               </h2>
             )}
             {timerState === TIMER["finished"] ? ( //===> finished

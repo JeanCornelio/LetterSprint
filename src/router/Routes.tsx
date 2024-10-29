@@ -3,7 +3,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { NotFoundPage } from '../Errors/NotFoundPage';
 import { LoginAndRegistrationPage } from '../Auth/LoginAndRegistrationPage';
 import { HomePage } from '../home/HomePage';
-import { WritingTest } from '../components';
+import { WritingTestPage } from '../lettesSprint/pages/WritingTestPage';
+import { UserPage } from '../lettesSprint/pages/UserPage';
+
 
 const router = createBrowserRouter([
   {
@@ -13,7 +15,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <WritingTest />
+        element: <WritingTestPage />
+      },
+      {
+        path: "/user",
+        element: <UserPage /> // Rememnber put protection in this page
       },
       {
         path: "/login",

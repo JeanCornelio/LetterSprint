@@ -1,0 +1,53 @@
+{
+    "user": {
+        "uid": "eOfygdxYFeX1shniWT0Feav1VZs2",
+        "email": "jeancornelio742@gmail.com",
+        "emailVerified": true,
+        "displayName": "Jean Cornelio",
+        "isAnonymous": false,
+        "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocIrooviMcdK2rcyINcRB30lTvZmWCymJkMQpUW9IXCZwOSCGOs=s96-c",
+        "providerData": [
+            {
+                "providerId": "google.com",
+                "uid": "102455672355133939624",
+                "displayName": "Jean Cornelio",
+                "email": "jeancornelio742@gmail.com",
+                "phoneNumber": null,
+                "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocIrooviMcdK2rcyINcRB30lTvZmWCymJkMQpUW9IXCZwOSCGOs=s96-c"
+            }
+        ],
+        "stsTokenManager": {
+            "refreshToken": "AMf-vBzqsEYZ3Vb9HLHA7iyGsBLJ4tpYwJ3hE3S89z_Z5IzAuVNhfh5ArvjTIuexqXnJYkeBZ9Ip_osix9BKNJVA4gxXlZP4uPKnSBN5AaRxwTCuFXb20wGzWq-iV2VZdVxlpdexcjJ0x-E5kzVVCPNHhtuuIYs0hNy_9uf3Ta0e0Oyk5ivH0iRywnlw7E_qxWDFmJZmzSCKt4PG2m4eTMa_GBE8h0cfTKmM9Cn-eoKH3OeHvU9GyEHAgFBy0tru6TBVdLV4-Kks1ANkDp3wdnXRRg2MajMxgUox804Ej22--CTbsSi3oThLixrENjQwRUG4W8kUXHh7oQMN9tzfEVg7ieQm1bqidn_3Cg-nzDR0qpvKHYdnH_bHbwWX755ZP9GyljRS4DJhESka5VqVXr7bnZWfXLeTa61iXZfFNvb0FRri0tEASixL5HPU6X6V0n1Ds6Gmerca",
+            "accessToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImU2YWMzNTcyNzY3ZGUyNjE0ZmM1MTA4NjMzMDg3YTQ5MjMzMDNkM2IiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiSmVhbiBDb3JuZWxpbyIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NJcm9vdmlNY2RLMnJjeUlOY1JCMzBsVHZabVdDeW1Ka01RcFVXOUlYQ1p3T1NDR09zPXM5Ni1jIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2xldHRlcnNwcmludC02NjIyNyIsImF1ZCI6ImxldHRlcnNwcmludC02NjIyNyIsImF1dGhfdGltZSI6MTczMDE3MDA4OCwidXNlcl9pZCI6ImVPZnlnZHhZRmVYMXNobmlXVDBGZWF2MVZaczIiLCJzdWIiOiJlT2Z5Z2R4WUZlWDFzaG5pV1QwRmVhdjFWWnMyIiwiaWF0IjoxNzMwMTcwMDg4LCJleHAiOjE3MzAxNzM2ODgsImVtYWlsIjoiamVhbmNvcm5lbGlvNzQyQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Imdvb2dsZS5jb20iOlsiMTAyNDU1NjcyMzU1MTMzOTM5NjI0Il0sImVtYWlsIjpbImplYW5jb3JuZWxpbzc0MkBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJnb29nbGUuY29tIn19.cczmyRUblyBj99T9p7FoonpwmA9R-zYb0cAIoyjqbtmQkdhk4ps9vqvQ6VsLz-Dkfxnw3Lu8QiLN9xEQjGFg9tJPy7jo-HoEMHcuUyTL7DOpaq-0NU68G9xYztQz1fCUM9ux3h49-AyIsxDuCjLtlDbIWPZckURihAcxbdbtSoaWf_OKWvpBaFgPYUX_hS0ZwcILJ5g0-NQuHQELbLfvN4ZFbbYD7wHmUSFHy71hgz--ngAZgJ7dPR_a6xtShIFvY8WXHuT3NNAN54eswwoYTCiZ1nFvAgOTBjxP2ePuCSnK32RK5al4zc55PotKvfxjEg0qkIGpNVrySwLqjEObUw",
+            "expirationTime": 1730173688693
+        },
+        "createdAt": "1730170088384",
+        "lastLoginAt": "1730170088385",
+        "apiKey": "AIzaSyBnnf2QcNkU0gK3XhJEMGg3MWu23NZ2ACA",
+        "appName": "[DEFAULT]"
+    },
+    "providerId": "google.com",
+    "_tokenResponse": {
+        "federatedId": "https://accounts.google.com/102455672355133939624",
+        "providerId": "google.com",
+        "email": "jeancornelio742@gmail.com",
+        "emailVerified": true,
+        "firstName": "Jean",
+        "fullName": "Jean Cornelio",
+        "lastName": "Cornelio",
+        "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocIrooviMcdK2rcyINcRB30lTvZmWCymJkMQpUW9IXCZwOSCGOs=s96-c",
+        "localId": "eOfygdxYFeX1shniWT0Feav1VZs2",
+        "displayName": "Jean Cornelio",
+        "idToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImU2YWMzNTcyNzY3ZGUyNjE0ZmM1MTA4NjMzMDg3YTQ5MjMzMDNkM2IiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiSmVhbiBDb3JuZWxpbyIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NJcm9vdmlNY2RLMnJjeUlOY1JCMzBsVHZabVdDeW1Ka01RcFVXOUlYQ1p3T1NDR09zPXM5Ni1jIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2xldHRlcnNwcmludC02NjIyNyIsImF1ZCI6ImxldHRlcnNwcmludC02NjIyNyIsImF1dGhfdGltZSI6MTczMDE3MDA4OCwidXNlcl9pZCI6ImVPZnlnZHhZRmVYMXNobmlXVDBGZWF2MVZaczIiLCJzdWIiOiJlT2Z5Z2R4WUZlWDFzaG5pV1QwRmVhdjFWWnMyIiwiaWF0IjoxNzMwMTcwMDg4LCJleHAiOjE3MzAxNzM2ODgsImVtYWlsIjoiamVhbmNvcm5lbGlvNzQyQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Imdvb2dsZS5jb20iOlsiMTAyNDU1NjcyMzU1MTMzOTM5NjI0Il0sImVtYWlsIjpbImplYW5jb3JuZWxpbzc0MkBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJnb29nbGUuY29tIn19.cczmyRUblyBj99T9p7FoonpwmA9R-zYb0cAIoyjqbtmQkdhk4ps9vqvQ6VsLz-Dkfxnw3Lu8QiLN9xEQjGFg9tJPy7jo-HoEMHcuUyTL7DOpaq-0NU68G9xYztQz1fCUM9ux3h49-AyIsxDuCjLtlDbIWPZckURihAcxbdbtSoaWf_OKWvpBaFgPYUX_hS0ZwcILJ5g0-NQuHQELbLfvN4ZFbbYD7wHmUSFHy71hgz--ngAZgJ7dPR_a6xtShIFvY8WXHuT3NNAN54eswwoYTCiZ1nFvAgOTBjxP2ePuCSnK32RK5al4zc55PotKvfxjEg0qkIGpNVrySwLqjEObUw",
+        "context": "",
+        "oauthAccessToken": "ya29.a0AeDClZAkKwdnnxwBvnybFodCbooIjyfqw6Syb4PFnSnJAIYatIjYgtQjq0QWHiUybdjYYx7Z-VirOm050iJM3oxGufRDjvUbhPAUF73uFDl8vxovsvqD9ZNWAMqc_oZfDpG_yYIc6vjS3BY5ybSI4dSeRqUZprRFHXy6cFfbaCgYKAYoSARISFQHGX2MiJdPgMnYgQc1JjxZWvQQ-7w0175",
+        "oauthExpireIn": 3599,
+        "refreshToken": "AMf-vBzqsEYZ3Vb9HLHA7iyGsBLJ4tpYwJ3hE3S89z_Z5IzAuVNhfh5ArvjTIuexqXnJYkeBZ9Ip_osix9BKNJVA4gxXlZP4uPKnSBN5AaRxwTCuFXb20wGzWq-iV2VZdVxlpdexcjJ0x-E5kzVVCPNHhtuuIYs0hNy_9uf3Ta0e0Oyk5ivH0iRywnlw7E_qxWDFmJZmzSCKt4PG2m4eTMa_GBE8h0cfTKmM9Cn-eoKH3OeHvU9GyEHAgFBy0tru6TBVdLV4-Kks1ANkDp3wdnXRRg2MajMxgUox804Ej22--CTbsSi3oThLixrENjQwRUG4W8kUXHh7oQMN9tzfEVg7ieQm1bqidn_3Cg-nzDR0qpvKHYdnH_bHbwWX755ZP9GyljRS4DJhESka5VqVXr7bnZWfXLeTa61iXZfFNvb0FRri0tEASixL5HPU6X6V0n1Ds6Gmerca",
+        "expiresIn": "3600",
+        "oauthIdToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImM4OGQ4MDlmNGRiOTQzZGY1M2RhN2FjY2ZkNDc3NjRkMDViYTM5MWYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNzI3NDEwOTAyNjI5LTQ2Z29ia21wbDF0OXQwNG4xbXA0bGR0Nm52cGNjNDdqLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNzI3NDEwOTAyNjI5LTQ2Z29ia21wbDF0OXQwNG4xbXA0bGR0Nm52cGNjNDdqLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTAyNDU1NjcyMzU1MTMzOTM5NjI0IiwiZW1haWwiOiJqZWFuY29ybmVsaW83NDJAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJKMEdoeUJxZEZ6X1UwOVhRbzhEZGRRIiwiaWF0IjoxNzMwMTcwMDg4LCJleHAiOjE3MzAxNzM2ODh9.sEfc2T9sYkBdX5Xa0sjTBfvQnee28hN1zqaLnMmZrWi7Ru-M0vqjfGfyjSViql1-Yjf55pfKAwRvpLcW_ShhRB6J7qSJqDDdQiSeiG_Xg1p3O3NK5a9tXzHUNTx57eDA8vkDYLGH86yrz9BalD_EyRr8FLPX5YRBlIS7DwetgbKbOsL486rMmyf_U8gtXdrflebtc3rCvjmJ_m7tPbobmnpJHETfPGDXHDL3BwIG63E63ZVhrHcBdkzC5EhvWe63nMJEWaNO-iYCW8klyG-HX-_yNS3RfcBSQMhwRVuFBTMHqHJvB8GFqHpEArx5UDTSf4Kcz34XyieqfXbKK0dRlg",
+        "rawUserInfo": "{\"name\":\"Jean Cornelio\",\"granted_scopes\":\"https://www.googleapis.com/auth/userinfo.email openid https://www.googleapis.com/auth/userinfo.profile\",\"id\":\"102455672355133939624\",\"verified_email\":true,\"given_name\":\"Jean\",\"family_name\":\"Cornelio\",\"email\":\"jeancornelio742@gmail.com\",\"picture\":\"https://lh3.googleusercontent.com/a/ACg8ocIrooviMcdK2rcyINcRB30lTvZmWCymJkMQpUW9IXCZwOSCGOs=s96-c\"}",
+        "isNewUser": true,
+        "kind": "identitytoolkit#VerifyAssertionResponse"
+    },
+    "operationType": "signIn"
+}
