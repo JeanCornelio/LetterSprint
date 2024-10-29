@@ -1,3 +1,4 @@
+import { useAuth } from "../hooks/useAuth";
 import {
   BackIcon,
   GithubIcon,
@@ -11,6 +12,7 @@ type formState = "signIn" | "signUp";
 
 export const LoginAndRegistrationPage = () => {
   const [formState, setformState] = useState<formState>("signIn");
+  const { signInWithGoogle } = useAuth()
 
   const handleFormState = (state: formState) => {
     setformState(state);
@@ -88,7 +90,7 @@ export const LoginAndRegistrationPage = () => {
 
             <div className="">/</div>
             <div className="flex flex-col w-full gap-4 mb-4 ">
-              <button className="border border-1 border-gray-700 p-4 rounded-md  hover:border-sprint-blue hover:text-sprint-blue transition">
+              <button className="border border-1 border-gray-700 p-4 rounded-md  hover:border-sprint-blue hover:text-sprint-blue transition" onClick={() => signInWithGoogle()}>
                 <span className="flex gap-3 items-center ">
                   <GoogleIcon className="text-xl" />
                   Sign in with Google
