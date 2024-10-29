@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { MODES, TIMER, TIMES, WORDS } from "../constants";
 import { useTestConfiguration } from "../hooks/useTestConfiguration";
 import {
@@ -6,9 +6,7 @@ import {
   ClockIcon,
   HealthiconsAIcon,
   NumberIcon,
-  ToolsIcon,
 } from "../icons/Icons";
-import { ConfigTestTimeModal } from "./ConfigTestTimeModal";
 import { MODE, TIME, WORD } from "../types/Text";
 import { useTimer } from "../hooks/useTimer";
 
@@ -30,12 +28,10 @@ export const TestConfiguration = () => {
 
   const defaultClass = "cursor-pointer hover:text-sprint-blue transition";
   const active = " text-sprint-blue font-bold";
-
-  const [open, setOpen] = useState(false);
   const { timerState } = useTimer();
-  const handleModal = () => {
-    setOpen(true);
-  };
+
+
+
   return (
     <section
       id="testConfig"
@@ -107,14 +103,6 @@ export const TestConfiguration = () => {
                   </button>
                 </li>
               ))}
-          {/*   <li className="cursor-pointer hover:text-sprint-blue transition">
-              <button
-                onClick={handleModal}
-                className="flex items-center gap-1 text-md"
-              >
-                <ToolsIcon />
-              </button>
-            </li> */}
           </ul>
         )}
 
@@ -139,7 +127,7 @@ export const TestConfiguration = () => {
           </ul>
         )}
       </div>
-      {open && <ConfigTestTimeModal dialogState={setOpen} />}
+
     </section>
   );
 };

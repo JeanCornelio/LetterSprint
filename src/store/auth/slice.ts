@@ -7,8 +7,10 @@ export const authSlice = createSlice({
         email:"",
         displayName:"",
         photoURL:"",
-        state: "not_authenticated",  //authenticated, not_authenticated, checking
-        errorMessage: null
+        userName:"",
+        state: "not_authenticated",  //authenticated, not_authenticated, checking, checkuserName
+        errorMessage: null,
+        isFirstTime: null // null, true, false
     },
     reducers:{
 
@@ -16,14 +18,24 @@ export const authSlice = createSlice({
              state.state = 'checking'
         },
 
+       chekUserNameStatus: (state) => {
+             state.state = 'checkuserName'
+        },
+
+        setUserName: (state,  action: PayloadAction) => {
+            const {payload} = action
+            state.userName = payload.userName
+        },
+
+    
         singInGoogle: (state, action: PayloadAction) => {
             const {payload} = action
-
-           state.uid = payload.uid
-           state.email = payload.email
-           state.displayName = payload.displayName
-           state.photoURL = payload.photoURL
-           state.state = "authenticated"
+            
+            state.uid = payload.uid
+            state.email = payload.email
+            state.displayName = payload.displayName
+            state.photoURL = payload.photoURL
+           
         },
 
         logout:(state,  action: PayloadAction)=>{
@@ -36,10 +48,15 @@ export const authSlice = createSlice({
             state.state = "not_authenticated"
             state.errorMessage = payload.errorMessage
            
+        },
+
+        setAuthenticatedState:(state)=>{
+            state.state = "authenticated"
         }
+        
 
     }
 })
 
 export default authSlice.reducer
-export const {singInGoogle, checkingStatus, logout} = authSlice.actions
+export const {singInGoogle, checkingStatus, logout, chekUserNameStatus, setUserName, setAuthenticatedState} = authSlice.actions

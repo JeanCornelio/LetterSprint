@@ -3,7 +3,9 @@ import { CrownIcon, KeyBoardIcon, UserIcon } from "../icons/Icons";
 import { useAuth } from "../hooks/useAuth";
 
 export const Nav = () => {
-  const { state, photoURL } = useAuth()
+  const { state, photoURL, email, userName } = useAuth()
+
+
 
   return (
     <nav className="container max-h-24 ">
@@ -25,8 +27,11 @@ export const Nav = () => {
               ? <Link to='/login' className="  p-1 rounded-full hover:text-sprint-blue transition">
                 <UserIcon className="text-2xl" />
               </Link>
-              : <div className=" cursor-pointer">
-                <img className="w-8 h-8 p-1 rounded-full ring-2 ring-slate-600 " src={photoURL} alt="Bordered avatar" />
+              : <div className="  flex items-center gap-2">
+                <div className="cursor-pointer">
+                  <img className="w-6 h-6 p-1 rounded-full ring-2 ring-slate-600 " src={photoURL} alt="Bordered avatar" />
+                </div>
+                <span className="select-none">{userName}</span>
               </div>
           }
 

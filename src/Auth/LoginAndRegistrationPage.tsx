@@ -1,3 +1,4 @@
+import { UserNameModal } from "../components/UserNameModal";
 import { useAuth } from "../hooks/useAuth";
 import {
   BackIcon,
@@ -12,11 +13,15 @@ type formState = "signIn" | "signUp";
 
 export const LoginAndRegistrationPage = () => {
   const [formState, setformState] = useState<formState>("signIn");
-  const { signInWithGoogle } = useAuth()
+  const { signInWithGoogle, state } = useAuth()
+
 
   const handleFormState = (state: formState) => {
     setformState(state);
   };
+
+
+
 
   return (
     <section className=" flex flex-col justify-center items-center gap-10 animate-fade-in ">
@@ -103,9 +108,13 @@ export const LoginAndRegistrationPage = () => {
                 </span>
               </button>
             </div>
+
           </>
         )}
-
+        {
+          state === 'checkuserName' &&
+          <UserNameModal />
+        }
         {formState === "signUp" && (
           <form className="flex  w-full items-center gap-8  ">
             <div className="flex-col flex w-full gap-4">
