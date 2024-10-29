@@ -3,10 +3,14 @@ LetterSprint
 Readme Coming soon 
 
 [x] - to implement chart of results or a way to show results
-[] - implement firebase
-[] - slice of auth
-[] - a way to safe user and autenticate
-[] - google autentication
+[x] - implement firebase
+[x] - slice of auth
+[x] - a way to safe user and autenticate
+[x] - google autentication
+    - get user name of modal
+    -
+    -
+    -
 [] - github autentication
 [] - login 
 [] - registration

@@ -9,11 +9,11 @@ export const googleProvider = new GoogleAuthProvider()
 export const singInGooglePopup = async () =>{
     try {
         const resp = await signInWithPopup(firebaseAuth, googleProvider)
+        console.log( resp)
+        const {isNewUser} = resp._tokenResponse
         const {uid, email, displayName, photoURL} = resp.user
-
-        //console.log({uid, email, displayName, photoURL})
         
-        return({uid, email, displayName, photoURL, ok: true, errorMessage:null})
+        return({uid, email, displayName, photoURL, ok: true, errorMessage:null, isNewUser})
 
     } catch (error) {
         const errorMessage  = error.message
