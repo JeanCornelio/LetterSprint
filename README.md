@@ -7,10 +7,9 @@ Readme Coming soon
 [x] - slice of auth
 [x] - a way to safe user and autenticate
 [x] - google autentication
-    - get user name of modal
-    - generate a random name
-    - 
-    -
+[x] - get user name of modal
+    - validate that userName not be repeated
+    - create user profile page
 [] - github autentication
 [] - login 
 [] - registration
