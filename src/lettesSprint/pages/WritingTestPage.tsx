@@ -160,8 +160,8 @@ export const WritingTestPage = () => {
     clone.play();
   };
 
-  const rowPosition = (wordPosition) => {
-    let contentChildren = Array.from(testContent.current.children).map(
+  const rowPosition = (wordPosition: number) => {
+    const contentChildren = Array.from(testContent.current.children).map(
       (child) => {
         return child.getBoundingClientRect().top;
       }
@@ -188,7 +188,10 @@ export const WritingTestPage = () => {
 
   const handleKeyDown = (event: KeyboardEvent) => {
     //Start Game
-    handleTimerState(TIMER["start"]);
+
+    
+
+    
 
     const { code, key } = event;
 
@@ -199,6 +202,10 @@ export const WritingTestPage = () => {
     //total of words nad total of letters to completed
     const totalWordsToCopleted = wordPosition + 1;
     const lastLettersToCompleted = letterPosition;
+
+    if(key.length === 1 && code !== "Space"){
+      handleTimerState(TIMER["start"]);
+    }
 
     if (code === "Space") {
       //next Word State

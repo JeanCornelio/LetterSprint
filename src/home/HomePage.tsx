@@ -1,29 +1,29 @@
 import { Outlet } from "react-router-dom";
 import { Footer, Nav } from "../components";
-import { LoadingIcon } from "../icons/Icons";
+
 import { useAuth } from "../hooks/useAuth";
 
+import { CheckingAuth } from "../components/CheckingAuth";
+import { CheckingCurrentUser } from "../components/CheckingCurrentUser";
+import { useCheckingCurrentUser } from "../hooks/useCheckingCurrentUser";
 
 export const HomePage = () => {
-  const { state, setUserAuthenticated } = useAuth()
-  setUserAuthenticated()
+  const { state, isPending } = useAuth();
+  useCheckingCurrentUser()
 
   return (
     <div className="container mx-auto flex flex-col  h-screen px-5 md:px-0 relative">
-      {state === 'checking' &&
-        <div className="flex bg-[#00000080]  overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  h-full">
-          <div className="w-full flex justify-center">
-            <LoadingIcon />
-          </div>
-        </div>
-      }
-
+      {state === "checking" && (
+       <CheckingAuth/>
+      )}
       <header className=" flex flex-col justify-center">
         <Nav />
       </header>
       <main className="flex justify-center  w-full flex-grow ">
-
-        <Outlet />
+        { isPending 
+          ? <CheckingCurrentUser/>
+          : <Outlet />
+        }
       </main>
       <Footer />
     </div>

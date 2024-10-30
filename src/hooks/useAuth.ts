@@ -1,84 +1,89 @@
 import { useNavigate } from "react-router-dom";
-import { checkingStatus, chekUserNameStatus, logout, setAuthenticatedState, setCurrentUser, setUserName, singInGoogle } from "../store/auth/slice";
-import { auth, checkUserExist, createUserAccount, singInGooglePopup } from "../utils/firebaseAuth.utils";
+import {
+  checkingStatus,
+  chekUserNameStatus,
+  logout,
+  setAuthenticatedState,
+  setCurrentUser,
+  setIsPending,
+  setUserName,
+  singInGoogle,
+} from "../store/auth/slice";
+import {
+  auth,
+  checkUserExist,
+  createUserAccount,
+  singInGooglePopup,
+} from "../utils/firebaseAuth.utils";
 import { useAppDispatch, useAppSelector } from "./useStore";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-
-
+import { signOut } from "firebase/auth";
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { state, photoURL, displayName, errorMessage, email, userName, uid } = useAppSelector(
-    ({ auth }) => auth
-  );
+  const {
+    state,
+    photoURL,
+    displayName,
+    errorMessage,
+    email,
+    userName,
+    uid,
+    isPending,
+  } = useAppSelector(({ auth }) => auth);
 
+  const handleCurrentUSer = (currentUser) => {
+    dispatch(setCurrentUser(currentUser));
+  };
 
-  const setUserAuthenticated = async () =>{
-    
-   onAuthStateChanged(auth, async (user)  => {
-      if(user){
-          const currentUser = await checkUserExist(user.uid)
-          dispatch(setCurrentUser(currentUser.data));
-      }
-    })
+  const checkingCurrentUser = (value: boolean) => {
+    dispatch(setIsPending(value));
+  };
 
-  }
-
- 
-
- 
-  const setLogout = (errorMessage = 'Sign up process Canceled') =>{
+  const setLogout = (errorMessage = "Sign up process Canceled") => {
     dispatch(logout(errorMessage));
     signOut(auth);
-    navigate('/login')
-  }
+    navigate("/login");
+  };
 
-
-  const addUserName= (userName:string) =>{
-   dispatch(setUserName({userName}))
-  }
-
+  const addUserName = (userName: string) => {
+    dispatch(setUserName({ userName }));
+  };
 
   const signInWithGoogle = async () => {
-    dispatch(checkingStatus()); // waiting for google autentication 
+    dispatch(checkingStatus()); // waiting for google autentication
 
     const resp = await singInGooglePopup();
     const { uid, email, displayName, photoURL, ok, errorMessage } = resp;
 
-    if (!ok) {return setLogout(errorMessage)}
+    if (!ok) {
+      return setLogout(errorMessage);
+    }
 
     dispatch(singInGoogle({ uid, email, displayName, photoURL }));
 
-     const user = await checkUserExist(uid)
+    const user = await checkUserExist(uid);
 
-     if(!user.exist){
+    if (!user.exist) {
+      dispatch(chekUserNameStatus()); // waiting for userName
+    } else {
+      dispatch(setAuthenticatedState());
 
-       dispatch(chekUserNameStatus()); // waiting for userName
-     
-      }else{
-       dispatch(setAuthenticatedState());
+      addUserName(user.data.userName);
 
-       addUserName(user.data.userName)
-       
-       navigate("/");
-     }
+      navigate("/");
+    }
   };
 
-  const createAccountName = (userName: string) =>{
+  const createAccountName = (userName: string) => {
+    addUserName(userName);
 
-     addUserName(userName)
-     
-     createUserAccount({ uid, email, displayName, photoURL, userName })
-     
-     dispatch(setAuthenticatedState());
-    
-     navigate("/user");
-  }
+    createUserAccount({ uid, email, displayName, photoURL, userName });
 
-  
+    dispatch(setAuthenticatedState());
 
-
+    navigate("/user");
+  };
 
   return {
     signInWithGoogle,
@@ -90,6 +95,8 @@ export const useAuth = () => {
     setLogout,
     userName,
     createAccountName,
-    setUserAuthenticated
+    isPending,
+    handleCurrentUSer,
+    checkingCurrentUser,
   };
 };
