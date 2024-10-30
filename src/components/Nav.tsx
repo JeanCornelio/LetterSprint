@@ -3,7 +3,7 @@ import { CrownIcon, KeyBoardIcon, UserIcon } from "../icons/Icons";
 import { useAuth } from "../hooks/useAuth";
 
 export const Nav = () => {
-  const { state, photoURL, email, userName } = useAuth()
+  const { state, photoURL, userName, setLogout } = useAuth()
 
 
 
@@ -32,6 +32,7 @@ export const Nav = () => {
                   <img className="w-6 h-6 p-1 rounded-full ring-2 ring-slate-600 " src={photoURL} alt="Bordered avatar" />
                 </div>
                 <span className="select-none">{userName}</span>
+                <button className="border " onClick={() => setLogout()} >close</button>
               </div>
           }
 

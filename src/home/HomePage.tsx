@@ -3,8 +3,10 @@ import { Footer, Nav } from "../components";
 import { LoadingIcon } from "../icons/Icons";
 import { useAuth } from "../hooks/useAuth";
 
+
 export const HomePage = () => {
-  const { state } = useAuth()
+  const { state, setUserAuthenticated } = useAuth()
+  setUserAuthenticated()
 
   return (
     <div className="container mx-auto flex flex-col  h-screen px-5 md:px-0 relative">

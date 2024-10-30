@@ -1,22 +1,42 @@
 import { useNavigate } from "react-router-dom";
-import { checkingStatus, chekUserNameStatus, logout, setAuthenticatedState, setUserName, singInGoogle } from "../store/auth/slice";
-import { singInGooglePopup } from "../utils/firebaseAuth.utils";
+import { checkingStatus, chekUserNameStatus, logout, setAuthenticatedState, setCurrentUser, setUserName, singInGoogle } from "../store/auth/slice";
+import { auth, checkUserExist, createUserAccount, singInGooglePopup } from "../utils/firebaseAuth.utils";
 import { useAppDispatch, useAppSelector } from "./useStore";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+
 
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
- 
-
-  const { state, photoURL, displayName, errorMessage, email, userName } = useAppSelector(
+  const { state, photoURL, displayName, errorMessage, email, userName, uid } = useAppSelector(
     ({ auth }) => auth
   );
+
+
+  const setUserAuthenticated = async () =>{
+    
+   onAuthStateChanged(auth, async (user)  => {
+      if(user){
+          const currentUser = await checkUserExist(user.uid)
+          dispatch(setCurrentUser(currentUser.data));
+      }
+    })
+
+  }
+
+ 
 
  
   const setLogout = (errorMessage = 'Sign up process Canceled') =>{
     dispatch(logout(errorMessage));
+    signOut(auth);
+    navigate('/login')
+  }
+
+
+  const addUserName= (userName:string) =>{
+   dispatch(setUserName({userName}))
   }
 
 
@@ -24,34 +44,39 @@ export const useAuth = () => {
     dispatch(checkingStatus()); // waiting for google autentication 
 
     const resp = await singInGooglePopup();
-    const { uid, email, displayName, photoURL, ok, errorMessage, isNewUser } = resp;
+    const { uid, email, displayName, photoURL, ok, errorMessage } = resp;
 
     if (!ok) {return setLogout(errorMessage)}
 
     dispatch(singInGoogle({ uid, email, displayName, photoURL }));
-    
-    if(isNewUser){
-      //This should active when is the first time of user or if user dosen't exist in our data base
-          dispatch(chekUserNameStatus()); // waiting for userName
-    }else{
-      //get the userName and set the information
 
-      //look up information of user
-      dispatch(setUserName({userName: 'MunditoRD'}))
-      dispatch(setAuthenticatedState());
-      navigate("/");
-    }
-   
+     const user = await checkUserExist(uid)
 
+     if(!user.exist){
+
+       dispatch(chekUserNameStatus()); // waiting for userName
+     
+      }else{
+       dispatch(setAuthenticatedState());
+
+       addUserName(user.data.userName)
+       
+       navigate("/");
+     }
   };
 
   const createAccountName = (userName: string) =>{
 
-    dispatch(setUserName({userName}))
-    dispatch(setAuthenticatedState());
-    //navigate when
-    navigate("/user");
+     addUserName(userName)
+     
+     createUserAccount({ uid, email, displayName, photoURL, userName })
+     
+     dispatch(setAuthenticatedState());
+    
+     navigate("/user");
   }
+
+  
 
 
 
@@ -64,6 +89,7 @@ export const useAuth = () => {
     email,
     setLogout,
     userName,
-    createAccountName
+    createAccountName,
+    setUserAuthenticated
   };
 };
