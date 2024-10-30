@@ -112,7 +112,7 @@ export const LoginAndRegistrationPage = () => {
           </>
         )}
         {
-          state === 'checkuserName' &&
+          state === 'checkUserName' &&
           <UserNameModal />
         }
         {formState === "signUp" && (

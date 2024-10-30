@@ -4,6 +4,7 @@ import { Tooltip } from './Tooltip'
 import { useTestConfiguration } from '../hooks/useTestConfiguration';
 import { MODES } from '../constants';
 import { useTimer } from '../hooks/useTimer';
+import { useAuth } from '../hooks/useAuth';
 
 
 export const TestResult = ({testReultValues}) => {
@@ -11,7 +12,8 @@ export const TestResult = ({testReultValues}) => {
   const {correct, incorrect, extra, missed, netWpm, totalWords, presition, raw, seconds} = testReultValues;
   const { mode } = useTestConfiguration();
   const { timeSelected} = useTimer()
-
+  const {state} = useAuth()
+  console.log(state)
   return (
     <article
     id="result"
@@ -87,12 +89,15 @@ export const TestResult = ({testReultValues}) => {
         </div>
       </div>
     </div>
+
+    {state === 'not_authenticated' &&
     <footer className="text-center self-center mt-10 text-lg">
       <Link to="/login" className="underline">
         Sing in
       </Link>
       <span> to save your result</span>
     </footer>
+    }
   </article>
   )
 }

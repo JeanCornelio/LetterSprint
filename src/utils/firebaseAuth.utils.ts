@@ -3,6 +3,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut} from "firebase/a
 import { firebaseAuth, firebaseBD } from "./firebase.utils"
 import {  doc, getDoc, setDoc } from "firebase/firestore";
 
+
 export const googleProvider = new GoogleAuthProvider()
 export const auth = getAuth();
 
@@ -34,9 +35,9 @@ export const checkUserExist = async (uid) =>{
 
     const userDoc = await getDoc(userRef)
  
-    console.log(userDoc)
     return {exist:userDoc.exists(),data:userDoc.data()}
 }
+
 
 export const createUserAccount = async (user) =>{
      try {
@@ -54,7 +55,6 @@ export const createUserAccount = async (user) =>{
         return false
      }
 }
-
 
 
 
