@@ -8,8 +8,8 @@ Readme Coming soon
 [x] - a way to safe user and autenticate
 [x] - google autentication
     - get user name of modal
-    -
-    -
+    - generate a random name
+    - 
     -
 [] - github autentication
 [] - login 
