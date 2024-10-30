@@ -11,7 +11,7 @@ Readme Coming soon
     - validate that userName not be repeated
     - create user profile page
 [] - github autentication
-[] - login 
+[] - login email and password
 [] - registration
 [] - change of password with email
 [] - persisten of user an data user
