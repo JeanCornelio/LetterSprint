@@ -8,13 +8,13 @@ Readme Coming soon
 [x] - a way to safe user and autenticate
 [x] - google autentication
 [x] - get user name of modal
-    - validate that userName not be repeated
-    - create user profile page
-[] - github autentication
-[] - login email and password
-[] - registration
-[] - change of password with email
-[] - persisten of user an data user
-[] - user profile when this is login
+[x] - validate that username not be repeated
+[]  - login email and password
+[]  - registration
+[]  - create user profile page
+[]  - github autentication
+[]  - change of password with email
+[]  - persisten of user an data user
+[]  - user profile when this is login
 
 

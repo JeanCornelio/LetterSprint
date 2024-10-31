@@ -7,7 +7,7 @@ export const authSlice = createSlice({
         email:"",
         displayName:"",
         photoURL:"",
-        userName:"",
+        username:"",
         state: "not_authenticated",  //authenticated, not_authenticated, checking, checkUserName
         errorMessage: null,
         isPending: true, //true false
@@ -18,13 +18,13 @@ export const authSlice = createSlice({
              state.state = 'checking'
         },
 
-       chekUserNameStatus: (state) => {
+       chekUsernameStatus: (state) => {
              state.state = 'checkUserName'
         },
 
-        setUserName: (state,  action: PayloadAction) => {
+        setUsername: (state,  action: PayloadAction) => {
             const {payload} = action
-            state.userName = payload.userName
+            state.username = payload.username
         },
 
     
@@ -38,15 +38,15 @@ export const authSlice = createSlice({
            
         },
 
-        logout:(state,  action: PayloadAction)=>{
+        logout:(state,  action: PayloadAction<string>)=>{
             const {payload} = action
-            
+    
             state.uid = ""
             state.email = ""
             state.displayName = ""
             state.photoURL = ""
             state.state = "not_authenticated"
-            state.errorMessage = payload.errorMessage
+            state.errorMessage = payload
            
         },
 
@@ -61,7 +61,7 @@ export const authSlice = createSlice({
             state.email = payload.email
             state.displayName = payload.displayName
             state.photoURL = payload.photoURL
-            state.userName = payload.userName
+            state.username = payload.username
             state.state = "authenticated"
             state.isPending = false
         },
@@ -74,4 +74,4 @@ export const authSlice = createSlice({
 })
 
 export default authSlice.reducer
-export const {singInGoogle, checkingStatus, logout, chekUserNameStatus, setUserName, setAuthenticatedState, setCurrentUser, setIsPending} = authSlice.actions
+export const {singInGoogle, checkingStatus, logout, chekUsernameStatus, setUsername, setAuthenticatedState, setCurrentUser, setIsPending} = authSlice.actions
