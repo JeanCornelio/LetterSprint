@@ -4,19 +4,26 @@ import { auth, checkUserExist } from "../utils/firebaseAuth.utils";
 import { useAuth } from "./useAuth";
 
 export const useCheckingCurrentUser = () => {
-  const { checkingCurrentUser, handleCurrentUSer } = useAuth();
+  const { checkingCurrentUser, handleCurrentUser, setLogout } = useAuth();
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        return checkingCurrentUser(false);
-      }
+      if (!user) return checkingCurrentUser(false);
 
       const currentUser = await checkUserExist(user.uid);
-
-      if (currentUser.data) {
-        checkingCurrentUser(true);
-        handleCurrentUSer(currentUser.data);
+      
+      if (!currentUser.data) return checkingCurrentUser(false);
+      
+      if (!user.emailVerified) {
+          checkingCurrentUser(false);
+          setLogout('We have sent a verification email, please check your email.')
+          return   
       }
+  
+      checkingCurrentUser(true);
+
+      handleCurrentUser(currentUser.data);
+     
+
     });
   }, []);
 
