@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import { UserOptions } from "./UserOptions";
 
 export const Nav = () => {
-  const { state, photoURL, userName, setLogout, isPending } = useAuth();
+  const { state, photoURL, username, setLogout, isPending } = useAuth();
 
   return (
     <nav className="container max-h-24 ">
@@ -31,7 +31,7 @@ export const Nav = () => {
             ) : (
               <UserOptions
                 setLogout={setLogout}
-                userName={userName}
+                username={username}
                 photoURL={photoURL}
               />
             )}
