@@ -9,6 +9,7 @@ import {
 } from "../icons/Icons";
 import { MODE, TIME, WORD } from "../types/Text";
 import { useTimer } from "../hooks/useTimer";
+import { TestConfigurationModal } from "./TestConfigurationModal";
 
 export const TestConfiguration = () => {
   const {
@@ -38,10 +39,10 @@ export const TestConfiguration = () => {
       className={
         (timerState === TIMER["start"] || timerState === TIMER["finished"]
           ? "animate-fade-out"
-          : "animate-fade-in") + "  flex justify-center transition-all "
+          : "animate-fade-in") + " flex  justify-center transition-all "
       }
     >
-      <div className="flex gap-5 bg-sprint-config p-2 px-5 rounded-md justify-center md:w-100">
+      <div className="hidden  md:flex gap-5 bg-sprint-config p-2 px-5 rounded-md justify-center md:w-100  ">
         <ul className="flex gap-5">
           <li className={defaultClass + (isPuntuatioActive ? active : "")}>
             <button
@@ -127,7 +128,7 @@ export const TestConfiguration = () => {
           </ul>
         )}
       </div>
-
+      <TestConfigurationModal />
     </section>
   );
 };

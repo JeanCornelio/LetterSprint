@@ -1,6 +1,4 @@
-
-import { SignInIcon, UserAdd01Icon } from "../icons/Icons"
-
+import { SignInIcon, UserAdd01Icon } from "../icons/Icons";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -9,54 +7,62 @@ interface Form {
     password: string;
 }
 
-
-
-
 export const FormSignIn = ({ handleFormState, onSignIn }) => {
-
-    const { handleSubmit, register, formState: { errors } } = useForm<Form>()
-
+    const {
+        handleSubmit,
+        register,
+        formState: { errors },
+    } = useForm<Form>();
 
     const onSubmit: SubmitHandler<Form> = async (data) => {
-        const { email, password } = data
-        onSignIn({ email, password })
-
-    }
-
+        const { email, password } = data;
+        onSignIn({ email, password });
+    };
 
     return (
         <article className="flex flex-col w-full ">
-            <form className="flex flex-col gap-4 " noValidate onSubmit={handleSubmit(onSubmit)}>
+            <form
+                className="flex flex-col gap-4 "
+                noValidate
+                onSubmit={handleSubmit(onSubmit)}
+            >
                 <div>
-                    {
-                        errors.email?.type === "required" &&
-                        <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2"> Email is required, cannot be empty</h3>
-                    }
-                    {
-                        errors.email?.type === "pattern" &&
-                        <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2"> Email is not valid</h3>
-                    }
+                    {errors.email?.type === "required" && (
+                        <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
+                            {" "}
+                            Email is required, cannot be empty
+                        </h3>
+                    )}
+                    {errors.email?.type === "pattern" && (
+                        <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
+                            {" "}
+                            Email is not valid
+                        </h3>
+                    )}
                     <input
                         autoComplete="off"
                         type="email"
                         defaultValue=""
                         placeholder="Email"
-                        {...register("email", { required: true, pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/ })}
+                        {...register("email", {
+                            required: true,
+                            pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                        })}
                         className="bg-sprint-config p-4 outline-none rounded-md w-full"
                     />
                 </div>
                 <div>
-                    {
-                        errors.password?.type === "required" &&
-                        <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">Password is required</h3>
-                    }
+                    {errors.password?.type === "required" && (
+                        <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
+                            Password is required
+                        </h3>
+                    )}
 
                     <input
                         autoComplete="off"
                         type="password"
                         placeholder="Password"
                         {...register("password", { required: true })}
-
                         className="bg-sprint-config p-4 outline-none rounded-md w-full"
                     />
                 </div>
@@ -95,5 +101,5 @@ export const FormSignIn = ({ handleFormState, onSignIn }) => {
                 Sign up
             </button>
         </article>
-    )
-}
+    );
+};

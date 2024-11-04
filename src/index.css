@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 body {
-    font-family: 'Iosevka Curly', monospace;
+  font-family: "Iosevka Curly", monospace;
 }
 
 .tooltip {
-    @apply invisible absolute;
+  @apply invisible absolute;
 }
 
 .has-tooltip:hover .tooltip {
-    @apply visible z-50;
+  @apply visible z-50;
 }
