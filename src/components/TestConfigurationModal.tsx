@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTestConfiguration } from "../hooks/useTestConfiguration";
 import { MODES, TIMES, WORDS } from "../constants";
 import { MODE, TIME, WORD } from "../types/Text";
-import { useTimer } from "../hooks/useTimer";
+
 
 export const TestConfigurationModal = () => {
     const [isOpen, setOpen] = useState(false);
@@ -23,9 +23,9 @@ export const TestConfigurationModal = () => {
 
     const defaultClass = " hover:bg-sprint-blue hover:text-white py-2  rounded-md transition ";
     const active = " bg-sprint-blue text-white ";
-    const { timerState } = useTimer();
 
-    console.log(isPuntuatioActive)
+
+
     return (
         <>
             <Button

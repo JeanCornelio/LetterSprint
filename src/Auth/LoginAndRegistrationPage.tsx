@@ -10,7 +10,7 @@ type formState = "signIn" | "signUp";
 
 export const LoginAndRegistrationPage = () => {
   const [formState, setFormState] = useState<formState>("signIn");
-  const { signInWithGoogle, state, createUserWithEmailAndPassword, signIn } =
+  const { signInWithGoogle, state, createUserWithEmailAndPassword, signIn, signInWithGithub } =
     useAuth();
 
   const handleFormState = (state: formState) => {
@@ -33,7 +33,7 @@ export const LoginAndRegistrationPage = () => {
           <>
             <FormSignIn handleFormState={handleFormState} onSignIn={signIn} />
             <div className="hidden md:block ">/</div>
-            <ExternalAuthentication onSignInWithGoogle={signInWithGoogle} />
+            <ExternalAuthentication onSignInWithGoogle={signInWithGoogle} onSignWithGithub={signInWithGithub} />
           </>
         )}
         {state === "checkUserName" && <UsernameModal />}
