@@ -6,10 +6,12 @@ import { useAuth } from "../hooks/useAuth";
 import { CheckingAuth } from "../components/CheckingAuth";
 import { CheckingCurrentUser } from "../components/CheckingCurrentUser";
 import { useCheckingCurrentUser } from "../hooks/useCheckingCurrentUser";
+import { useUpdateConfig } from "../hooks/useUpdateConfig";
 
 export const HomePage = () => {
   const { state, isPending } = useAuth();
   useCheckingCurrentUser();
+  useUpdateConfig()
 
   return (
     <div className="container mx-auto flex flex-col h-screen  xl:px-0 relative min-w-[375px] ">

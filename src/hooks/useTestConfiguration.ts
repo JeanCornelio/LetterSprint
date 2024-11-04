@@ -1,4 +1,8 @@
+import { useEffect } from "react";
+import { TestInitialState } from "../interfaces/testConfiguration";
 import {
+  resetTestConfiguration,
+  setTestConfiguration,
   setTestMode,
   setTestNumber,
   setTestPuntuation,
@@ -6,13 +10,15 @@ import {
   setTestWords,
 } from "../store/test/slice";
 import { MODE, TIME, WORD } from "../types/Text";
-
 import { useAppDispatch, useAppSelector } from "./useStore";
 
+
 export const useTestConfiguration = () => {
+
   const { mode, time, words, puntuation, number } = useAppSelector(
     ({ test }) => test
   );
+
   const dispatch = useAppDispatch();
 
   const setMode = (mode: MODE) => {
@@ -35,6 +41,14 @@ export const useTestConfiguration = () => {
     dispatch(setTestNumber());
   };
 
+  const setCurrentUserTestConfiguration = (config: TestInitialState) =>{
+      dispatch(setTestConfiguration(config))
+  }
+
+  const resetConfiguration = () =>{
+       dispatch(resetTestConfiguration)
+  }
+
   return {
     setMode,
     setTime,
@@ -46,5 +60,7 @@ export const useTestConfiguration = () => {
     words,
     isPuntuatioActive: puntuation,
     isNumberactive: number,
+    setCurrentUserTestConfiguration,
+    resetConfiguration
   };
 };

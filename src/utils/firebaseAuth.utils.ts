@@ -9,23 +9,36 @@ import {
   signOut,
 } from "firebase/auth";
 import { firebaseAuth, firebaseBD } from "./firebase.utils";
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { TestInitialState } from "../interfaces/testConfiguration";
 
 export const googleProvider = new GoogleAuthProvider();
 export const githubProvider = new GithubAuthProvider();
 export const auth = getAuth();
 
-
-
-const handleQuery = (db, collectionName: string, input:string, rule:string, value: string | number  ) =>{
-    try {
-        const q = query(collection(db, collectionName), where(input, rule , value))
-        return q
-    } catch (error) {
-        return 
-    }
-
-}
+const handleQuery = (
+  db,
+  collectionName: string,
+  input: string,
+  rule: string,
+  value: string | number
+) => {
+  try {
+    const q = query(collection(db, collectionName), where(input, rule, value));
+    return q;
+  } catch (error) {
+    return;
+  }
+};
 
 export const signInGooglePopup = async () => {
   try {
@@ -35,9 +48,8 @@ export const signInGooglePopup = async () => {
 
     return { uid, email, displayName, photoURL, ok: true, errorMessage: null };
   } catch (error) {
-
     const errorMessage = error.message;
-    
+
     return {
       ok: false,
       errorMessage,
@@ -53,9 +65,8 @@ export const signInGithub = async () => {
 
     return { uid, email, displayName, photoURL, ok: true, errorMessage: null };
   } catch (error) {
-
     const errorMessage = error.message;
-    
+
     return {
       ok: false,
       errorMessage,
@@ -63,25 +74,39 @@ export const signInGithub = async () => {
   }
 };
 
-
-export const createAccountWithEmailAndPassword = async ({email:userEmail, password, username}) => {
+export const createAccountWithEmailAndPassword = async ({
+  email: userEmail,
+  password,
+  username,
+}) => {
   try {
-    const resp = await createUserWithEmailAndPassword(auth, userEmail, password);
+    const resp = await createUserWithEmailAndPassword(
+      auth,
+      userEmail,
+      password
+    );
 
-   
     const { uid, email, displayName, photoURL } = resp.user;
 
-    
-     sendEmailVerification(resp.user).catch(()=>{
-       return { ok: false, errorMessage:'Error sending the verification email'};
-    })
- 
-    return { uid, email, displayName, photoURL, username, ok: true, errorMessage: null }
+    sendEmailVerification(resp.user).catch(() => {
+      return {
+        ok: false,
+        errorMessage: "Error sending the verification email",
+      };
+    });
 
+    return {
+      uid,
+      email,
+      displayName,
+      photoURL,
+      username,
+      ok: true,
+      errorMessage: null,
+    };
   } catch (error) {
-
     const errorMessage = error.message;
-   
+
     return {
       ok: false,
       errorMessage,
@@ -89,19 +114,23 @@ export const createAccountWithEmailAndPassword = async ({email:userEmail, passwo
   }
 };
 
-export const signInEmailAndPassword = async ({email:userEmail, password}) => {
+export const signInEmailAndPassword = async ({
+  email: userEmail,
+  password,
+}) => {
   try {
-   
     await signInWithEmailAndPassword(auth, userEmail, password);
 
-    const emailVerified = await userEmailVerify()
+    const emailVerified = await userEmailVerify();
 
-    if(!emailVerified){
-       return { ok: false, errorMessage:'Please verified your email and confirm your account'}
+    if (!emailVerified) {
+      return {
+        ok: false,
+        errorMessage: "Please verified your email and confirm your account",
+      };
     }
 
-    return { ok: true, errorMessage: ''}
-
+    return { ok: true, errorMessage: "" };
   } catch (error) {
     const errorMessage = error.message;
     return {
@@ -111,39 +140,30 @@ export const signInEmailAndPassword = async ({email:userEmail, password}) => {
   }
 };
 
+export const getCurrentUser = async () => {
+  const currentUser = auth.currentUser;
 
-export const getCurrentUser = async () =>{
+  const userUid = currentUser?.uid;
 
-  const currentUser = auth.currentUser
+  const user = await checkUserExist(userUid as string);
 
-  const userUid = currentUser?.uid
+  if (!user.data) return { ok: false, errorMessage: "user not exist" };
 
-  const user =  await checkUserExist(userUid as string)
+  const { displayName, email, photoURL, uid, username, testConfig } = user.data;
 
+  return { displayName, email, photoURL, uid, username, testConfig };
+};
 
-  if(!user.data) return {ok: false, errorMessage:  'user not exist'}
-  
-     
- const {displayName,email,photoURL, uid, username, testConfig} = user.data
+const userEmailVerify = async () => {
+  const currentUser = auth.currentUser;
 
-  return {displayName,email,photoURL, uid, username, testConfig}
+  const emailVerified = currentUser?.emailVerified; //true or false
 
-}
-
-const userEmailVerify = async () =>{
-
-  const currentUser = auth.currentUser
-
-  const emailVerified = currentUser?.emailVerified //true or false
-
-  return emailVerified
-}
-
-
+  return emailVerified;
+};
 
 export const createUserAccount = async (user) => {
- try {
-
+  try {
     //User Configuration
     const testConfig = {
       time: "30",
@@ -155,14 +175,41 @@ export const createUserAccount = async (user) => {
 
     const userRef = doc(firebaseBD, "users", user.uid);
 
-     await setDoc(userRef, {
+    await setDoc(userRef, {
       ...user,
-      testConfig
+      testConfig,
     });
-      
-   return {
+
+    return {
       ok: true,
-      errorMessage:'',
+      errorMessage: "",
+    };
+  } catch (error) {
+    const errorMessage = error.message;
+
+    return {
+      ok: false,
+      errorMessage,
+    };
+  }
+};
+
+export const updateUserSettings = async (uid: string, testConfig: TestInitialState
+) => {
+  try {
+    const userRef = doc(firebaseBD, "users", uid);
+
+    const user = await getCurrentUser();
+
+    const newDataUser = { ...user, testConfig };
+
+    await updateDoc(userRef, newDataUser);
+
+ 
+
+    return {
+      ok: true,
+      errorMessage: "",
     };
   } catch (error) {
     const errorMessage = error.message;
@@ -183,7 +230,6 @@ export const logout = async () => {
 };
 
 export const checkUserExist = async (uid: string) => {
-
   const userRef = doc(firebaseBD, "users", uid);
 
   const userDoc = await getDoc(userRef);
@@ -191,12 +237,10 @@ export const checkUserExist = async (uid: string) => {
   return { exist: userDoc.exists(), data: userDoc.data() };
 };
 
-export const checkUsernameExist = async (username:string) =>{
+export const checkUsernameExist = async (username: string) => {
+  const query = handleQuery(firebaseBD, "users", "username", "==", username);
 
- const query  =  handleQuery(firebaseBD, 'users', "username" , "==", username)
+  const querySnapshot = await getDocs(query);
 
- const querySnapshot = await getDocs(query);
-
- return querySnapshot.empty
-
-}
+  return querySnapshot.empty;
+};

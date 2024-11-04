@@ -2,14 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { MODES, TIMES, WORDS } from "../../constants";
 import { MODE, TIME, WORD } from "../../types/Text";
+import { TestInitialState } from "../../interfaces/testConfiguration";
 
-interface TestInitialState {
-  time: number;
-  mode: string;
-  words: number;
-  puntuation: boolean; // true or false
-  number: boolean; // true or false
-}
 
 const initialState: TestInitialState = {
   time: TIMES["15"],
@@ -25,7 +19,6 @@ export const testSlice = createSlice({
   reducers: {
     setTestMode: (state, action: PayloadAction<MODE>) => {
       const { payload } = action;
-      payload === MODES['words'] ? state.time = 0 :   state.time = 15;
       state.mode = payload;
     },
     setTestTime: (state, action: PayloadAction<TIME>) => {
@@ -46,6 +39,24 @@ export const testSlice = createSlice({
       state.number = !state.number;
     },
 
+    setTestConfiguration:(state, action: PayloadAction<TestInitialState>) =>{
+      const {payload} = action
+      state.time = payload.time;
+      state.mode = payload.mode;
+      state.words = payload.words;
+      state.puntuation = payload.puntuation;
+      state.number = payload.number;
+    },
+
+    resetTestConfiguration:(state) =>{
+    
+      state.time = TIMES["15"];  
+      state.mode = MODES["time"];      
+      state.words = WORDS["100"];
+      state.puntuation = false
+      state.number = false
+    }
+
   },
 });
 
@@ -56,4 +67,6 @@ export const {
   setTestWords,
   setTestPuntuation,
   setTestNumber,
+  setTestConfiguration,
+  resetTestConfiguration
 } = testSlice.actions;
