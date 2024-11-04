@@ -10,14 +10,15 @@ type formState = "signIn" | "signUp";
 
 export const LoginAndRegistrationPage = () => {
   const [formState, setFormState] = useState<formState>("signIn");
-  const { signInWithGoogle, state, createUserWithEmailAndPassword, signIn } = useAuth();
+  const { signInWithGoogle, state, createUserWithEmailAndPassword, signIn } =
+    useAuth();
 
   const handleFormState = (state: formState) => {
     setFormState(state);
   };
 
   return (
-    <section className=" flex flex-col justify-center items-center gap-10 animate-fade-in ">
+    <section className=" flex flex-col justify-center items-center md:gap-10 animate-fade-in ">
       <div className="text-center mb-auto">
         <h2 className="text-4xl font-bold">Login to Your Account</h2>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 mt-8  text-lg lg:text-center lg:text-xl xl:px-60">
@@ -27,16 +28,21 @@ export const LoginAndRegistrationPage = () => {
         </p>
       </div>
 
-      <div className=" flex w-full max-w-5xl gap-8 items-center justify-center p-5 mb-auto">
-        {formState === "signIn" &&
+      <div className=" flex flex-col-reverse md:flex-row w-full max-w-5xl md:gap-8 items-center justify-center p-5 mb-auto">
+        {formState === "signIn" && (
           <>
             <FormSignIn handleFormState={handleFormState} onSignIn={signIn} />
-            <div className="">/</div>
+            <div className="hidden md:block ">/</div>
             <ExternalAuthentication onSignInWithGoogle={signInWithGoogle} />
           </>
-        }
+        )}
         {state === "checkUserName" && <UsernameModal />}
-        {formState === "signUp" && <FormSignUp handleFormState={handleFormState} onCreateUserWithEmailAndPassword={createUserWithEmailAndPassword} />}
+        {formState === "signUp" && (
+          <FormSignUp
+            handleFormState={handleFormState}
+            onCreateUserWithEmailAndPassword={createUserWithEmailAndPassword}
+          />
+        )}
       </div>
     </section>
   );

@@ -15,7 +15,6 @@ import { TestConfiguration } from "../../components";
 import { TestResult } from "../../components/TestResult";
 import { Tooltip } from "../../components/Tooltip";
 
-
 interface Letters {
   letter: string;
   state: string;
@@ -189,10 +188,6 @@ export const WritingTestPage = () => {
   const handleKeyDown = (event: KeyboardEvent) => {
     //Start Game
 
-    
-
-    
-
     const { code, key } = event;
 
     const currentWord: Word = test[wordPosition];
@@ -203,7 +198,7 @@ export const WritingTestPage = () => {
     const totalWordsToCopleted = wordPosition + 1;
     const lastLettersToCompleted = letterPosition;
 
-    if(key.length === 1 && code !== "Space"){
+    if (key.length === 1 && code !== "Space") {
       handleTimerState(TIMER["start"]);
     }
 
@@ -432,7 +427,9 @@ export const WritingTestPage = () => {
 
   return (
     <section className="w-full ">
+
       <TestConfiguration />
+
       <div className=" flex flex-col justify-center  h-[90%] ">
         {loading ? (
           <div className="w-full flex justify-center">
@@ -489,7 +486,7 @@ export const WritingTestPage = () => {
                     id="word"
                     key={id}
                     className={
-                      "my-[.25em] mx-[.3em] text-4xl px-1 max-h-fit select-none " +
+                      " my-[.20em] md:my-[.25em] mx-[.1em] md:mx-[.3em] text-2xl md:text-4xl px-1 max-h-fit select-none " +
                       state
                     }
                   >
