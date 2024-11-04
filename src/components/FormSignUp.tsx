@@ -45,7 +45,6 @@ export const FormSignUp = ({
 
     const onSubmit: SubmitHandler<Form> = async (data) => {
         const { email, password, username } = data;
-        console.log(email, password, username);
         onCreateUserWithEmailAndPassword({ email, password, username });
         handleFormState("signIn");
     };

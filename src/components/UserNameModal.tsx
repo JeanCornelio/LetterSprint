@@ -34,7 +34,7 @@ export const UsernameModal = () => {
   };
 
   return (
-    <div className="flex bg-[#00000080]  overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0  h-full ">
+    <div className="flex bg-[#00000080]  overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-10 justify-center items-center w-full md:inset-0  h-full ">
       <div className="relative p-4 w-full max-w-md max-h-full ">
         <div className="relative bg-sprint-home rounded-lg animate-fade-in ">
           <div className="flex items-center justify-between p-4 md:p-5">

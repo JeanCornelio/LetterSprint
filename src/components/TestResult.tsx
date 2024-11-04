@@ -13,7 +13,7 @@ export const TestResult = ({ testReultValues }) => {
   const { mode } = useTestConfiguration();
   const { timeSelected } = useTimer()
   const { state } = useAuth()
-  console.log(state)
+
   return (
     <article
       id="result"
@@ -92,7 +92,7 @@ export const TestResult = ({ testReultValues }) => {
       {state === 'not_authenticated' &&
         <footer className="text-center self-center mt-10 text-lg">
           <Link to="/login" className="underline">
-            Sing in
+            Sign in
           </Link>
           <span> to save your result</span>
         </footer>

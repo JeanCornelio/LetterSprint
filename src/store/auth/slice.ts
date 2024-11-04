@@ -28,7 +28,7 @@ export const authSlice = createSlice({
         },
 
     
-        singInGoogle: (state, action: PayloadAction) => {
+        signInWithExternalAccount: (state, action: PayloadAction) => {
             const {payload} = action
             
             state.uid = payload.uid
@@ -45,6 +45,7 @@ export const authSlice = createSlice({
             state.email = ""
             state.displayName = ""
             state.photoURL = ""
+            state.username = ""
             state.state = "not_authenticated"
             state.errorMessage = payload
            
@@ -69,9 +70,11 @@ export const authSlice = createSlice({
         setIsPending:(state, action:PayloadAction<boolean>) =>{
             const {payload} = action
             state.isPending = payload
-        }
+        },
+
+    
     }
 })
 
 export default authSlice.reducer
-export const {singInGoogle, checkingStatus, logout, chekUsernameStatus, setUsername, setAuthenticatedState, setCurrentUser, setIsPending} = authSlice.actions
+export const {signInWithExternalAccount, checkingStatus, logout, chekUsernameStatus, setUsername, setAuthenticatedState, setCurrentUser, setIsPending} = authSlice.actions
