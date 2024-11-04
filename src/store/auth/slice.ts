@@ -72,9 +72,12 @@ export const authSlice = createSlice({
             state.isPending = payload
         },
 
-    
+        setErrorMessage: (state, action:PayloadAction<string>) =>{
+              const {payload} = action
+              state.errorMessage = payload
+        }
     }
 })
 
 export default authSlice.reducer
-export const {signInWithExternalAccount, checkingStatus, logout, chekUsernameStatus, setUsername, setAuthenticatedState, setCurrentUser, setIsPending} = authSlice.actions
+export const {signInWithExternalAccount, checkingStatus, logout, chekUsernameStatus, setUsername, setAuthenticatedState, setCurrentUser, setIsPending, setErrorMessage} = authSlice.actions
