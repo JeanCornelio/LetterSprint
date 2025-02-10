@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { TestInitialState } from "../interfaces/testConfiguration";
 import {
   resetTestConfiguration,
@@ -58,6 +57,8 @@ export const useTestConfiguration = () => {
     mode,
     timeActive: time,
     words,
+    puntuation,
+    number,
     isPuntuatioActive: puntuation,
     isNumberactive: number,
     setCurrentUserTestConfiguration,

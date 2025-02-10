@@ -2,9 +2,12 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
 import { auth, checkUserExist } from "../utils/firebaseAuth.utils";
 import { useAuth } from "./useAuth";
+import { useUpdateConfig } from "./useUpdateConfig";
 
 export const useCheckingCurrentUser = () => {
-  const { checkingCurrentUser, handleCurrentUser, setLogout } = useAuth();
+  const { checkingCurrentUser, handleCurrentUser,  photoURL, username, setLogout, isPending, state } = useAuth();
+  useUpdateConfig()
+
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
 
@@ -23,11 +26,14 @@ export const useCheckingCurrentUser = () => {
       }
   
       checkingCurrentUser(true);
+    
 
       handleCurrentUser(currentUser.data);
      
     });
   }, []);
 
-  return {};
+  return {
+     photoURL, username, setLogout, isPending, state
+  };
 };

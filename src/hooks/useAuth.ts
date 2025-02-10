@@ -37,13 +37,14 @@ export const useAuth = () => {
     username,
     uid,
     isPending,
+    stats
   } = useAppSelector(({ auth }) => auth);
   const { setCurrentUserTestConfiguration, resetConfiguration } =
     useTestConfiguration();
 
   const handleCurrentUser = async (currentUser) => {
     //dipatch Configuration
-
+  
     const user = await getCurrentUser(currentUser.uid);
     const { testConfig } = user;
 
@@ -197,6 +198,7 @@ export const useAuth = () => {
     createUserWithEmailAndPassword,
     signIn,
     setMessage,
-    uid
+    uid,
+    stats
   };
 };

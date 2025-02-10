@@ -12,9 +12,9 @@ Readme Coming soon
 [x] - login email and password
 [x] - registration
 [x] - github autentication
-[]  - save user config
-[]  - save user Result
-[]  - user Profile fdata
+[x]  - save user config
+[x]  - save user Result
+[x]  - user Profile data
 []  - change password
 
 

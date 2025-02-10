@@ -7,11 +7,11 @@ export const ScoreModeTable = ({ records }) => {
             <div className=" justify-around w-min flex-1 p-5 grid grid-cols-2 md:grid-cols-4 gap-2 ">
 
                 {
-                    records.map(({ id, mode, wpm, pre }) => (
-                        <div className="text-center px-2 " key={id}>
-                            <h4 className="text-xs">{mode}</h4>
+                    records.map(({ uid, modeSelected, wpm, precision }) => (
+                        <div className="text-center px-2 " key={uid}>
+                            <h4 className="text-xs">{modeSelected}</h4>
                             <h2 className="text-4xl font-bold">{wpm !== null ? wpm : '-'}</h2>
-                            <h3 className="text-2xl">{pre !== null ? `${pre}%` : '-'}</h3>
+                            <h3 className="text-xl">{precision !== null ? `${precision}%` : '-'}</h3>
                         </div>
                     ))
                 }

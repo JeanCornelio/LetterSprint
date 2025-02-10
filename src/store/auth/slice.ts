@@ -11,6 +11,13 @@ export const authSlice = createSlice({
         state: "not_authenticated",  //authenticated, not_authenticated, checking, checkUserName
         errorMessage: null,
         isPending: true, //true false
+        stats:{
+            testsCompleted: 0,
+            wordsWritten: 0,
+            timeTyping: 0,
+            timeRecord: [],
+            wordRecord: [],
+        }
     },
     reducers:{
 
@@ -65,6 +72,9 @@ export const authSlice = createSlice({
             state.username = payload.username
             state.state = "authenticated"
             state.isPending = false
+            state.stats = payload.stats
+
+            
         },
         
         setIsPending:(state, action:PayloadAction<boolean>) =>{
@@ -75,9 +85,22 @@ export const authSlice = createSlice({
         setErrorMessage: (state, action:PayloadAction<string>) =>{
               const {payload} = action
               state.errorMessage = payload
+        },
+
+        setCurrentStats:(state, action: PayloadAction) =>{
+            const {payload} = action
+    
+            const stats = {
+                testsCompleted: state.stats. testsCompleted += payload.testsCompleted,
+                wordsWritten: state.stats.wordsWritten += payload.wordsWritten,
+                timeTyping: state.stats.timeTyping += payload.timeTyping,
+                timeRecord: payload.timeRecord,
+                wordRecord: payload.wordRecord,
+            }
+            state.stats = stats
         }
     }
 })
 
 export default authSlice.reducer
-export const {signInWithExternalAccount, checkingStatus, logout, chekUsernameStatus, setUsername, setAuthenticatedState, setCurrentUser, setIsPending, setErrorMessage} = authSlice.actions
+export const {signInWithExternalAccount,setCurrentStats, checkingStatus, logout, chekUsernameStatus, setUsername, setAuthenticatedState, setCurrentUser, setIsPending, setErrorMessage} = authSlice.actions

@@ -10,6 +10,7 @@ import {
 import { MODE, TIME, WORD } from "../types/Text";
 import { useTimer } from "../hooks/useTimer";
 import { TestConfigurationModal } from "./TestConfigurationModal";
+import { useUpdateConfig } from "../hooks/useUpdateConfig";
 
 export const TestConfiguration = () => {
   const {
@@ -24,7 +25,7 @@ export const TestConfiguration = () => {
     isPuntuatioActive,
     isNumberactive,
   } = useTestConfiguration();
-
+  useUpdateConfig()
   //Note: descrubir la animacon del filtro al expandirce
 
   const defaultClass = "cursor-pointer hover:text-sprint-blue transition";
