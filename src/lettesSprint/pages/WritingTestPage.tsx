@@ -14,6 +14,8 @@ import { useTestConfiguration } from "../../hooks/useTestConfiguration";
 import { TestConfiguration } from "../../components";
 import { TestResult } from "../../components/TestResult";
 import { Tooltip } from "../../components/Tooltip";
+import { getTest } from "../../service/generateTest";
+import { useAuth } from "../../hooks/useAuth";
 
 interface Letters {
   letter: string;
@@ -22,8 +24,10 @@ interface Letters {
 }
 interface Result {
   raw: number;
-  netWpm: number;
-  presition: number;
+  wpm: number;
+  precision: number;
+  totalWords: number;
+  characters: string;
 }
 
 interface Word {
@@ -43,20 +47,17 @@ const LETTER_STATES = {
   // Agregar más estados si es necesario
 };
 
-const text =
-  "creating a successful project requires careful planning and attention to detail because each phase builds on the previous one and influences the outcome the first step involves defining the scope of the project to ensure all team members understand the goals and objectives once the scope is established the next phase includes developing a timeline and allocating resources effectively it is crucial to monitor progress regularly to identify any potential obstacles early on open communication among team members helps maintain alignment and address challenges promptly adapting to changes and remaining flexible can enhance the chances of success ultimately a projects success depends on teamwork commitment and a shared vision by keeping each component in sync the team can achieve its goals efficiently";
 
-const result: Result = {
-  presition: 0,
-  raw: 0,
-  netWpm: 0,
-};
 
 const letterStates = {
   incorrect: [],
   correct: [],
   extra: [],
   missed: [],
+  incorrectRepeted: [],
+  correctRepeted: [],
+  extraRepeted: [],
+
 };
 
 interface states {
@@ -64,17 +65,23 @@ interface states {
   correct: Letters[];
   extra: Letters[];
   missed: Letters[];
+  incorrectRepeted: Letters[];
+  correctRepeted: Letters[];
+  extraRepeted: Letters[];
 }
 
+
 export const WritingTestPage = () => {
+
   const [wordPosition, setWordPosition] = useState(0);
   const [letterPosition, setLetterPosition] = useState(0);
   const [test, setTest] = useState<Word[]>([]);
   const [lettersStates, setLettersStates] = useState<states>(letterStates);
   const [originalTest, setOriginalTest] = useState<Word[]>([]);
   const [originalTotalWordsTest, setOriginalTotalWordsTest] = useState(0);
-  const [testResult, setTestResult] = useState<Result>(result);
+  const [testResult, setTestResult] = useState<Result | null>(null);
   const { loading, handleLoading } = useLoading();
+  const { uid } = useAuth()
   const {
     seconds,
     handleTimerState,
@@ -82,29 +89,15 @@ export const WritingTestPage = () => {
     handleTimerTime,
     timeSelected,
   } = useTimer();
-  const { mode, words: wordSelected } = useTestConfiguration();
+  const { mode, words: wordSelected, puntuation, number } = useTestConfiguration();
   const testContent = useRef(null);
-  const { presition, netWpm, raw } = testResult;
-  const { extra, correct, incorrect, missed } = lettersStates;
+  const { incorrectRepeted, correctRepeted, correct, incorrect, } = lettersStates;
+
+
 
   const createTest = () => {
     handleLoading(true); // Loanding
-    //.slice(0, WORDS[wordSelected]) test
-    const words: Word[] = text.split(" ").map((word, index) => {
-      return {
-        word,
-        id: `${word}-${crypto.randomUUID()}`,
-        state: index === 0 ? LETTER_STATES.ACTIVE : "",
-        letters: word.split("").map((letter) => {
-          return {
-            letter: letter,
-            state: "",
-            id: `${letter}-${crypto.randomUUID()}`,
-          };
-        }),
-      };
-    });
-
+    const words: Word[] = getTest({ puntuation, number, wordSelected, mode, timeSelected });
     //words of the tets
     setTest(words);
     setOriginalTest(words);
@@ -116,8 +109,9 @@ export const WritingTestPage = () => {
 
   useEffect(() => {
     //Reset TIMER and Create Game
+
     resestTest();
-  }, [mode, wordSelected, timeSelected]);
+  }, [mode, wordSelected, timeSelected, puntuation, number]);
 
   const toCheckWordCorreclyCompleted = (word: Word) => {
     const lettersStates = word.letters.some(
@@ -313,6 +307,16 @@ export const WritingTestPage = () => {
 
       if (letterPosition > currentWord.word.length) {
         updateLetter.pop();
+
+        setLettersStates((current) => {
+
+          const newExtraLetters = current['extra']
+
+          newExtraLetters.pop()
+
+          return { ...current, ['extra']: newExtraLetters };
+
+        });
       }
 
       // erease if the user wrote a word
@@ -350,7 +354,17 @@ export const WritingTestPage = () => {
 
   const handleResultLetterState = (property: string, letter: Letters) => {
     setLettersStates((current) => {
+
+      const letterExist = current[property].find((lett) => lett.id === letter.id)
+
+      if (letterExist) {
+        const repetedProperty = `${property}Repeted`
+
+        return { ...current, [repetedProperty]: [...current[repetedProperty], letter] };
+      }
+
       return { ...current, [property]: [...current[property], letter] };
+
     });
   };
 
@@ -382,6 +396,7 @@ export const WritingTestPage = () => {
     setLetterPosition(0);
     setOriginalTotalWordsTest(0);
     setLettersStates(letterStates);
+    setTestResult(null);
     handleTimerTime();
   };
 
@@ -393,41 +408,48 @@ export const WritingTestPage = () => {
     const timeInMinutes =
       (mode === MODES["time"] ? timeSelected : seconds) / 60;
 
-    const { correct, incorrect, extra, missed } = lettersStates;
+    const { correct, incorrect, extra, missed, incorrectRepeted,
+      correctRepeted, extraRepeted } = lettersStates;
 
-    const totalWords = correct.length;
+    //  console.log(lettersStates)
+
+    const charactersWritten = correct.length;
+
+    //console.log(charactersWritten)
 
     const erros = incorrect.length + extra.length;
 
     // WPM gross
-    const grossWpm = totalWords / 5 / timeInMinutes;
+    const grossWpm = charactersWritten / 5 / timeInMinutes;
 
     // WPM neto
     const netWpm = grossWpm - erros / (5 * timeInMinutes);
 
     //TotalTyped
-    const totalTyped = correct.length + incorrect.length + extra.length;
+    const totalTyped = correct.length + correctRepeted.length + incorrect.length + incorrectRepeted.length + extra.length + extraRepeted.length;
 
-    // Presition
-    const presition = (correct.length / totalTyped) * 100;
+    // precision
+    const precision = ((correctRepeted.length + correct.length) / totalTyped) * 100;
 
     //Validation
     const invalidWpm =
-      (presition < 20 && netWpm > 100) ||
+      (precision < 20 && netWpm > 100) ||
       missed.length > correct.length ||
       netWpm < 0;
 
     setTestResult({
-      presition: Number(presition.toFixed(2)),
-      raw: !Number.isFinite(grossWpm) ? 0 : grossWpm,
-      netWpm: invalidWpm ? 0 : netWpm,
+      precision: parseFloat(precision.toFixed(2)),
+      raw: !Number.isFinite(grossWpm) ? 0 : parseFloat(grossWpm.toFixed(2)),
+      wpm: invalidWpm ? 0 : parseFloat(netWpm.toFixed(2)),
+      totalWords: wordPosition + originalTotalWordsTest + 1,
+      characters: `${correct.length}/${incorrect.length}/${extra.length}/${missed.length}`,
     });
+
     handleLoading(false); // stop Loanding
   };
 
   return (
     <section className="w-full ">
-
       <TestConfiguration />
 
       <div className=" flex flex-col justify-center  h-[90%] ">
@@ -462,43 +484,50 @@ export const WritingTestPage = () => {
                   }`}
               </h2>
             )}
-            {timerState === TIMER["finished"] ? ( //===> finished
-              <TestResult
-                testReultValues={{
-                  correct,
-                  incorrect,
-                  extra,
-                  missed,
-                  netWpm,
-                  totalWords: wordPosition + originalTotalWordsTest + 1,
-                  presition,
-                  raw,
-                  seconds,
-                }}
-              />
-            ) : (
-              <div
-                className="w-full flex flex-wrap animate-fade-in text-pretty content-start h-44  overflow-x-visible overflow-y-clip text-gray-600"
-                ref={testContent}
-              >
-                {test.map(({ id, letters, state }) => (
-                  <div
-                    id="word"
-                    key={id}
-                    className={
-                      " my-[.20em] md:my-[.25em] mx-[.1em] md:mx-[.3em] text-2xl md:text-4xl px-1 max-h-fit select-none " +
-                      state
-                    }
-                  >
-                    {letters.map(({ letter, state, id }) => (
-                      <span key={id} id="key" className={state}>
-                        {letter}
-                      </span>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            )}
+            {
+              timerState === TIMER["finished"] && testResult !== null ? ( //===> finished
+
+                <TestResult
+                  testReultValues={{
+                    characters: testResult.characters,
+                    wpm: testResult.wpm,
+                    correct: correctRepeted.length + correct.length,
+                    incorrect: incorrectRepeted.length + incorrect.length,
+                    totalWords: testResult.totalWords,
+                    modeResult:
+                      mode === "time"
+                        ? `${timeSelected} Seconds`
+                        : `${wordSelected} Words`,
+                    precision: testResult.precision,
+                    raw: testResult.raw,
+                    mode,
+                    seconds,
+                    uid
+                  }}
+                />
+              ) : (
+                <div
+                  className="w-full flex flex-wrap animate-fade-in text-pretty content-start h-44  overflow-x-visible overflow-y-clip text-gray-600"
+                  ref={testContent}
+                >
+                  {test.map(({ id, letters, state }) => (
+                    <div
+                      id="word"
+                      key={id}
+                      className={
+                        " my-[.20em] md:my-[.25em] mx-[.1em] md:mx-[.3em] text-2xl md:text-4xl px-1 max-h-fit select-none " +
+                        state
+                      }
+                    >
+                      {letters.map(({ letter, state, id }) => (
+                        <span key={id} id="key" className={state}>
+                          {letter}
+                        </span>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              )}
             <div className="flex justify-center mt-20">
               <button
                 className="text-xl  text-white"

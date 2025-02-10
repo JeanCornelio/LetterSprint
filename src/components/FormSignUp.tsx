@@ -66,7 +66,7 @@ export const FormSignUp = ({
                     {errors.username?.type === "minLength" && (
                         <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
                             {" "}
-                            Username cannot be less than 3 characteres
+                            Username cannot be less than 3 characters
                         </h3>
                     )}
                     {errors.username?.type === "maxLength" && (

@@ -14,7 +14,7 @@ export const useTimer = () => {
   };
 
   const handleTime = () => {
-     const time = mode === MODES['words'] ? 0 : timeActive
+    const time = mode === MODES["words"] ? 0 : timeActive;
     dispatch(setSeconds(time));
   };
 

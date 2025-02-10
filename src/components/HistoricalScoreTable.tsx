@@ -1,4 +1,4 @@
-export const HistoricalScoreTable = ({ history }) => {
+export const HistoricalScoreTable = ({ tests }) => {
     return (
         <div className="relative overflow-x-auto  rounded-md bg-sprint-config">
             <table className="w-full text-sm text-left rtl:text-right">
@@ -11,10 +11,10 @@ export const HistoricalScoreTable = ({ history }) => {
                             Raw
                         </th>
                         <th scope="col" className="px-6 py-3">
-                            Presition
+                            precision
                         </th>
                         <th scope="col" className="px-6 py-3">
-                            characteres
+                            characters
                         </th>
                         <th scope="col" className="px-6 py-3">
                             Mode
@@ -25,45 +25,23 @@ export const HistoricalScoreTable = ({ history }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr className="odd:bg-sprint-home text-lg">
-                        <th
-                            scope="row"
-                            className="px-6 py-1 md:py-4 font-medium   whitespace-nowrap"
-                        >
-                            58.63
-                        </th>
-                        <td className="px-6 py-1 md:py-4">58.63</td>
-                        <td className="px-6 py-1 md:py-4">100 %</td>
-                        <td className="px-6 py-1 md:py-4">47/1/0/0</td>
-                        <td className="px-6 py-1 md:py-4">
-                            time 15
-                        </td>
-                        <td className="px-6 py-1 md:py-4 ">
-                            31/10/24
-                            18:04
-                        </td>
-                    </tr>
-                    <tr className="odd:bg-sprint-home text-lg">
-                        <th
-                            scope="row"
-                            className="px-6 py-1 md:py-4 font-medium   whitespace-nowrap"
-                        >
-                            58.63
-                        </th>
-                        <td className="px-6 py-1 md:py-4">58.63</td>
-                        <td className="px-6 py-1 md:py-4">100 %</td>
-                        <td className="px-6 py-1 md:py-4">47/1/0/0</td>
-                        <td className="px-6 py-1 md:py-4">
-                            words 10
-                        </td>
-                        <td className="px-6 py-1 md:py-4 ">
-                            31/10/24
-                            18:04
-                        </td>
-                    </tr>
-
+                    {tests.map((test) => (
+                        <tr className="odd:bg-sprint-home text-lg" key={test.uid}>
+                            <td
+                                scope="row"
+                                className="px-6 py-1 md:py-4 font-medium   whitespace-nowrap"
+                            >
+                                {test.wpm}
+                            </td>
+                            <td className="px-6 py-1 md:py-4">{test.raw}</td>
+                            <td className="px-6 py-1 md:py-4">{test.precision} %</td>
+                            <td className="px-6 py-1 md:py-4">{test.characters}</td>
+                            <td className="px-6 py-1 md:py-4">{test.modeSelected}</td>
+                            <td className="px-6 py-1 md:py-4 ">{test.date}</td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
-        </div >
+        </div>
     );
 };

@@ -1,9 +1,11 @@
 import { HistoricalScoreTable } from "../../components/HistoricalScoreTable";
 import { ScoreModeTable } from "../../components/ScoreModeTable";
 import { useAuth } from "../../hooks/useAuth";
+import { useResult } from "../../hooks/useResult";
 import { AvatarIcon } from "../../icons/Icons";
 
-const timeRecord = [
+
+/* const timeRecord = [
     {
         mode: '15 Seconds',
         wpm: '58',
@@ -62,13 +64,13 @@ const wordRecord = [
         raw: null,
         id: 4,
     },
-]
-
-
+] */
 
 
 export const UserPage = () => {
-    const { photoURL, username, displayName } = useAuth();
+    const { photoURL, username, displayName, stats } = useAuth();
+    const { tests, setLmt } = useResult()
+
 
     return (
         <section id="user-profile" className="container flex flex-col gap-5 animate-fade-in">
@@ -94,26 +96,34 @@ export const UserPage = () => {
                 <div className=" flex-1 flex flex-wrap  sm:items-center gap-5 md:justify-evenly ">
                     <div>
                         <h2 className="text-1xl">Test completed</h2>
-                        <h2 className="text-3xl text-sprint-blue font-bold">0</h2>
+                        <h2 className="text-3xl text-sprint-blue font-bold">{stats.testsCompleted}</h2>
                     </div>
                     <div>
                         <h2 className="text-1xl">Total words</h2> {/* Remember implement a pipe to number */}
-                        <h2 className="text-3xl text-sprint-blue font-bold">0</h2>
+                        <h2 className="text-3xl text-sprint-blue font-bold">{stats.wordsWritten}</h2>
                     </div>
                     <div>
-                        <h2 className="text-1xl">mode typing</h2>
-                        <h2 className="text-3xl text-sprint-blue font-bold">00:02:13</h2>
+                        <h2 className="text-1xl">Time typing</h2>
+                        <h2 className="text-3xl text-sprint-blue font-bold">{stats.timeTyping}</h2>
                     </div>
                 </div>
             </div>
-            <div className="grid grid-col-1  lg:grid-cols-2 gap-5">
+            {
+                stats.testsCompleted > 0 && <div className="grid grid-col-1  lg:grid-cols-2 gap-5">
+                    <ScoreModeTable records={stats.timeRecord} />
+                    <ScoreModeTable records={stats.wordRecord} />
+                </div>
+            }
 
-                <ScoreModeTable records={timeRecord} />
+            {
 
-                <ScoreModeTable records={wordRecord} />
+                stats.testsCompleted > 0 ? <HistoricalScoreTable tests={tests} /> : <h2 className="text-2xl text-center mt-5">No tests completed yet</h2>
+            }
 
-            </div>
-            <HistoricalScoreTable />
+            {
+                stats.testsCompleted > tests.length && <button className="p-3 rounded-md bg-sprint-config cursor-pointer hover:opacity-80 hover:bg-white transition" onClick={() => setLmt()}>Load More</button>
+            }
+
         </section>
     );
 };

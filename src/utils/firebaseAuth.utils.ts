@@ -10,6 +10,7 @@ import {
 } from "firebase/auth";
 import { firebaseAuth, firebaseBD } from "./firebase.utils";
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
@@ -20,6 +21,7 @@ import {
   where,
 } from "firebase/firestore";
 import { TestInitialState } from "../interfaces/testConfiguration";
+import { Stats, Test } from "../interfaces/Test";
 
 export const googleProvider = new GoogleAuthProvider();
 export const githubProvider = new GithubAuthProvider();
@@ -164,20 +166,26 @@ const userEmailVerify = async () => {
 
 export const createUserAccount = async (user) => {
   try {
-    //User Configuration
-    const testConfig = {
-      time: "30",
-      mode: "time",
-      words: "50",
-      puntuation: false,
-      number: false,
-    };
+   
 
     const userRef = doc(firebaseBD, "users", user.uid);
 
     await setDoc(userRef, {
       ...user,
-      testConfig,
+          estConfig: {
+          time: "30",
+          mode: "time",
+          words: "50",
+          puntuation: false,
+          number: false,
+      },
+      stats:{
+          testsCompleted: 0,
+          wordsWritten: 0,
+          timeTyping: 0,
+          timeRecord: [],
+          wordRecord: [],
+        }
     });
 
     return {
@@ -244,3 +252,34 @@ export const checkUsernameExist = async (username: string) => {
 
   return querySnapshot.empty;
 };
+
+export const saveUserStats = async (stats: Stats) => {
+    const currentUser = await getCurrentUser()
+    const {uid} = currentUser
+
+   try {
+        const userRef = doc(firebaseBD, "users", uid);
+       await setDoc(userRef, {stats}, { merge: true });
+
+    } catch (error) {
+        console.error("Error guardando las stats", error);
+    }
+    //console.log(stats)
+
+};
+
+export const saveTest = async (test: Test) => {
+  const currentUser = await getCurrentUser()
+  const {uid} = currentUser
+  
+    try {
+         const testsRef = collection(firebaseBD, "users", uid, "tests");
+        await addDoc(testsRef, test);
+
+    } catch (error) {
+        console.error("Error guardando el test", error);
+    }
+}
+
+
+
