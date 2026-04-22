@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { auth, checkUserExist } from "../utils/firebaseAuth.utils";
 import { useAuth } from "./useAuth";
 import { useUpdateConfig } from "./useUpdateConfig";
+import { toast } from "react-toastify";
 
 export const useCheckingCurrentUser = () => {
   const {
@@ -24,18 +25,13 @@ export const useCheckingCurrentUser = () => {
 
       try {
         if (!user) {
-          console.log("No user from auth");
           checkingCurrentUser(false);
           return;
         }
 
-        console.log("User from auth:", user.uid);
-
         const currentUser = await checkUserExist(user.uid);
-        console.log("User from DB:", currentUser);
 
         if (!currentUser.exist || !currentUser.data) {
-          console.log("No user data in DB");
           checkingCurrentUser(false);
           return;
         }
@@ -43,20 +39,17 @@ export const useCheckingCurrentUser = () => {
         const passwordUser = user.providerData[0]?.providerId;
 
         if (!user.emailVerified && passwordUser === "password") {
-          console.log("Email not verified");
+          toast.warn("Please verify your email before signing in.");
           checkingCurrentUser(false);
-          setLogout(
-            "We have sent a verification email, please check your email.",
-          );
+          setLogout("Email not verified. Please check your email.");
           return;
         }
 
-        console.log("Calling checkingCurrentUser(true)");
         checkingCurrentUser(true);
-        console.log("Calling handleCurrentUser");
         handleCurrentUser(currentUser.data);
       } catch (error) {
         console.error("Error checking user:", error);
+        toast.error("Error loading user data. Please try again.");
         if (isMounted) {
           checkingCurrentUser(false);
         }

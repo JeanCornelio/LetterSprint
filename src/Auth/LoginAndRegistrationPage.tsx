@@ -10,7 +10,6 @@ type formState = "signIn" | "signUp";
 
 export const LoginAndRegistrationPage = () => {
   const [formState, setFormState] = useState<formState>("signIn");
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const {
     signInWithGoogle,
     state,
@@ -21,13 +20,6 @@ export const LoginAndRegistrationPage = () => {
 
   const handleFormState = (newState: formState) => {
     setFormState(newState);
-    if (newState === "signIn") {
-      setSuccessMessage(null);
-    }
-  };
-
-  const handleSuccessMessage = (message: string) => {
-    setSuccessMessage(message);
   };
 
   return (
@@ -44,11 +36,6 @@ export const LoginAndRegistrationPage = () => {
       </div>
 
       <div className=" flex flex-col-reverse md:flex-row w-full max-w-5xl md:gap-8 items-center justify-center p-5 mb-auto">
-        {formState === "signIn" && successMessage && (
-          <div className="w-full mb-4 bg-green-500/20 border border-green-500 text-green-400 p-3 rounded-md text-center">
-            {successMessage}
-          </div>
-        )}
         {formState === "signIn" && (
           <>
             <FormSignIn handleFormState={handleFormState} onSignIn={signIn} />
@@ -64,7 +51,6 @@ export const LoginAndRegistrationPage = () => {
           <FormSignUp
             handleFormState={handleFormState}
             onCreateUserWithEmailAndPassword={createUserWithEmailAndPassword}
-            setSuccessMessage={handleSuccessMessage}
           />
         )}
       </div>

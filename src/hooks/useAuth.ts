@@ -25,6 +25,7 @@ import { signOut as firebaseSignOut } from "firebase/auth";
 import { useTestConfiguration } from "./useTestConfiguration";
 import type { TestInitialState } from "../interfaces/testConfiguration";
 import type { Stats } from "../interfaces/Test";
+import { toast } from "react-toastify";
 
 interface CurrentUserData {
   uid: string;
@@ -80,6 +81,9 @@ export const useAuth = () => {
   };
 
   const setLogout = (errorMsg = "Sign Out") => {
+    if (errorMsg && errorMsg !== "Sign Out") {
+      toast.error(errorMsg);
+    }
     dispatch(logout(errorMsg));
     resetConfiguration();
     firebaseSignOut(auth);

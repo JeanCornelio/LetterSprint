@@ -2,6 +2,7 @@ import { BackIcon, UserAdd01Icon } from "../icons/Icons";
 import { useAuth } from "../hooks/useAuth";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 interface Form {
   email: string;
@@ -14,7 +15,6 @@ interface Form {
 interface FormSignUpProps {
   handleFormState: (state: "signIn" | "signUp") => void;
   onCreateUserWithEmailAndPassword: (data: { email: string; password: string; username: string }) => Promise<void>;
-  setSuccessMessage?: (message: string) => void;
 }
 
 const initialForm = {
@@ -28,7 +28,6 @@ const initialForm = {
 export const FormSignUp = ({
   handleFormState,
   onCreateUserWithEmailAndPassword,
-  setSuccessMessage,
 }: FormSignUpProps) => {
   const {
     handleSubmit,
@@ -56,7 +55,7 @@ export const FormSignUp = ({
     
     try {
       await onCreateUserWithEmailAndPassword({ email, password, username });
-      setSuccessMessage?.("Account created successfully! Please check your email to verify your account, then sign in.");
+      toast.success("Account created successfully! Please check your email to verify your account.");
       handleFormState("signIn");
     } catch (error) {
       console.error("Error creating account:", error);
