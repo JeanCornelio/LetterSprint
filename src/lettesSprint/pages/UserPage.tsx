@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { HistoricalScoreTable } from "../../components/HistoricalScoreTable";
 import { ScoreModeTable } from "../../components/ScoreModeTable";
 import { useAuth } from "../../hooks/useAuth";
@@ -68,8 +70,15 @@ const wordRecord = [
 
 
 export const UserPage = () => {
-    const { photoURL, username, displayName, stats } = useAuth();
-    const { tests, setLmt } = useResult()
+    const { photoURL, username, displayName, stats, state } = useAuth();
+    const { tests, setLmt } = useResult();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (state === "not authenticated") {
+            navigate("/login");
+        }
+    }, [state, navigate]);
 
 
     return (
