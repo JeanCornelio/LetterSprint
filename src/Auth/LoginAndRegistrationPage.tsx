@@ -4,12 +4,14 @@ import { FormSignUp } from "../components/FormSignUp";
 import { UsernameModal } from "../components/UserNameModal";
 
 import { useAuth } from "../hooks/useAuth";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 type formState = "signIn" | "signUp";
 
 export const LoginAndRegistrationPage = () => {
   const [formState, setFormState] = useState<formState>("signIn");
+  const navigate = useNavigate();
   const {
     signInWithGoogle,
     state,
@@ -17,6 +19,12 @@ export const LoginAndRegistrationPage = () => {
     signIn,
     signInWithGithub,
   } = useAuth();
+
+  useEffect(() => {
+    if (state === "authenticated") {
+      navigate("/");
+    }
+  }, [state, navigate]);
 
   const handleFormState = (newState: formState) => {
     setFormState(newState);
