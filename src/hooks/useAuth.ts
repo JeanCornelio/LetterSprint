@@ -218,8 +218,13 @@ export const useAuth = () => {
     const { ok, errorMessage } = resp;
 
     if (!ok) {
-      if (errorMessage?.includes("verified") || errorMessage?.includes("confirm")) {
+      if (
+        errorMessage?.includes("verified") ||
+        errorMessage?.includes("confirm")
+      ) {
         toast.warn("Please verify your email before signing in.");
+      } else if (errorMessage.includes("(auth/invalid-credential)")) {
+        toast.error("Invalid email or password. Please try again.");
       } else {
         toast.error(errorMessage || "Sign in failed");
       }

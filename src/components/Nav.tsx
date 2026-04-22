@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { CrownIcon, KeyBoardIcon, UserIcon } from "../icons/Icons";
 import { UserOptions } from "./UserOptions";
-import { useCheckingCurrentUser } from "../hooks/useCheckingCurrentUser";
+import { useAuth } from "../hooks/useAuth";
 
 export const Nav = () => {
   const { photoURL, username, setLogout, isPending, state } =
-    useCheckingCurrentUser();
+    useAuth();
 
   return (
     <nav className="flex  py-3 md:py-7 justify-between items-center ">
