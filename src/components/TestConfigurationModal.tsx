@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTestConfiguration } from "../hooks/useTestConfiguration";
 import { MODES, TIMES, WORDS } from "../constants";
 import { MODE, TIME, WORD } from "../types/Text";
+import { Difficulty } from "../interfaces/testConfiguration";
 
 
 export const TestConfigurationModal = () => {
@@ -19,6 +20,8 @@ export const TestConfigurationModal = () => {
         numberToggle,
         isPuntuatioActive,
         isNumberactive,
+        difficulty,
+        setDifficulty,
     } = useTestConfiguration();
 
     const defaultClass = " hover:bg-sprint-blue hover:text-white py-2  rounded-md transition ";
@@ -45,6 +48,19 @@ export const TestConfigurationModal = () => {
                     <button className={defaultClass + (isNumberactive ? active : "bg-sprint-config")} onClick={numberToggle}>
                         Numbers
                     </button>
+
+                    <div className="flex flex-col gap-2 mt-5">
+                        <span className="text-sm text-gray-400">Difficulty</span>
+                        {(['easy', 'medium', 'hard'] as const).map((level) => (
+                            <button 
+                                key={level}
+                                className={defaultClass + (difficulty === level ? active : "bg-sprint-config")}
+                                onClick={() => setDifficulty(level)}
+                            >
+                                {level.charAt(0).toUpperCase() + level.slice(1)}
+                            </button>
+                        ))}
+                    </div>
 
                     <div className="flex flex-col gap-3 mt-5">
                         <button

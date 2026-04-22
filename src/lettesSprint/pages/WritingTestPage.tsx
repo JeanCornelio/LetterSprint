@@ -89,7 +89,7 @@ export const WritingTestPage = () => {
     handleTimerTime,
     timeSelected,
   } = useTimer();
-  const { mode, words: wordSelected, puntuation, number } = useTestConfiguration();
+  const { mode, words: wordSelected, puntuation, number, difficulty } = useTestConfiguration();
   const testContent = useRef(null);
   const { incorrectRepeted, correctRepeted, correct, incorrect, } = lettersStates;
 
@@ -97,7 +97,7 @@ export const WritingTestPage = () => {
 
   const createTest = () => {
     handleLoading(true); // Loanding
-    const words: Word[] = getTest({ puntuation, number, wordSelected, mode, timeSelected });
+    const words: Word[] = getTest({ puntuation, number, wordSelected, mode, timeSelected, difficulty });
     //words of the tets
     setTest(words);
     setOriginalTest(words);
@@ -111,7 +111,7 @@ export const WritingTestPage = () => {
     //Reset TIMER and Create Game
 
     resestTest();
-  }, [mode, wordSelected, timeSelected, puntuation, number]);
+  }, [mode, wordSelected, timeSelected, puntuation, number, difficulty]);
 
   const toCheckWordCorreclyCompleted = (word: Word) => {
     const lettersStates = word.letters.some(
