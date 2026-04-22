@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { MODES, TIMES, WORDS } from "../../constants";
 import { MODE, TIME, WORD } from "../../types/Text";
-import { TestInitialState } from "../../interfaces/testConfiguration";
+import { TestInitialState, Difficulty } from "../../interfaces/testConfiguration";
 
 
 const initialState: TestInitialState = {
@@ -11,6 +11,7 @@ const initialState: TestInitialState = {
   words: WORDS["100"],
   puntuation: false,
   number: false,
+  difficulty: 'medium',
 };
 
 export const testSlice = createSlice({
@@ -39,6 +40,10 @@ export const testSlice = createSlice({
       state.number = !state.number;
     },
 
+    setTestDifficulty: (state, action: PayloadAction<Difficulty>) => {
+      state.difficulty = action.payload;
+    },
+
     setTestConfiguration:(state, action: PayloadAction<TestInitialState>) =>{
       const {payload} = action
       state.time = payload.time;
@@ -48,13 +53,14 @@ export const testSlice = createSlice({
       state.number = payload.number;
     },
 
-    resetTestConfiguration:(state) =>{
-    
+resetTestConfiguration:(state) =>{
+     
       state.time = TIMES["15"];  
       state.mode = MODES["time"];      
       state.words = WORDS["100"];
       state.puntuation = false
       state.number = false
+      state.difficulty = 'medium'
     }
 
   },
@@ -67,6 +73,7 @@ export const {
   setTestWords,
   setTestPuntuation,
   setTestNumber,
+  setTestDifficulty,
   setTestConfiguration,
   resetTestConfiguration
 } = testSlice.actions;

@@ -1,7 +1,8 @@
-import { TestInitialState } from "../interfaces/testConfiguration";
+import { TestInitialState, Difficulty } from "../interfaces/testConfiguration";
 import {
   resetTestConfiguration,
   setTestConfiguration,
+  setTestDifficulty,
   setTestMode,
   setTestNumber,
   setTestPuntuation,
@@ -14,7 +15,7 @@ import { useAppDispatch, useAppSelector } from "./useStore";
 
 export const useTestConfiguration = () => {
 
-  const { mode, time, words, puntuation, number } = useAppSelector(
+  const { mode, time, words, puntuation, number, difficulty } = useAppSelector(
     ({ test }) => test
   );
 
@@ -40,6 +41,10 @@ export const useTestConfiguration = () => {
     dispatch(setTestNumber());
   };
 
+  const setDifficulty = (difficulty: Difficulty) => {
+    dispatch(setTestDifficulty(difficulty));
+  };
+
   const setCurrentUserTestConfiguration = (config: TestInitialState) =>{
       dispatch(setTestConfiguration(config))
   }
@@ -54,11 +59,13 @@ export const useTestConfiguration = () => {
     setWordQuantity,
     puntuationToggle,
     numberToggle,
+    setDifficulty,
     mode,
     timeActive: time,
     words,
     puntuation,
     number,
+    difficulty,
     isPuntuatioActive: puntuation,
     isNumberactive: number,
     setCurrentUserTestConfiguration,

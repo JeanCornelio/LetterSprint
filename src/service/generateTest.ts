@@ -1,6 +1,6 @@
 import { MODES } from "../constants";
 import { paragraphs } from "../data/paragraphs";
-import { Difficulty } from "../interfaces/Paragraph";
+import { Difficulty } from "../interfaces/testConfiguration";
 
 interface Word {
   word: string;
