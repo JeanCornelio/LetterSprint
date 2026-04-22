@@ -1,14 +1,19 @@
 import { useRouteError } from "react-router-dom";
 
+interface RouteError {
+  statusText?: string;
+  message?: string;
+}
+
 export const NotFoundPage = () => {
-    const error = useRouteError();
+  const error = useRouteError() as RouteError | undefined;
   return (
     <div id="error-page">
       <h1>Oops!</h1>
       <p>Sorry, an unexpected error has occurred.</p>
       <p>
-        <i>{error.statusText || error.message}</i>
+        <i>{error?.statusText || error?.message || "Unknown error"}</i>
       </p>
     </div>
-  )
-}
+  );
+};

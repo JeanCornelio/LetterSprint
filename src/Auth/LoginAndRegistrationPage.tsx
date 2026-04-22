@@ -1,7 +1,7 @@
 import { ExternalAuthentication } from "../components/ExternalAuthentication";
 import { FormSignIn } from "../components/FormSignIn";
 import { FormSignUp } from "../components/FormSignUp";
-import { UsernameModal } from "../components/UsernameModal";
+import { UsernameModal } from "../components/UserNameModal";
 
 import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
@@ -10,8 +10,13 @@ type formState = "signIn" | "signUp";
 
 export const LoginAndRegistrationPage = () => {
   const [formState, setFormState] = useState<formState>("signIn");
-  const { signInWithGoogle, state, createUserWithEmailAndPassword, signIn, signInWithGithub } =
-    useAuth();
+  const {
+    signInWithGoogle,
+    state,
+    createUserWithEmailAndPassword,
+    signIn,
+    signInWithGithub,
+  } = useAuth();
 
   const handleFormState = (state: formState) => {
     setFormState(state);
@@ -33,7 +38,10 @@ export const LoginAndRegistrationPage = () => {
           <>
             <FormSignIn handleFormState={handleFormState} onSignIn={signIn} />
             <div className="hidden md:block ">/</div>
-            <ExternalAuthentication onSignInWithGoogle={signInWithGoogle} onSignWithGithub={signInWithGithub} />
+            <ExternalAuthentication
+              onSignInWithGoogle={signInWithGoogle}
+              onSignWithGithub={signInWithGithub}
+            />
           </>
         )}
         {state === "checkUserName" && <UsernameModal />}

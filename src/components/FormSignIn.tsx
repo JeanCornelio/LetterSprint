@@ -1,105 +1,91 @@
 import { SignInIcon, UserAdd01Icon } from "../icons/Icons";
-
 import { SubmitHandler, useForm } from "react-hook-form";
 
 interface Form {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
-export const FormSignIn = ({ handleFormState, onSignIn }) => {
-    const {
-        handleSubmit,
-        register,
-        formState: { errors },
-    } = useForm<Form>();
+interface FormSignInProps {
+  handleFormState: (state: "signIn" | "signUp") => void;
+  onSignIn: (data: { email: string; password: string }) => Promise<void>;
+}
 
-    const onSubmit: SubmitHandler<Form> = async (data) => {
-        const { email, password } = data;
-        onSignIn({ email, password });
-    };
+export const FormSignIn = ({ handleFormState, onSignIn }: FormSignInProps) => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<Form>();
 
-    return (
-        <article className="flex flex-col w-full ">
-            <form
-                className="flex flex-col gap-4 "
-                noValidate
-                onSubmit={handleSubmit(onSubmit)}
-            >
-                <div>
-                    {errors.email?.type === "required" && (
-                        <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-                            {" "}
-                            Email is required, cannot be empty
-                        </h3>
-                    )}
-                    {errors.email?.type === "pattern" && (
-                        <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-                            {" "}
-                            Email is not valid
-                        </h3>
-                    )}
-                    <input
-                        autoComplete="off"
-                        type="email"
-                        defaultValue=""
-                        placeholder="Email"
-                        {...register("email", {
-                            required: true,
-                            pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-                        })}
-                        className="bg-sprint-config p-4 outline-none rounded-md w-full"
-                    />
-                </div>
-                <div>
-                    {errors.password?.type === "required" && (
-                        <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-                            Password is required
-                        </h3>
-                    )}
+  const onSubmit: SubmitHandler<Form> = async (data) => {
+    const { email, password } = data;
+    await onSignIn({ email, password });
+  };
 
-                    <input
-                        autoComplete="off"
-                        type="password"
-                        placeholder="Password"
-                        {...register("password", { required: true })}
-                        className="bg-sprint-config p-4 outline-none rounded-md w-full"
-                    />
-                </div>
-                {/*     <div className="flex items-start">
-                    <div className="flex items-center h-5">
-                        <input
-                            id="remember"
-                            type="checkbox"
-                            value=""
-                            className="w-4 h-4 border border-gray-300 bg-gray-50 "
+  return (
+    <article className="flex flex-col w-full ">
+      <form
+        className="flex flex-col gap-4 "
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div>
+          {errors.email?.type === "required" && (
+            <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
+              {" "}
+              Email is required, cannot be empty
+            </h3>
+          )}
+          {errors.email?.type === "pattern" && (
+            <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
+              {" "}
+              Email is not valid
+            </h3>
+          )}
+          <input
+            className=" border border-1 border-gray-700 p-3 rounded-md w-full bg-sprint-config"
+            type="email"
+            placeholder="Email"
+            {...register("email", {
+              required: true,
+              pattern: /^\S+@\S+$/i,
+            })}
+          />
+        </div>
+        <div>
+          {errors.password?.type === "required" && (
+            <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
+              password is required
+            </h3>
+          )}
+          <input
+            className=" border border-1 border-gray-700 p-3 rounded-md w-full bg-sprint-config"
+            type="password"
+            placeholder="Password"
+            {...register("password", { required: true })}
+          />
+        </div>
 
-                        />
-                    </div>
-                    <label
-                        htmlFor="remember"
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                    >
-                        Remember me
-                    </label>
-                </div> */}
-
-                <button
-                    type="submit"
-                    className="bg-sprint-blue text-white p-4 rounded flex items-center justify-center gap-2 "
-                >
-                    <SignInIcon className="font-bold" />
-                    Sign in
-                </button>
-            </form>
-
-            <button
-                onClick={() => handleFormState("signUp")}
-                className="border border-gray-700   p-4 rounded flex items-center justify-center gap-2  hover:border-sprint-blue hover:text-sprint-blue w-full mt-4"
-            >
-                <UserAdd01Icon className="font-bold" />
-                Sign up
-            </button>
-        </article>
-    );
+        <button
+          className=" bg-sprint-blue p-3 rounded-md text-white hover:opacity-80 transition"
+          type="submit"
+        >
+          <span className="flex gap-3 items-center justify-center font-bold ">
+            <SignInIcon className="text-xl " />
+            Sign In
+          </span>
+        </button>
+      </form>
+      <div className="flex gap-2 mt-4 ">
+        <h3>or</h3>
+        <button
+          className="text-sprint-blue font-bold"
+          onClick={() => handleFormState("signUp")}
+        >
+          Sign Up
+        </button>
+      </div>
+    </article>
+  );
 };

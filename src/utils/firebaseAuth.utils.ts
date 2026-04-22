@@ -20,8 +20,35 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { TestInitialState } from "../interfaces/testConfiguration";
-import { Stats, Test } from "../interfaces/Test";
+import type { TestInitialState } from "../interfaces/testConfiguration";
+import type { Stats, Test } from "../interfaces/Test";
+
+interface UserData {
+  uid: string;
+  email: string;
+  displayName: string | null;
+  photoURL: string | null;
+  username: string;
+  testConfig: TestInitialState;
+  stats: Stats;
+}
+
+const normalizeTimestamp = (value: unknown): unknown => {
+  if (value && typeof value === 'object' && 'seconds' in value && 'nanoseconds' in value) {
+    const timestamp = value as { seconds: number; nanoseconds: number };
+    return new Date(timestamp.seconds * 1000).toISOString();
+  }
+  return value;
+};
+
+const normalizeData = (data: Record<string, unknown>): Record<string, unknown> => {
+  if (!data) return data;
+  const normalized: Record<string, unknown> = {};
+  Object.keys(data).forEach(key => {
+    normalized[key] = normalizeTimestamp(data[key]);
+  });
+  return normalized;
+};
 
 export const googleProvider = new GoogleAuthProvider();
 export const githubProvider = new GithubAuthProvider();
@@ -142,18 +169,20 @@ export const signInEmailAndPassword = async ({
   }
 };
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (uid?: string) => {
   const currentUser = auth.currentUser;
 
-  const userUid = currentUser?.uid;
+  const userUid = uid || currentUser?.uid;
 
-  const user = await checkUserExist(userUid as string);
+  if (!userUid) return { ok: false, errorMessage: "user not exist" };
+
+  const user = await checkUserExist(userUid);
 
   if (!user.data) return { ok: false, errorMessage: "user not exist" };
 
-  const { displayName, email, photoURL, uid, username, testConfig } = user.data;
+  const { displayName, email, photoURL, uid: userUidRet, username, testConfig } = user.data;
 
-  return { displayName, email, photoURL, uid, username, testConfig };
+  return { displayName, email, photoURL, uid: userUidRet, username, testConfig };
 };
 
 const userEmailVerify = async () => {
@@ -242,7 +271,12 @@ export const checkUserExist = async (uid: string) => {
 
   const userDoc = await getDoc(userRef);
 
-  return { exist: userDoc.exists(), data: userDoc.data() };
+  if (!userDoc.exists()) {
+    return { exist: false, data: null };
+  }
+
+  const data = normalizeData(userDoc.data() as Record<string, unknown>);
+  return { exist: true, data: data as UserData };
 };
 
 export const checkUsernameExist = async (username: string) => {
