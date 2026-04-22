@@ -24,7 +24,7 @@ export const getTests = async (lmt: number = 5 , uid : string) => {
   
   const testsRef = collection(firebaseBD, "users", uid, "tests");
   
-  const q = query(testsRef, orderBy("date"), limit(lmt));
+  const q = query(testsRef, orderBy("date", "desc"), limit(lmt));
   
   
 const querySnapshot = await getDocs(q);

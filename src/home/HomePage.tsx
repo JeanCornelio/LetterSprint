@@ -13,7 +13,7 @@ export const HomePage = () => {
     <div className="container mx-auto flex flex-col h-screen  xl:px-0 relative min-w-[375px] ">
       {state === "checking" && <CheckingAuth />}
 
-      <header className="max-h-24 fixed  top-0  container  bg-sprint-home z-50 px-2  md:px-0">
+      <header className="max-h-24 fixed  top-0  container  bg-sprint-home px-2  md:px-0">
         <Nav />
       </header>
 
