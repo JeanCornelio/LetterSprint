@@ -177,7 +177,6 @@ export const useAuth = () => {
     password: string;
     username: string;
   }) => {
-    dispatch(checkingStatus());
     const resp = await createAccountWithEmailAndPassword({
       email: userEmail,
       password,
@@ -193,7 +192,9 @@ export const useAuth = () => {
       errorMessage,
     } = resp;
 
-    if (!ok || !uid) return setLogout(errorMessage || "Creation failed");
+    if (!ok || !uid) {
+      throw new Error(errorMessage || "Creation failed");
+    }
 
     const userCreated = await createUserAccount({
       uid,
@@ -203,8 +204,9 @@ export const useAuth = () => {
       username,
     });
 
-    if (!userCreated.ok)
-      return setLogout(userCreated.errorMessage || "Creation failed");
+    if (!userCreated.ok) {
+      throw new Error(userCreated.errorMessage || "Creation failed");
+    }
   };
 
   const signIn = async ({
