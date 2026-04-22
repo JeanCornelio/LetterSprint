@@ -51,6 +51,7 @@ export const testSlice = createSlice({
       state.words = payload.words;
       state.puntuation = payload.puntuation;
       state.number = payload.number;
+      state.difficulty = payload.difficulty || 'medium';
     },
 
 resetTestConfiguration:(state) =>{
