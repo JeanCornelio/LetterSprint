@@ -2,16 +2,34 @@ import { collection, query, orderBy, limit, getDocs, where, collectionGroup } fr
 import { firebaseBD } from "./firebase.utils";
 import { MODES } from "../constants";
 
+const normalizeTimestamp = (value: unknown): unknown => {
+  if (value && typeof value === 'object' && 'seconds' in value && 'nanoseconds' in value) {
+    const timestamp = value as { seconds: number; nanoseconds: number };
+    return new Date(timestamp.seconds * 1000).toISOString();
+  }
+  return value;
+};
+
+const normalizeData = (data: unknown): unknown => {
+  if (!data || typeof data !== 'object') return data;
+  const obj = data as Record<string, unknown>;
+  const normalized: Record<string, unknown> = {};
+  Object.keys(obj).forEach(key => {
+    normalized[key] = normalizeTimestamp(obj[key]);
+  });
+  return normalized;
+};
+
 export const getTests = async (lmt: number = 5 , uid : string) => {
   
   const testsRef = collection(firebaseBD, "users", uid, "tests");
   
-  const q = query(testsRef, orderBy("date"), limit(lmt));
+  const q = query(testsRef, orderBy("date", "desc"), limit(lmt));
   
   
-  const querySnapshot = await getDocs(q);
-    
-  return querySnapshot.docs.map(doc => doc.data());
+const querySnapshot = await getDocs(q);
+     
+  return querySnapshot.docs.map(doc => normalizeData(doc.data()));
 };
 
 
@@ -29,7 +47,7 @@ const getBestForMode  = async (modeSelected: string, uid: string, mode: string) 
   const querySnapshot = await getDocs(timeQuery);
 
   if(!querySnapshot.empty){
-    return querySnapshot.docs[0].data();
+    return normalizeData(querySnapshot.docs[0].data());
   }
 
   return {

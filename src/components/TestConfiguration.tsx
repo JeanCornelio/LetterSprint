@@ -24,6 +24,8 @@ export const TestConfiguration = () => {
     numberToggle,
     isPuntuatioActive,
     isNumberactive,
+    difficulty,
+    setDifficulty,
   } = useTestConfiguration();
   useUpdateConfig()
   //Note: descrubir la animacon del filtro al expandirce
@@ -60,6 +62,25 @@ export const TestConfiguration = () => {
               <NumberIcon className="text-md" /> Numbers
             </button>
           </li>
+        </ul>
+        <div className="border-r-2 rounded-full border-gray-400"></div>
+        <ul className="flex gap-2 items-center">
+          {(['easy', 'medium', 'hard'] as const).map((level) => (
+            <li
+              key={level}
+              className={
+                defaultClass +
+                (difficulty === level ? active : "")
+              }
+            >
+              <button
+                onClick={() => setDifficulty(level)}
+                className="flex items-center gap-1 text-sm capitalize"
+              >
+                {level}
+              </button>
+            </li>
+          ))}
         </ul>
         <div className="border-r-2 rounded-full border-gray-400"></div>
         <ul className="flex gap-5">

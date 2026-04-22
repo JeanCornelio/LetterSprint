@@ -3,37 +3,68 @@ import { useEffect } from "react";
 import { auth, checkUserExist } from "../utils/firebaseAuth.utils";
 import { useAuth } from "./useAuth";
 import { useUpdateConfig } from "./useUpdateConfig";
+import { toast } from "react-toastify";
 
 export const useCheckingCurrentUser = () => {
-  const { checkingCurrentUser, handleCurrentUser,  photoURL, username, setLogout, isPending, state } = useAuth();
-  useUpdateConfig()
+  const {
+    checkingCurrentUser,
+    handleCurrentUser,
+    photoURL,
+    username,
+    setLogout,
+    isPending,
+    state,
+  } = useAuth();
+  useUpdateConfig();
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
+    let isMounted = true;
 
-      if (!user) return checkingCurrentUser(false);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!isMounted) return;
 
-      const currentUser = await checkUserExist(user.uid);
-      
-      if (!currentUser.data) return checkingCurrentUser(false);
-
-      const passwordUser = user.providerData[0].providerId
-
-      if (!user.emailVerified && passwordUser === "password") {
+      try {
+        if (!user) {
           checkingCurrentUser(false);
-          setLogout('We have sent a verification email, please check your email.')
-          return   
-      }
-  
-      checkingCurrentUser(true);
-    
+          return;
+        }
 
-      handleCurrentUser(currentUser.data);
-     
+        const currentUser = await checkUserExist(user.uid);
+
+        if (!currentUser.exist || !currentUser.data) {
+          checkingCurrentUser(false);
+          return;
+        }
+
+        const passwordUser = user.providerData[0]?.providerId;
+
+        if (!user.emailVerified && passwordUser === "password") {
+          checkingCurrentUser(false);
+          return;
+        }
+
+        checkingCurrentUser(true);
+        handleCurrentUser(currentUser.data);
+      } catch (error) {
+        console.error("Error checking user:", error);
+        toast.error("Error loading user data. Please try again.");
+        if (isMounted) {
+          checkingCurrentUser(false);
+        }
+      }
     });
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
   }, []);
 
   return {
-     photoURL, username, setLogout, isPending, state
+    photoURL,
+    username,
+    setLogout,
+    isPending,
+    state,
   };
 };

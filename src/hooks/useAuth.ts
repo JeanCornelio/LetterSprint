@@ -11,7 +11,6 @@ import {
   signInWithExternalAccount,
 } from "../store/auth/slice";
 import {
-  auth,
   checkUserExist,
   checkUsernameExist,
   createAccountWithEmailAndPassword,
@@ -19,11 +18,24 @@ import {
   signInGooglePopup,
   signInEmailAndPassword,
   signInGithub,
-  getCurrentUser,
 } from "../utils/firebaseAuth.utils";
 import { useAppDispatch, useAppSelector } from "./useStore";
-import { signOut } from "firebase/auth";
+import { auth } from "../utils/firebaseAuth.utils";
+import { signOut as firebaseSignOut } from "firebase/auth";
 import { useTestConfiguration } from "./useTestConfiguration";
+import type { TestInitialState } from "../interfaces/testConfiguration";
+import type { Stats } from "../interfaces/Test";
+import { toast } from "react-toastify";
+
+interface CurrentUserData {
+  uid: string;
+  email: string;
+  displayName: string | null;
+  photoURL: string | null;
+  username: string;
+  testConfig?: TestInitialState;
+  stats: Stats;
+}
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -37,87 +49,115 @@ export const useAuth = () => {
     username,
     uid,
     isPending,
-    stats
+    stats,
   } = useAppSelector(({ auth }) => auth);
   const { setCurrentUserTestConfiguration, resetConfiguration } =
     useTestConfiguration();
 
-  const handleCurrentUser = async (currentUser) => {
-    //dipatch Configuration
-  
-    const user = await getCurrentUser(currentUser.uid);
-    const { testConfig } = user;
+  const handleCurrentUser = async (currentUser: CurrentUserData) => {
+    console.log("handleCurrentUser called with:", currentUser);
 
-    setCurrentUserTestConfiguration(testConfig);
-    dispatch(setCurrentUser(currentUser));
+    const testConfig = currentUser.testConfig;
+    if (testConfig) {
+      setCurrentUserTestConfiguration(testConfig as TestInitialState);
+    }
+
+    console.log("Dispatching setCurrentUser");
+    dispatch(
+      setCurrentUser({
+        uid: currentUser.uid,
+        email: currentUser.email || "",
+        displayName: currentUser.displayName || "",
+        photoURL: currentUser.photoURL || "",
+        username: currentUser.username,
+        stats: currentUser.stats,
+      }),
+    );
+    console.log("setCurrentUser dispatched");
   };
 
   const checkingCurrentUser = (value: boolean) => {
     dispatch(setIsPending(value));
   };
 
-  const setLogout = (errorMessage = "Sign Out") => {
-    dispatch(logout(errorMessage));
+  const setLogout = (errorMsg = "Sign Out") => {
+    dispatch(logout(errorMsg));
     resetConfiguration();
-    signOut(auth);
+    firebaseSignOut(auth);
     navigate("/login");
   };
 
-  const addUsername = (username: string) => {
-    dispatch(setUsername({ username }));
+  const addUsername = (name: string) => {
+    dispatch(setUsername({ username: name }));
   };
 
   const signInWithGoogle = async () => {
-    dispatch(checkingStatus()); // waiting for google autentication
+    dispatch(checkingStatus());
 
     const resp = await signInGooglePopup();
     const { uid, email, displayName, photoURL, ok, errorMessage } = resp;
 
-    if (!ok) return setLogout(errorMessage);
+    if (!ok || !uid) return setLogout(errorMessage || "Sign in failed");
 
-    dispatch(signInWithExternalAccount({ uid, email, displayName, photoURL }));
+    dispatch(
+      signInWithExternalAccount({
+        uid,
+        email: email || "",
+        displayName,
+        photoURL,
+      }),
+    );
 
     const user = await checkUserExist(uid);
 
     if (!user.exist) return dispatch(chekUsernameStatus());
 
     dispatch(setAuthenticatedState());
-
-    addUsername(user.data.username);
+    if (user.data?.username) {
+      addUsername(user.data.username);
+    }
 
     navigate("/");
   };
 
   const signInWithGithub = async () => {
-    dispatch(checkingStatus()); // waiting for google autentication
+    dispatch(checkingStatus());
 
     const resp = await signInGithub();
     const { uid, email, displayName, photoURL, ok, errorMessage } = resp;
 
-    if (!ok) return setLogout(errorMessage);
+    if (!ok || !uid) return setLogout(errorMessage || "Sign in failed");
 
-    dispatch(signInWithExternalAccount({ uid, email, displayName, photoURL }));
+    dispatch(
+      signInWithExternalAccount({
+        uid,
+        email: email || "",
+        displayName,
+        photoURL,
+      }),
+    );
 
     const user = await checkUserExist(uid);
 
     if (!user.exist) return dispatch(chekUsernameStatus());
 
     dispatch(setAuthenticatedState());
-
-    addUsername(user.data.username);
+    if (user.data?.username) {
+      addUsername(user.data.username);
+    }
 
     navigate("/");
   };
 
-  const createAccountName = (username: string) => {
-    addUsername(username);
+  const createAccountName = (name: string) => {
+    addUsername(name);
 
     createUserAccount({
       uid,
-      email,
+      email: email || "",
       displayName,
       photoURL,
-      username,
+      username: name,
     });
 
     dispatch(setAuthenticatedState());
@@ -126,53 +166,99 @@ export const useAuth = () => {
   };
 
   const createUserWithEmailAndPassword = async ({
-    email,
+    email: userEmail,
     password,
     username,
+  }: {
+    email: string;
+    password: string;
+    username: string;
   }) => {
-    dispatch(checkingStatus()); // waiting for google autentication
     const resp = await createAccountWithEmailAndPassword({
-      email,
+      email: userEmail,
       password,
       username,
     });
 
     const {
       uid,
-      email: userEmail,
+      email: userEmailResp,
       displayName,
       photoURL,
       ok,
       errorMessage,
     } = resp;
 
-    if (!ok) return setLogout(errorMessage);
+    if (!ok || !uid) {
+      throw new Error(errorMessage || "Creation failed");
+    }
 
     const userCreated = await createUserAccount({
       uid,
-      email: userEmail,
+      email: userEmailResp || userEmail,
       displayName,
       photoURL,
       username,
     });
 
-    if (!userCreated.ok) return setLogout(userCreated.errorMessage);
+    if (!userCreated.ok) {
+      throw new Error(userCreated.errorMessage || "Creation failed");
+    }
   };
 
-  const signIn = async ({ email, password }) => {
-    //dispatch(checkingStatus());
-
-    const resp = await signInEmailAndPassword({ email, password });
+  const signIn = async ({
+    email: userEmail,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    const resp = await signInEmailAndPassword({ email: userEmail, password });
 
     const { ok, errorMessage } = resp;
 
-    if (!ok) return dispatch(logout(errorMessage));
+    if (!ok) {
+      if (
+        errorMessage?.includes("verified") ||
+        errorMessage?.includes("confirm")
+      ) {
+        toast.warn("Please verify your email before signing in.");
+      } else if (errorMessage?.includes("(auth/invalid-credential)")) {
+        toast.error("Invalid email or password. Please try again.");
+      } else {
+        toast.error(errorMessage || "Sign in failed");
+      }
+      dispatch(logout(errorMessage || "Sign in failed"));
+      return;
+    }
+
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      toast.error("Sign in failed. Please try again.");
+      return;
+    }
+
+    const user = await checkUserExist(currentUser.uid);
+    
+    if (!user.exist || !user.data) {
+      toast.error("User not found. Please try again.");
+      return;
+    }
+
+    dispatch(setCurrentUser({
+      uid: user.data.uid,
+      email: user.data.email || "",
+      displayName: user.data.displayName || "",
+      photoURL: user.data.photoURL || "",
+      username: user.data.username,
+      stats: user.data.stats,
+    }));
 
     navigate("/");
   };
 
-  const checkUsername = async (username: string) => {
-    const result = await checkUsernameExist(username);
+  const checkUsername = async (name: string) => {
+    const result = await checkUsernameExist(name);
     return result;
   };
 
@@ -199,6 +285,6 @@ export const useAuth = () => {
     signIn,
     setMessage,
     uid,
-    stats
+    stats,
   };
 };

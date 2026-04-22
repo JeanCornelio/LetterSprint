@@ -5,10 +5,12 @@ import authReducer from "./auth/slice";
 import result from "./testResults/slice";
 
 export const store = configureStore({
-    reducer: {
-        test: testReducer,
-        timer: timerReducer,
-        auth: authReducer,
-        results: result,
-    },
+  reducer: {
+    test: testReducer,
+    timer: timerReducer,
+    auth: authReducer,
+    results: result,
+  },
 });
+
+export type AppDispatch = typeof store.dispatch;

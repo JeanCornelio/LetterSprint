@@ -6,23 +6,23 @@ import { useAuth } from "./useAuth";
 
 export const useUpdateConfig = () => {
 
-    const {mode, timeActive, words, isPuntuatioActive, isNumberactive} = useTestConfiguration()
+    const {mode, timeActive, words, isPuntuatioActive, isNumberactive, difficulty} = useTestConfiguration()
     const {uid, setMessage} = useAuth()
 
   useEffect(() => {
   const saveConfig = async () => {
-       const data = await  updateUserSettings(uid, {mode,number:isNumberactive,puntuation:isPuntuatioActive ,time:timeActive, words});
+       const data = await  updateUserSettings(uid, {mode,number:isNumberactive,puntuation:isPuntuatioActive ,time:timeActive, words, difficulty});
 
        const {ok, errorMessage} = data
        
        if (!ok) return  setMessage(errorMessage)
 
-    };
+  };
 
-    saveConfig(); 
+  saveConfig(); 
   
     
-  }, [mode, timeActive, words, isPuntuatioActive, isNumberactive])
+  }, [mode, timeActive, words, isPuntuatioActive, isNumberactive, difficulty])
 
 
   return {

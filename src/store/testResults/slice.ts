@@ -1,31 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Test } from "../../interfaces/Test";
+
+interface TestResultsState {
+  tests: Test[];
+}
+
+const initialState: TestResultsState = {
+  tests: [],
+};
 
 export const testResultSlice = createSlice({
   name: "testResult",
-  initialState: {
-  
-    tests: [],
-  /*   testsCompleted: 0,
-    wordsWritten: 0,
-    timeTyping: 0,
-    timeRecord: [],
-    wordRecord: [], */
-  },
-  reducers:{
-
-    setTets:(state, action)=>{
-       const {payload}= action;
-       state.tests = [payload, ...state.tests]
-       //Note de 2/5/2025: I think the problem is here, the form how we save the data in the state, or could be the way I'm calling the data in firebaseService
+  initialState,
+  reducers: {
+    setTets: (state, action: PayloadAction<Test>) => {
+      state.tests = [action.payload, ...state.tests];
     },
-
-    setActualTests:(state, action)=>{
-        const {payload}= action;
-        state.tests = payload
-    }
-
-  }
+    setActualTests: (state, action: PayloadAction<Test[]>) => {
+      state.tests = action.payload;
+    },
+  },
 });
 
-export default testResultSlice.reducer
-export const {setTets, setActualTests} = testResultSlice.actions
+export default testResultSlice.reducer;
+export const { setTets, setActualTests } = testResultSlice.actions;

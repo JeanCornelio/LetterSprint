@@ -89,7 +89,7 @@ export const WritingTestPage = () => {
     handleTimerTime,
     timeSelected,
   } = useTimer();
-  const { mode, words: wordSelected, puntuation, number } = useTestConfiguration();
+  const { mode, words: wordSelected, puntuation, number, difficulty } = useTestConfiguration();
   const testContent = useRef(null);
   const { incorrectRepeted, correctRepeted, correct, incorrect, } = lettersStates;
 
@@ -97,7 +97,7 @@ export const WritingTestPage = () => {
 
   const createTest = () => {
     handleLoading(true); // Loanding
-    const words: Word[] = getTest({ puntuation, number, wordSelected, mode, timeSelected });
+    const words: Word[] = getTest({ puntuation, number, wordSelected, mode, timeSelected, difficulty });
     //words of the tets
     setTest(words);
     setOriginalTest(words);
@@ -111,7 +111,7 @@ export const WritingTestPage = () => {
     //Reset TIMER and Create Game
 
     resestTest();
-  }, [mode, wordSelected, timeSelected, puntuation, number]);
+  }, [mode, wordSelected, timeSelected, puntuation, number, difficulty]);
 
   const toCheckWordCorreclyCompleted = (word: Word) => {
     const lettersStates = word.letters.some(
@@ -411,35 +411,38 @@ export const WritingTestPage = () => {
     const { correct, incorrect, extra, missed, incorrectRepeted,
       correctRepeted, extraRepeted } = lettersStates;
 
-    //  console.log(lettersStates)
+    // Espacios entre palabras tipeadas correctamente
+    const spacesTyped = wordPosition;
 
-    const charactersWritten = correct.length;
+    // Total de caracteres gross (todos los tipeados + espacios)
+    const totalTyped = correct.length + correctRepeted.length + 
+                       incorrect.length + incorrectRepeted.length + 
+                       extra.length + extraRepeted.length + spacesTyped;
 
-    //console.log(charactersWritten)
+    // Errores no corregidos (solo incorrectos, NO repetidos)
+    const uncorrectedErrors = incorrect.length + extra.length;
 
-    const erros = incorrect.length + extra.length;
+    // Caracteres correctos totales
+    const correctTotal = correct.length + correctRepeted.length;
 
-    // WPM gross
-    const grossWpm = charactersWritten / 5 / timeInMinutes;
+    // Raw WPM = Gross WPM (todos los caracteres / 5 / minutos)
+    const rawWpm = (totalTyped / 5) / timeInMinutes;
 
-    // WPM neto
-    const netWpm = grossWpm - erros / (5 * timeInMinutes);
+    // Net WPM = Gross - errores no corregidos por minuto
+    const netWpm = rawWpm - (uncorrectedErrors / timeInMinutes);
 
-    //TotalTyped
-    const totalTyped = correct.length + correctRepeted.length + incorrect.length + incorrectRepeted.length + extra.length + extraRepeted.length;
+    // Accuracy = correct / total × 100
+    const accuracy = (correctTotal / totalTyped) * 100;
 
-    // precision
-    const precision = ((correctRepeted.length + correct.length) / totalTyped) * 100;
-
-    //Validation
+    //Validation estándar
     const invalidWpm =
-      (precision < 20 && netWpm > 100) ||
-      missed.length > correct.length ||
-      netWpm < 0;
+      accuracy < 20 ||
+      netWpm < 0 ||
+      (netWpm > 100 && accuracy < 80);
 
     setTestResult({
-      precision: parseFloat(precision.toFixed(2)),
-      raw: !Number.isFinite(grossWpm) ? 0 : parseFloat(grossWpm.toFixed(2)),
+      precision: parseFloat(accuracy.toFixed(2)),
+      raw: !Number.isFinite(rawWpm) ? 0 : parseFloat(rawWpm.toFixed(2)),
       wpm: invalidWpm ? 0 : parseFloat(netWpm.toFixed(2)),
       totalWords: wordPosition + originalTotalWordsTest + 1,
       characters: `${correct.length}/${incorrect.length}/${extra.length}/${missed.length}`,

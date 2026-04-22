@@ -30,7 +30,7 @@ export const UsernameModal = () => {
 
   const onSubmit: SubmitHandler<Form> = async (data) => {
     const { username } = data;
-    createAccountName(username);
+    createAccountName(username || "");
   };
 
   return (
@@ -44,12 +44,10 @@ export const UsernameModal = () => {
             <button
               type="button"
               className="text-gray-500 bg-transparent  rounded-lg text-sm  ms-auto inline-flex justify-center items-center "
-              data-modal-hide="default-modal"
-            >
+              data-modal-hide="default-modal">
               <button
                 className="hover:text-sprint-blue"
-                onClick={() => setLogout()}
-              >
+                onClick={() => setLogout()}>
                 <CloseIcon />
               </button>
               <span className="sr-only">Close modal</span>
@@ -60,8 +58,7 @@ export const UsernameModal = () => {
             <form
               noValidate
               onSubmit={handleSubmit(onSubmit)}
-              className="flex flex-col gap-4"
-            >
+              className="flex flex-col gap-4">
               <h3 className="text-xs font-semibold">
                 Please enter a username before continuing
               </h3>
@@ -100,7 +97,7 @@ export const UsernameModal = () => {
                   maxLength: 15,
                   validate: {
                     userNameNotAvailable: async () =>
-                      await checkUsername(username),
+                      await checkUsername(username || ""),
                   },
                 })}
                 className="bg-sprint-config p-2 rounded-md w-full "
@@ -108,8 +105,7 @@ export const UsernameModal = () => {
               <button
                 data-modal-hide="default-modal"
                 type="submit"
-                className=" w-full border border-gray-700 p-2 rounded-md hover:bg-sprint-blue hover:text-white"
-              >
+                className=" w-full border border-gray-700 p-2 rounded-md hover:bg-sprint-blue hover:text-white">
                 OK
               </button>
             </form>

@@ -2,7 +2,17 @@ import { Button, Dialog, DialogTrigger, Popover } from "react-aria-components";
 import { Link } from "react-router-dom";
 import { AvatarIcon, SignOutIcon, UserIcon } from "../icons/Icons";
 
-export const UserOptions = ({ setLogout, username, photoURL }) => {
+interface UserOptionsProps {
+  setLogout: (message?: string) => void;
+  username: string;
+  photoURL: string;
+}
+
+export const UserOptions = ({
+  setLogout,
+  username,
+  photoURL,
+}: UserOptionsProps) => {
   return (
     <DialogTrigger>
       <Button className="flex items-center gap-2 hover:text-sprint-blue hover:ring-sprint-blue">
@@ -23,7 +33,7 @@ export const UserOptions = ({ setLogout, username, photoURL }) => {
       </Button>
 
       <Popover>
-        <Dialog className=" border-sprint-home border-4 rounded-md w-28 bg-sprint-config overflow-hidden">
+        <Dialog className=" border-sprint-home border-4 rounded-md w-32 bg-sprint-config overflow-hidden">
           <div className="flex-col text-sm ">
             <div className=" hover:bg-gray-400 hover:text-sprint-config transition ">
               <Link to="/user" className="flex gap-1 items-center py-1  px-3">
@@ -34,8 +44,7 @@ export const UserOptions = ({ setLogout, username, photoURL }) => {
             <div className="hover:bg-gray-400 hover:text-sprint-config transition">
               <button
                 className="   flex gap-1 items-center py-1  px-3 "
-                onClick={() => setLogout()}
-              >
+                onClick={() => setLogout()}>
                 <SignOutIcon /> <span>Sign out</span>
               </button>
             </div>
