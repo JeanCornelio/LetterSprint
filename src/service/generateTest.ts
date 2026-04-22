@@ -60,11 +60,17 @@ export const getTest = (config: Config) => {
   let modifiedText = filteredByDifficulty[randomIndex].text;
 
   if (!puntuation) {
-    modifiedText = modifiedText.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()¿?¡""'<>[\]@+|]/g, "");
+    modifiedText = modifiedText.replace(/[.,:;"'!?()\[\]{}]/g, "");
+  } else {
+    if (difficulty === 'easy') {
+      modifiedText = modifiedText.replace(/[,"'\[\]{}]/g, "");
+    } else if (difficulty === 'medium') {
+      modifiedText = modifiedText.replace(/["\[\]{}]/g, "");
+    }
   }
 
   if (!number) {
-    modifiedText = modifiedText.replace(/\s?\d+\s?/g, " ");
+    modifiedText = modifiedText.replace(/\d+/g, "");
   }
 
   modifiedText = modifiedText.replace(/\s+/g, " ").trim().toLowerCase();
