@@ -16,7 +16,10 @@ export const useResult = () => {
   const fetchTests = async () => {
     if (!uid) return;
     const testsData = await getTests(limit, uid);
-    dispatch(setActualTests(testsData as Test[]));
+    const sortedTests = (testsData as Test[]).sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    dispatch(setActualTests(sortedTests));
   };
 
   useEffect(() => {
