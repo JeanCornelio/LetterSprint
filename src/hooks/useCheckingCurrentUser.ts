@@ -39,9 +39,7 @@ export const useCheckingCurrentUser = () => {
         const passwordUser = user.providerData[0]?.providerId;
 
         if (!user.emailVerified && passwordUser === "password") {
-          toast.warn("Please verify your email before signing in.");
           checkingCurrentUser(false);
-          //setLogout("Email not verified. Please check your email.");
           return;
         }
 

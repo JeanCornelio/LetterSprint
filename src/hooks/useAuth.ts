@@ -218,6 +218,11 @@ export const useAuth = () => {
     const { ok, errorMessage } = resp;
 
     if (!ok) {
+      if (errorMessage?.includes("verified") || errorMessage?.includes("confirm")) {
+        toast.warn("Please verify your email before signing in.");
+      } else {
+        toast.error(errorMessage || "Sign in failed");
+      }
       dispatch(logout(errorMessage || "Sign in failed"));
       return;
     }
