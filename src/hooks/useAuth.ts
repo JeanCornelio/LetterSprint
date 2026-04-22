@@ -30,8 +30,8 @@ import type { Stats } from "../interfaces/Test";
 interface CurrentUserData {
   uid: string;
   email: string;
-  displayName: string;
-  photoURL: string;
+  displayName: string | null;
+  photoURL: string | null;
   username: string;
   stats: Stats;
 }
@@ -182,7 +182,10 @@ export const useAuth = () => {
 
     const { ok, errorMessage } = resp;
 
-    if (!ok) return dispatch(logout(errorMessage || "Sign in failed"));
+    if (!ok) {
+      dispatch(logout(errorMessage || "Sign in failed"));
+      return;
+    }
 
     navigate("/");
   };

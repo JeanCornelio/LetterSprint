@@ -3,6 +3,7 @@ dist/
 build/
 coverage/
 
+
 # Logs
 *.log
 npm-debug.log*
@@ -31,3 +32,6 @@ Thumbs.db
 
 # Test
 coverage/
+
+#mocks
+mocks/

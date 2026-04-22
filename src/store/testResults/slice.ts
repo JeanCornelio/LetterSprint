@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { Test } from "../interfaces/Test";
+import { Test } from "../../interfaces/Test";
 
 interface TestResultsState {
   tests: Test[];

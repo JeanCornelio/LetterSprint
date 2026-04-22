@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Stats } from "../interfaces/Test";
+import { Stats } from "../../interfaces/Test";
 
 interface AuthState {
   uid: string;
@@ -28,7 +28,7 @@ const initialState: AuthState = {
     timeTyping: 0,
     timeRecord: [],
     wordRecord: [],
-  }
+  },
 };
 
 interface SetCurrentUserPayload {
@@ -41,19 +41,27 @@ interface SetCurrentUserPayload {
 }
 
 export const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     checkingStatus: (state) => {
-      state.state = 'checking'
+      state.state = "checking";
     },
     chekUsernameStatus: (state) => {
-      state.state = 'checkUserName'
+      state.state = "checkUserName";
     },
     setUsername: (state, action: PayloadAction<{ username: string }>) => {
       state.username = action.payload.username;
     },
-    signInWithExternalAccount: (state, action: PayloadAction<{ uid: string; email: string; displayName: string | null; photoURL: string | null }>) => {
+    signInWithExternalAccount: (
+      state,
+      action: PayloadAction<{
+        uid: string;
+        email: string;
+        displayName: string | null;
+        photoURL: string | null;
+      }>,
+    ) => {
       state.uid = action.payload.uid;
       state.email = action.payload.email;
       state.displayName = action.payload.displayName || "";
@@ -69,7 +77,7 @@ export const authSlice = createSlice({
       state.errorMessage = action.payload;
     },
     setAuthenticatedState: (state) => {
-      state.state = "authenticated"
+      state.state = "authenticated";
     },
     setCurrentUser: (state, action: PayloadAction<SetCurrentUserPayload>) => {
       const { payload } = action;
@@ -95,8 +103,8 @@ export const authSlice = createSlice({
       state.stats.timeTyping += payload.timeTyping;
       state.stats.timeRecord = payload.timeRecord;
       state.stats.wordRecord = payload.wordRecord;
-    }
-  }
+    },
+  },
 });
 
 export default authSlice.reducer;
@@ -110,5 +118,5 @@ export const {
   setAuthenticatedState,
   setCurrentUser,
   setIsPending,
-  setErrorMessage
+  setErrorMessage,
 } = authSlice.actions;
