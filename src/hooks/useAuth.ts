@@ -223,7 +223,7 @@ export const useAuth = () => {
         errorMessage?.includes("confirm")
       ) {
         toast.warn("Please verify your email before signing in.");
-      } else if (errorMessage.includes("(auth/invalid-credential)")) {
+      } else if (errorMessage?.includes("(auth/invalid-credential)")) {
         toast.error("Invalid email or password. Please try again.");
       } else {
         toast.error(errorMessage || "Sign in failed");
@@ -231,6 +231,28 @@ export const useAuth = () => {
       dispatch(logout(errorMessage || "Sign in failed"));
       return;
     }
+
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      toast.error("Sign in failed. Please try again.");
+      return;
+    }
+
+    const user = await checkUserExist(currentUser.uid);
+    
+    if (!user.exist || !user.data) {
+      toast.error("User not found. Please try again.");
+      return;
+    }
+
+    dispatch(setCurrentUser({
+      uid: user.data.uid,
+      email: user.data.email || "",
+      displayName: user.data.displayName || "",
+      photoURL: user.data.photoURL || "",
+      username: user.data.username,
+      stats: user.data.stats,
+    }));
 
     navigate("/");
   };

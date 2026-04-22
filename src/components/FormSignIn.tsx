@@ -1,4 +1,4 @@
-import { SignInIcon, UserAdd01Icon } from "../icons/Icons";
+import { SignInIcon } from "../icons/Icons";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 interface Form {
@@ -28,8 +28,7 @@ export const FormSignIn = ({ handleFormState, onSignIn }: FormSignInProps) => {
       <form
         className="flex flex-col gap-4 "
         noValidate
-        onSubmit={handleSubmit(onSubmit)}
-      >
+        onSubmit={handleSubmit(onSubmit)}>
         <div>
           {errors.email?.type === "required" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
@@ -69,8 +68,7 @@ export const FormSignIn = ({ handleFormState, onSignIn }: FormSignInProps) => {
 
         <button
           className=" bg-sprint-blue p-3 rounded-md text-white hover:opacity-80 transition"
-          type="submit"
-        >
+          type="submit">
           <span className="flex gap-3 items-center justify-center font-bold ">
             <SignInIcon className="text-xl " />
             Sign In
@@ -81,8 +79,7 @@ export const FormSignIn = ({ handleFormState, onSignIn }: FormSignInProps) => {
         <h3>or</h3>
         <button
           className="text-sprint-blue font-bold"
-          onClick={() => handleFormState("signUp")}
-        >
+          onClick={() => handleFormState("signUp")}>
           Sign Up
         </button>
       </div>
