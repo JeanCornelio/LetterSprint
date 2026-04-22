@@ -41,7 +41,7 @@ export const useCheckingCurrentUser = () => {
         if (!user.emailVerified && passwordUser === "password") {
           toast.warn("Please verify your email before signing in.");
           checkingCurrentUser(false);
-          setLogout("Email not verified. Please check your email.");
+          //setLogout("Email not verified. Please check your email.");
           return;
         }
 

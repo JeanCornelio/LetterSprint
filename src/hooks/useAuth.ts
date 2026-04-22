@@ -81,9 +81,6 @@ export const useAuth = () => {
   };
 
   const setLogout = (errorMsg = "Sign Out") => {
-    if (errorMsg && errorMsg !== "Sign Out") {
-      toast.error(errorMsg);
-    }
     dispatch(logout(errorMsg));
     resetConfiguration();
     firebaseSignOut(auth);
