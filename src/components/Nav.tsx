@@ -4,9 +4,8 @@ import { UserOptions } from "./UserOptions";
 import { useCheckingCurrentUser } from "../hooks/useCheckingCurrentUser";
 
 export const Nav = () => {
-
-  const { photoURL, username, setLogout, isPending, state } = useCheckingCurrentUser();
-
+  const { photoURL, username, setLogout, isPending, state } =
+    useCheckingCurrentUser();
 
   return (
     <nav className="flex  py-3 md:py-7 justify-between items-center ">
@@ -18,15 +17,14 @@ export const Nav = () => {
       </Link>
       {!isPending && (
         <div className="flex gap-2 items-center transition animate-fade-in">
-          <button className="me-auto  p-1 mt-1 rounded-full hover:text-sprint-blue transition">
+          {/* <button className="me-auto  p-1 mt-1 rounded-full hover:text-sprint-blue transition">
             <CrownIcon className="text-2xl" />
-          </button>
+          </button> */}
 
           {state !== "authenticated" ? (
             <Link
               to="/login"
-              className="  p-1 rounded-full hover:text-sprint-blue transition"
-            >
+              className="  p-1 rounded-full hover:text-sprint-blue transition">
               <UserIcon className="text-2xl" />
             </Link>
           ) : (

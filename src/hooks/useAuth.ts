@@ -18,7 +18,6 @@ import {
   signInGooglePopup,
   signInEmailAndPassword,
   signInGithub,
-  getCurrentUser,
 } from "../utils/firebaseAuth.utils";
 import { useAppDispatch, useAppSelector } from "./useStore";
 import { auth } from "../utils/firebaseAuth.utils";
@@ -33,6 +32,7 @@ interface CurrentUserData {
   displayName: string | null;
   photoURL: string | null;
   username: string;
+  testConfig?: TestInitialState;
   stats: Stats;
 }
 
@@ -48,20 +48,31 @@ export const useAuth = () => {
     username,
     uid,
     isPending,
-    stats
+    stats,
   } = useAppSelector(({ auth }) => auth);
   const { setCurrentUserTestConfiguration, resetConfiguration } =
     useTestConfiguration();
 
   const handleCurrentUser = async (currentUser: CurrentUserData) => {
-    const user = await getCurrentUser(currentUser.uid);
-    if (!user.ok) return;
-    
-    const testConfig = user.testConfig as TestInitialState | undefined;
+    console.log("handleCurrentUser called with:", currentUser);
+
+    const testConfig = currentUser.testConfig;
     if (testConfig) {
-      setCurrentUserTestConfiguration(testConfig);
+      setCurrentUserTestConfiguration(testConfig as TestInitialState);
     }
-    dispatch(setCurrentUser(currentUser as Parameters<typeof setCurrentUser>[0]));
+
+    console.log("Dispatching setCurrentUser");
+    dispatch(
+      setCurrentUser({
+        uid: currentUser.uid,
+        email: currentUser.email || "",
+        displayName: currentUser.displayName || "",
+        photoURL: currentUser.photoURL || "",
+        username: currentUser.username,
+        stats: currentUser.stats,
+      }),
+    );
+    console.log("setCurrentUser dispatched");
   };
 
   const checkingCurrentUser = (value: boolean) => {
@@ -87,7 +98,14 @@ export const useAuth = () => {
 
     if (!ok || !uid) return setLogout(errorMessage || "Sign in failed");
 
-    dispatch(signInWithExternalAccount({ uid, email: email || "", displayName, photoURL }));
+    dispatch(
+      signInWithExternalAccount({
+        uid,
+        email: email || "",
+        displayName,
+        photoURL,
+      }),
+    );
 
     const user = await checkUserExist(uid);
 
@@ -109,7 +127,14 @@ export const useAuth = () => {
 
     if (!ok || !uid) return setLogout(errorMessage || "Sign in failed");
 
-    dispatch(signInWithExternalAccount({ uid, email: email || "", displayName, photoURL }));
+    dispatch(
+      signInWithExternalAccount({
+        uid,
+        email: email || "",
+        displayName,
+        photoURL,
+      }),
+    );
 
     const user = await checkUserExist(uid);
 
@@ -174,10 +199,17 @@ export const useAuth = () => {
       username,
     });
 
-    if (!userCreated.ok) return setLogout(userCreated.errorMessage || "Creation failed");
+    if (!userCreated.ok)
+      return setLogout(userCreated.errorMessage || "Creation failed");
   };
 
-  const signIn = async ({ email: userEmail, password }: { email: string; password: string }) => {
+  const signIn = async ({
+    email: userEmail,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
     const resp = await signInEmailAndPassword({ email: userEmail, password });
 
     const { ok, errorMessage } = resp;
@@ -218,6 +250,6 @@ export const useAuth = () => {
     signIn,
     setMessage,
     uid,
-    stats
+    stats,
   };
 };

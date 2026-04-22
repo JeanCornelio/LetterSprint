@@ -26,7 +26,7 @@ export const LoginAndRegistrationPage = () => {
     <section className=" flex flex-col justify-center items-center md:gap-10 animate-fade-in ">
       <div className="text-center mb-auto">
         <h2 className="text-4xl font-bold">Login to Your Account</h2>
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 mt-8  text-lg lg:text-center lg:text-xl xl:px-60">
+        <p className=" mb-3 read-only font-normal text-gray-700 dark:text-gray-400 mt-8  text-lg lg:text-center lg:text-xl xl:px-60">
           Challenge yourself by testing your typing speed and accuracy and
           compete against people from all corners of the globe in real-time to
           prove your skills and climb to the top of the leaderboard
