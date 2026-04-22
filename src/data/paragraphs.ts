@@ -2,7 +2,7 @@ import { Paragraph } from '../interfaces/Paragraph';
 
 export const paragraphs: Record<string, Paragraph[]> = {
   en: [
-    // EASY - Short with punctuation and numbers
+    // EASY - Simple with punctuation and numbers
     {
       id: 'en-e-1',
       text: 'The quick brown fox jumps over the lazy dog. It runs 5 miles per hour in the park at 7 AM. Birds wake me up at dawn. The sun rises: today will be great!',
@@ -19,7 +19,7 @@ export const paragraphs: Record<string, Paragraph[]> = {
     },
     {
       id: 'en-e-3',
-      text: 'The sun is bright today at 80 degrees. We see 10 blue sky and 5 white clouds. Weather changes daily: sunny days at 25°C, rainy days at 15°C. Nature provides beauty!',
+      text: 'The sun is bright today at 80 degrees. We see 10 blue sky and 5 white clouds. Weather changes daily: sunny days at 25C, rainy days at 15C. Nature provides beauty!',
       language: 'en',
       difficulty: 'easy',
       tags: ['nature', 'weather'],
@@ -33,7 +33,7 @@ export const paragraphs: Record<string, Paragraph[]> = {
     },
     {
       id: 'en-e-5',
-      text: 'The cat sleeps 14 hours on the bed. It is warm at 72°F. Dogs and cats make great pets. They bring joy to every home!',
+      text: 'The cat sleeps 14 hours on the bed. It is warm at 72F. Dogs and cats make great pets. They bring joy to every home!',
       language: 'en',
       difficulty: 'easy',
       tags: ['animals', 'home'],
@@ -54,7 +54,7 @@ export const paragraphs: Record<string, Paragraph[]> = {
     },
     {
       id: 'en-e-8',
-      text: 'Water is cold at 32°F in winter. We need warm coats at 68°F. Seasons change: 4 seasons bring different weather. Weather repeats yearly!',
+      text: 'Water is cold at 32F in winter. We need warm coats at 68F. Seasons change: 4 seasons bring different weather. Weather repeats yearly!',
       language: 'en',
       difficulty: 'easy',
       tags: ['weather', 'seasons'],
@@ -76,7 +76,7 @@ export const paragraphs: Record<string, Paragraph[]> = {
     // MEDIUM - Medium with punctuation and numbers
     {
       id: 'en-m-1',
-      text: 'Technology changed how we communicate: phones, computers, tablets connect 8 billion people globally. Email and video calls let us talk across 195 countries instantly. The internet transformed human interaction fundamentally; distance no longer matters in relationships or business.',
+      text: 'Technology changed how we communicate: phones, computers, tablets connect 8 billion people globally. Email and video calls let us talk across 195 countries. The internet transformed human interaction; distance no longer matters.',
       language: 'en',
       difficulty: 'medium',
       tags: ['technology', 'communication'],
@@ -90,7 +90,7 @@ export const paragraphs: Record<string, Paragraph[]> = {
     },
     {
       id: 'en-m-3',
-      text: 'Healthy eating matters: fruits, vegetables, nuts and proteins feed our bodies. Water, exercise and sleep keep us healthy. Nutrition science reveals how 2000 daily calories affect mood, energy and 75 years of life. Balance is essential!',
+      text: 'Healthy eating matters: fruits, vegetables, nuts and proteins feed our bodies. Water, exercise and sleep keep us healthy. Nutrition reveals 2000 daily calories affect mood and energy. Balance is essential!',
       language: 'en',
       difficulty: 'medium',
       tags: ['health', 'food'],
@@ -104,21 +104,21 @@ export const paragraphs: Record<string, Paragraph[]> = {
     },
     {
       id: 'en-m-5',
-      text: 'Exercise benefits body and mind: running, swimming, cycling and walking build strength. Fitness reduces stress 40%, improves mood 25%, adds 10 years to life. Studies show 30 minutes daily impacts health significantly. Consistency matters more than intensity!',
+      text: 'Exercise benefits body and mind: running, swimming, cycling and walking build strength. Fitness reduces stress 40%, improves mood 25%, adds 10 years to life. Studies show 30 minutes daily impacts health. Consistency matters more than intensity!',
       language: 'en',
       difficulty: 'medium',
       tags: ['health', 'fitness'],
     },
     {
       id: 'en-m-6',
-      text: 'Music moves emotions powerfully: jazz, rock, classical and pop inspire feelings. Happy songs lift spirits; peaceful melodies soothe after difficult days. Sound transforms mood instantly!',
+      text: 'Music moves emotions: jazz, rock, classical and pop inspire feelings. Happy songs lift spirits; peaceful melodies soothe after difficult days. Sound transforms mood instantly!',
       language: 'en',
       difficulty: 'medium',
       tags: ['art', 'music'],
     },
     {
       id: 'en-m-7',
-      text: 'Oceans cover 71% of Earth and contain mysterious creatures. Scientists discover 2000 new species yearly in underwater ecosystems. Climate regulation and food sources depend on healthy oceans. Protection matters urgently!',
+      text: 'Oceans cover 71% of Earth and contain mysterious creatures. Scientists discover 2000 new species yearly in underwater ecosystems. Climate regulation depends on healthy oceans. Protection matters urgently!',
       language: 'en',
       difficulty: 'medium',
       tags: ['nature', 'science'],
@@ -146,7 +146,7 @@ export const paragraphs: Record<string, Paragraph[]> = {
     },
     {
       id: 'en-m-11',
-      text: 'Nature provides air, water, food and shelter for all creatures. Forests, oceans, deserts and mountains create essential ecosystems. Environmental conservation and sustainable practices protect our planet for future generations!',
+      text: 'Nature provides air, water, food and shelter for all creatures. Forests, oceans, deserts and mountains create essential ecosystems. Conservation and sustainable practices protect our planet for future generations!',
       language: 'en',
       difficulty: 'medium',
       tags: ['nature', 'environment'],
@@ -158,59 +158,59 @@ export const paragraphs: Record<string, Paragraph[]> = {
       difficulty: 'medium',
       tags: ['food', 'health'],
     },
-    // HARD - Technical with numbers and dates
+    // HARD - Simple punctuation only: . , : ; ! ?
     {
       id: 'en-h-1',
-      text: 'The Renaissance (1400-1600) transformed European art: Leonardo, Michelangelo created masterworks. Humanism and perspective defined this era. Printing press (1440) spread ideas across Europe; literacy rose from 5% to 50% in 150 years. Scientific Revolution followed: Copernicus (1543), Galileo (1610), Newton (1687) changed worldview.',
+      text: 'The Renaissance (1400-1600) transformed European art. Leonardo and Michelangelo created masterworks. Humanism and perspective defined this era. Printing press (1440) spread ideas across Europe. Literacy rose from 5 percent to 50 percent in 150 years. Copernicus (1543) and Galileo (1610) changed our worldview.',
       language: 'en',
       difficulty: 'hard',
       tags: ['history', 'art'],
     },
     {
       id: 'en-h-2',
-      text: 'Quantum mechanics (1900-present) proves wave-particle duality: electrons exist as probability clouds until measurement. Heisenberg uncertainty (ΔxΔp≥ℏ/2) challenges determinism. Schrödinger equation describes quantum states. Quantum computing reached 1000 qubits by 2024.',
+      text: 'Quantum mechanics proves wave-particle duality. Electrons exist as probability clouds until measured. Heisenberg uncertainty challenges determinism. Schrodinger equation describes quantum states. Quantum computing reached 1000 qubits by 2024.',
       language: 'en',
       difficulty: 'hard',
       tags: ['science', 'physics'],
     },
     {
       id: 'en-h-3',
-      text: 'Industrial Revolution (1760-1840) introduced factories: urbanization grew from 10% to 50% in 80 years. Child labor preceded reforms; Factory Acts limited hours to 12. Coal consumption rose from 10M to 50M tons. GDP increased 200%—economic growth unprecedented.',
+      text: 'Industrial Revolution introduced factories. Urbanization grew from 10 percent to 50 percent in 80 years. Child labor preceded reforms. Factory Acts limited hours to 12 per day. Coal consumption rose from 10 million to 50 million tons. GDP increased 200 percent. Economic growth was unprecedented.',
       language: 'en',
       difficulty: 'hard',
       tags: ['history', 'economy'],
     },
     {
       id: 'en-h-4',
-      text: 'AI systems (2010-present) process exabytes daily: neural networks with 175B parameters identify invisible patterns. Computer vision exceeds human accuracy (3.4% vs 5.1%). Healthcare AI diagnoses cancers at 94% accuracy. Ethics concerns: deepfakes up 1000%, job displacement 30%.',
+      text: 'AI systems process data daily. Neural networks with 175 billion parameters identify patterns. Computer vision exceeds human accuracy. Healthcare AI diagnoses cancers at 94 percent accuracy. Ethics concerns include deepfakes, job displacement, and bias. EU AI Act regulates systems.',
       language: 'en',
       difficulty: 'hard',
       tags: ['technology', 'ai'],
     },
     {
       id: 'en-h-5',
-      text: 'Bitcoin (2009) introduced blockchain: 21M capped supply ensures scarcity. Mining consumes 150TWh—Argentina equals. Ethereum (2015) enabled DeFi: $80B TVL. Stablecoins facilitate $200B monthly volume. Regulatory frameworks emerge globally.',
+      text: 'Bitcoin introduced blockchain. 21 million capped supply ensures scarcity. Mining consumes 150 terawatts. Ethereum enabled DeFi. Stablecoins facilitate billions in volume. Regulatory frameworks emerge globally.',
       language: 'en',
       difficulty: 'hard',
       tags: ['technology', 'finance'],
     },
     {
       id: 'en-h-6',
-      text: 'Human Genome Project (1990-2003) mapped 20K+ genes. Sequencing dropped from $100M (2008) to $200 (2024)—500x cheaper. CRISPR treats sickle cell ($2.2M therapy approved 2024). Gene therapy: 2K+ trials target cancers and genetic disorders—80% now treatable.',
+      text: 'Human Genome Project mapped genes. Sequencing dropped from 100 million to 200 dollars. CRISPR treats diseases. Gene therapy trials target cancers and disorders. Many conditions are now treatable.',
       language: 'en',
       difficulty: 'hard',
       tags: ['science', 'medicine'],
     },
     {
       id: 'en-h-7',
-      text: 'Neuroplasticity research (1980-present) proves brain rewires continuously: 86B neurons form new connections. Learning language creates larger cortical maps; taxi drivers show 20% larger hippocampi. Meditation increases gray matter density. Brain-computer interfaces reach 1024 electrodes.',
+      text: 'Neuroplasticity proves brain rewires. 86 billion neurons form new connections. Learning creates larger brain areas. Meditation increases gray matter. Brain-computer interfaces reach electrodes.',
       language: 'en',
       difficulty: 'hard',
       tags: ['science', 'brain'],
     },
     {
       id: 'en-h-8',
-      text: 'Climate models project +2.5°C by 2100: CO2 reaches 500ppm. Sea levels rise 1-2 meters—cities face flooding. Renewable energy must reach 80% by 2050 (today 30%). Solar dropped 90% since 2010. Carbon capture: 15 facilities operational, 300+ planned for net-zero goals.',
+      text: 'Climate models project warming. CO2 reaches 500 ppm. Sea levels rise. Cities face flooding. Renewable energy must reach 80 percent by 2050. Solar costs dropped 90 percent since 2010. Carbon capture facilities operate globally.',
       language: 'en',
       difficulty: 'hard',
       tags: ['environment', 'climate'],
