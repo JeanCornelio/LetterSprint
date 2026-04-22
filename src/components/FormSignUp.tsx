@@ -28,6 +28,7 @@ const initialForm = {
 export const FormSignUp = ({
   handleFormState,
   onCreateUserWithEmailAndPassword,
+  setSuccessMessage,
 }: FormSignUpProps) => {
   const {
     handleSubmit,
@@ -55,8 +56,7 @@ export const FormSignUp = ({
     
     try {
       await onCreateUserWithEmailAndPassword({ email, password, username });
-      // Usuario creado exitosamente - mostrar mensaje y redirigir
-      alert("Account created successfully! Please check your email to verify your account, then sign in.");
+      setSuccessMessage?.("Account created successfully! Please check your email to verify your account, then sign in.");
       handleFormState("signIn");
     } catch (error) {
       console.error("Error creating account:", error);
