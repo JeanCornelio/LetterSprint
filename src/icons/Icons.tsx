@@ -453,7 +453,8 @@ export function LanguageIcon(props: SVGProps<SVGSVGElement>) {
       width="1.6em"
       height="1.6em"
       viewBox="0 0 512 512"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}>
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
       <g
         id="SVGRepo_tracerCarrier"

@@ -46,7 +46,7 @@ const LETTER_STATES = {
   EXTRA_INCORRECT: "incorrect extra",
   MISSED: "",
   // Agregar más estados si es necesario
-};
+} as const;
 
 
 
@@ -71,13 +71,16 @@ interface states {
   extraRepeted: Letters[];
 }
 
+type ResultStateKey = "incorrect" | "correct" | "extra";
+type RepeatedStateKey = "incorrectRepeted" | "correctRepeted" | "extraRepeted";
+
 
 export const WritingTestPage = () => {
 
   const [wordPosition, setWordPosition] = useState(0);
   const [letterPosition, setLetterPosition] = useState(0);
   const [test, setTest] = useState<Word[]>([]);
-  const [lettersStates, setLettersStates] = useState<states>(letterStates);
+  const [lettersStates, setLettersStates] = useState<states>(letterStates as states);
   const [originalTest, setOriginalTest] = useState<Word[]>([]);
   const [originalTotalWordsTest, setOriginalTotalWordsTest] = useState(0);
   const [testResult, setTestResult] = useState<Result | null>(null);
@@ -92,7 +95,7 @@ export const WritingTestPage = () => {
   } = useTimer();
   const { mode, words: wordSelected, puntuation, number, difficulty, soundEffects, language } = useTestConfiguration();
   const labels = UI_LABELS[language];
-  const testContent = useRef(null);
+  const testContent = useRef<HTMLDivElement | null>(null);
   const { incorrectRepeted, correctRepeted, correct, incorrect, } = lettersStates;
 
 
@@ -166,20 +169,26 @@ export const WritingTestPage = () => {
   };
 
   const rowPosition = (wordPosition: number) => {
-    const contentChildren = Array.from(testContent.current.children).map(
-      (child) => {
-        return child.getBoundingClientRect().top;
-      }
-    );
+    if (!testContent.current) return;
 
-    const rowsGroups = Object.groupBy(contentChildren, (row) => row);
-    const totalOfRows = Object.keys(rowsGroups).map((el) => {
-      return rowsGroups[el];
+    const contentChildren = Array.from(testContent.current.children).map((child) => {
+      return child.getBoundingClientRect().top;
     });
+
+    const rowsGroups = contentChildren.reduce<Record<string, number[]>>((acc, row) => {
+      const key = String(row);
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(row);
+      return acc;
+    }, {});
+
+    const totalOfRows = Object.values(rowsGroups);
 
     const lettesLength = wordPosition + 1;
 
-    if (totalOfRows[0].length === lettesLength) {
+    if (totalOfRows[0]?.length === lettesLength) {
       const newTest = test.slice(lettesLength);
       const totalDeleted = newTest.length - originalTest.length;
 
@@ -364,13 +373,12 @@ export const WritingTestPage = () => {
     }
   };
 
-  const handleResultLetterState = (property: string, letter: Letters) => {
+  const handleResultLetterState = (property: ResultStateKey, letter: Letters) => {
     setLettersStates((current) => {
-
-      const letterExist = current[property].find((lett) => lett.id === letter.id)
+      const letterExist = current[property].find((lett) => lett.id === letter.id);
 
       if (letterExist) {
-        const repetedProperty = `${property}Repeted`
+        const repetedProperty = `${property}Repeted` as RepeatedStateKey;
 
         return { ...current, [repetedProperty]: [...current[repetedProperty], letter] };
       }
