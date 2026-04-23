@@ -80,7 +80,11 @@ type UiLabels = {
     charactersTooltip: string;
     wpmTooltip: (wpm: number) => string;
     rawTooltip: (raw: number) => string;
-    precisionTooltip: (precision: number, correct: number, incorrect: number) => string;
+    precisionTooltip: (
+      precision: number,
+      correct: number,
+      incorrect: number,
+    ) => string;
     signInToSavePrefix: string;
     signInToSaveLink: string;
     signInToSaveSuffix: string;
@@ -134,7 +138,7 @@ export const UI_LABELS: Record<TypingLanguage, UiLabels> = {
       createAccountSubtitle:
         "Join LetterSprint and start improving your typing speed today!",
       loginSubtitle:
-        "Challenge yourself by testing your typing speed and accuracy. Push your limits, beat your personal bests, and climb to the top of the leaderboard.",
+        "Challenge yourself by testing your typing speed and accuracy. Push your limits and beat your personal records every day.",
       emailPlaceholder: "Email",
       passwordPlaceholder: "Password",
       usernamePlaceholder: "Username",
@@ -197,8 +201,11 @@ export const UI_LABELS: Record<TypingLanguage, UiLabels> = {
       charactersTooltip: "correct, incorrect, extra, missed",
       wpmTooltip: (wpm: number) => `${wpm} WPM`,
       rawTooltip: (raw: number) => `${raw} WPM`,
-      precisionTooltip: (precision: number, correct: number, incorrect: number) =>
-        `${precision} % (${correct} correct / ${incorrect} incorrect)`,
+      precisionTooltip: (
+        precision: number,
+        correct: number,
+        incorrect: number,
+      ) => `${precision} % (${correct} correct / ${incorrect} incorrect)`,
       signInToSavePrefix: "",
       signInToSaveLink: "Sign in",
       signInToSaveSuffix: " to save your result",
@@ -250,7 +257,7 @@ export const UI_LABELS: Record<TypingLanguage, UiLabels> = {
       createAccountSubtitle:
         "Únete a LetterSprint y empieza a mejorar tu velocidad de escritura hoy.",
       loginSubtitle:
-        "Ponte a prueba midiendo tu velocidad y precisión al escribir. Supera tus límites, mejora tus marcas personales y sube en la clasificación.",
+        "Ponte a prueba midiendo tu velocidad y precisión al escribir. Supera tus límites, mejora tus marcas personales cada día.",
       emailPlaceholder: "Correo",
       passwordPlaceholder: "Contraseña",
       usernamePlaceholder: "Nombre de usuario",
@@ -273,8 +280,10 @@ export const UI_LABELS: Record<TypingLanguage, UiLabels> = {
         passwordRequired: "La contraseña es obligatoria",
         passwordMinLength: "La contraseña debe tener al menos 6 caracteres",
         usernameRequired: "El nombre de usuario es obligatorio",
-        usernameMinLength: "El nombre de usuario debe tener al menos 3 caracteres",
-        usernameMaxLength: "El nombre de usuario no puede tener más de 15 caracteres",
+        usernameMinLength:
+          "El nombre de usuario debe tener al menos 3 caracteres",
+        usernameMaxLength:
+          "El nombre de usuario no puede tener más de 15 caracteres",
         usernameNotAvailable: (username: string) =>
           `El nombre de usuario ${username} no está disponible`,
         emailsNotMatch: "Los correos no coinciden",
@@ -283,8 +292,7 @@ export const UI_LABELS: Record<TypingLanguage, UiLabels> = {
       toasts: {
         accountCreated:
           "¡Cuenta creada con éxito! Revisa tu correo para verificar tu cuenta.",
-        verifyEmailBeforeSignIn:
-          "Verifica tu correo antes de iniciar sesión.",
+        verifyEmailBeforeSignIn: "Verifica tu correo antes de iniciar sesión.",
         invalidCredentials:
           "Correo o contraseña incorrectos. Inténtalo de nuevo.",
         signInFailed: "No se pudo iniciar sesión. Inténtalo de nuevo.",
@@ -317,8 +325,11 @@ export const UI_LABELS: Record<TypingLanguage, UiLabels> = {
       charactersTooltip: "correctas, incorrectas, extra, omitidas",
       wpmTooltip: (wpm: number) => `${wpm} PPM`,
       rawTooltip: (raw: number) => `${raw} PPM`,
-      precisionTooltip: (precision: number, correct: number, incorrect: number) =>
-        `${precision} % (${correct} correctas / ${incorrect} incorrectas)`,
+      precisionTooltip: (
+        precision: number,
+        correct: number,
+        incorrect: number,
+      ) => `${precision} % (${correct} correctas / ${incorrect} incorrectas)`,
       signInToSavePrefix: "",
       signInToSaveLink: "Inicia sesión",
       signInToSaveSuffix: " para guardar tu resultado",

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { KeyBoardIcon, UserIcon } from "../icons/Icons";
+import { UserIcon } from "../icons/Icons";
 import { UserOptions } from "./UserOptions";
 import { useCheckingCurrentUser } from "../hooks/useCheckingCurrentUser";
 import { ToolsOptions } from "./ToolsOptions";
@@ -17,7 +17,6 @@ export const Nav = () => {
     <nav className="flex  py-3 md:py-7 justify-between items-center ">
       <Link to="/" className=" cursor-pointer ">
         <h1 className="text-xl lg:text-3xl gap-2 flex font-bold tracking-wide  fade-in-bottom">
-          <KeyBoardIcon className=" text-xl lg:text-3xl text-sprint-blue mt-0.5" />{" "}
           LetterSprint
         </h1>
       </Link>
