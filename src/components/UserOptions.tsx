@@ -19,13 +19,13 @@ export const UserOptions = ({
         <div className="cursor-pointer ">
           {photoURL ? (
             <img
-              className="w-6 h-6 p-1 rounded-full ring-2 ring-slate-600 "
+              className="w-6 h-6 p-1 rounded-full ring-2 ring-sprint-ring "
               src={photoURL}
               alt="Bordered avatar"
             />
           ) : (
-            <div className="relative  overflow-hidden w-6 h-6 p-1 rounded-full ring-2 ring-slate-600">
-              <AvatarIcon className="absolute w-8 h-8 text-gray-400 top-0 -left-1" />
+            <div className="relative  overflow-hidden w-6 h-6 p-1 rounded-full ring-2 ring-sprint-ring">
+              <AvatarIcon className="absolute w-8 h-8 text-sprint-muted top-0 -left-1" />
             </div>
           )}
         </div>
@@ -33,15 +33,15 @@ export const UserOptions = ({
       </Button>
 
       <Popover>
-        <Dialog className=" border-sprint-home border-4 rounded-md w-32 bg-sprint-config overflow-hidden">
+        <Dialog className="rounded-md w-32 overflow-hidden text-sprint-foreground bg-sprint-config shadow-lg shadow-black/5">
           <div className="flex-col text-sm ">
-            <div className=" hover:bg-gray-400 hover:text-sprint-config transition ">
+            <div className="hover:bg-sprint-surface-hover/35 transition">
               <Link to="/user" className="flex gap-1 items-center py-1  px-3">
                 <UserIcon /> <span>Profile</span>
               </Link>
             </div>
 
-            <div className="hover:bg-gray-400 hover:text-sprint-config transition">
+            <div className="hover:bg-sprint-surface-hover/35 transition">
               <button
                 className="   flex gap-1 items-center py-1  px-3 "
                 onClick={() => setLogout()}>

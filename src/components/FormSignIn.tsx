@@ -43,7 +43,7 @@ export const FormSignIn = ({ handleFormState, onSignIn }: FormSignInProps) => {
             </h3>
           )}
           <input
-            className=" border border-1 border-gray-700 p-3 rounded-md w-full bg-sprint-config"
+            className="p-3 rounded-md w-full bg-sprint-config text-sprint-foreground placeholder:text-sprint-muted focus:outline-none focus:ring-2 focus:ring-sprint-ring/50"
             type="email"
             placeholder="Email"
             {...register("email", {
@@ -59,7 +59,7 @@ export const FormSignIn = ({ handleFormState, onSignIn }: FormSignInProps) => {
             </h3>
           )}
           <input
-            className=" border border-1 border-gray-700 p-3 rounded-md w-full bg-sprint-config"
+            className="p-3 rounded-md w-full bg-sprint-config text-sprint-foreground placeholder:text-sprint-muted focus:outline-none focus:ring-2 focus:ring-sprint-ring/50"
             type="password"
             placeholder="Password"
             {...register("password", { required: true })}
