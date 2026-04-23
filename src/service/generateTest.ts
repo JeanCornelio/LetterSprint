@@ -1,6 +1,6 @@
 import { MODES } from "../constants";
 import { paragraphs } from "../data/paragraphs";
-import { Difficulty } from "../interfaces/testConfiguration";
+import { Difficulty, TypingLanguage } from "../interfaces/testConfiguration";
 
 interface Word {
   word: string;
@@ -30,13 +30,26 @@ interface Config {
   number: boolean;
   puntuation: boolean;
   difficulty?: Difficulty;
+  language?: TypingLanguage;
   timeSelected?: number;
 }
 
 const ALL_PUNCTUATION_AND_SYMBOLS_REGEX = /[^\p{L}\p{N}\s]/gu;
 
-const getRandomParagraphText = (difficulty: Difficulty) => {
-  const filteredByDifficulty = paragraphs.en.filter((paragraph) => paragraph.difficulty === difficulty);
+const getRandomParagraphText = (difficulty: Difficulty, language: TypingLanguage) => {
+  const selectedLanguageParagraphs = paragraphs[language] ?? paragraphs.en;
+  const filteredByDifficulty = selectedLanguageParagraphs.filter(
+    (paragraph) => paragraph.difficulty === difficulty,
+  );
+
+  if (filteredByDifficulty.length === 0) {
+    const fallbackParagraphs = paragraphs.en.filter(
+      (paragraph) => paragraph.difficulty === difficulty,
+    );
+    const fallbackRandomIndex = Math.floor(Math.random() * fallbackParagraphs.length);
+    return fallbackParagraphs[fallbackRandomIndex].text;
+  }
+
   const randomIndex = Math.floor(Math.random() * filteredByDifficulty.length);
 
   return filteredByDifficulty[randomIndex].text;
@@ -89,10 +102,17 @@ const createWordFormat = (text: string[]) => {
 };
 
 export const getTest = (config: Config) => {
-  const { mode, wordSelected, number, puntuation, difficulty = 'medium' } = config;
+  const {
+    mode,
+    wordSelected,
+    number,
+    puntuation,
+    difficulty = 'medium',
+    language = 'en',
+  } = config;
 
   let words = applyParagraphFilters(
-    getRandomParagraphText(difficulty),
+    getRandomParagraphText(difficulty, language),
     puntuation,
     number,
     difficulty,
@@ -101,7 +121,7 @@ export const getTest = (config: Config) => {
   if (mode === MODES.words) {
     while (words.length < wordSelected) {
       const extraWords = applyParagraphFilters(
-        getRandomParagraphText(difficulty),
+        getRandomParagraphText(difficulty, language),
         puntuation,
         number,
         difficulty,

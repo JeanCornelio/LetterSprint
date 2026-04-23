@@ -10,6 +10,7 @@ import { MODE, TIME, WORD } from "../types/Text";
 import { useTimer } from "../hooks/useTimer";
 import { TestConfigurationModal } from "./TestConfigurationModal";
 import { useUpdateConfig } from "../hooks/useUpdateConfig";
+import { UI_LABELS } from "../constants/uiLabels";
 
 export const TestConfiguration = () => {
   const {
@@ -25,13 +26,14 @@ export const TestConfiguration = () => {
     isNumberactive,
     difficulty,
     setDifficulty,
+    language,
   } = useTestConfiguration();
-  useUpdateConfig()
-  //Note: descrubir la animacon del filtro al expandirce
+  useUpdateConfig();
 
   const defaultClass = "cursor-pointer hover:text-sprint-blue transition";
   const active = " text-sprint-blue font-bold";
   const { timerState } = useTimer();
+  const labels = UI_LABELS[language];
 
   return (
     <section
@@ -41,20 +43,20 @@ export const TestConfiguration = () => {
           ? "animate-fade-out"
           : "animate-fade-in") + " flex  justify-center transition-all "
       }>
-      <div className="hidden md:flex gap-5 p-2 px-5 rounded-md justify-center md:w-100 bg-sprint-config text-sprint-foreground ">
+      <div className="hidden lg:flex gap-5 p-2 px-5 rounded-md justify-center md:w-100 bg-sprint-config text-sprint-foreground ">
         <ul className="flex gap-5">
           <li className={defaultClass + (isPuntuatioActive ? active : "")}>
             <button
               className="flex items-center gap-1"
               onClick={puntuationToggle}>
               {" "}
-              <AtIcon className="text-md" /> Puntuation
+              <AtIcon className="text-md" /> {labels.punctuation}
             </button>
           </li>
           <li className={defaultClass + (isNumberactive ? active : "")}>
             <button className="flex items-center gap-1" onClick={numberToggle}>
               {" "}
-              <NumberIcon className="text-md" /> Numbers
+              <NumberIcon className="text-md" /> {labels.numbers}
             </button>
           </li>
         </ul>
@@ -67,7 +69,7 @@ export const TestConfiguration = () => {
               <button
                 onClick={() => setDifficulty(level)}
                 className="flex items-center gap-1 text-sm capitalize">
-                {level}
+                {labels.difficulties[level]}
               </button>
             </li>
           ))}
@@ -79,7 +81,7 @@ export const TestConfiguration = () => {
               onClick={() => setMode("time")}
               className="flex items-center gap-1">
               {" "}
-              <ClockIcon className="text-sm" /> Time
+              <ClockIcon className="text-sm" /> {labels.time}
             </button>
           </li>
           <li
@@ -87,7 +89,7 @@ export const TestConfiguration = () => {
             <button
               onClick={() => setMode("words")}
               className="flex items-center gap-1">
-              <HealthiconsAIcon className="text-md" /> Words
+              <HealthiconsAIcon className="text-md" /> {labels.words}
             </button>
           </li>
         </ul>

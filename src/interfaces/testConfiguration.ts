@@ -1,4 +1,5 @@
 export type Difficulty = 'easy' | 'medium' | 'hard';
+export type TypingLanguage = 'en' | 'es';
 
 export interface TestInitialState {
   time: number;
@@ -8,4 +9,5 @@ export interface TestInitialState {
   number: boolean; // true or false
   soundEffects: boolean;
   difficulty: Difficulty;
+  language: TypingLanguage;
 }

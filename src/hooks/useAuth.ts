@@ -26,6 +26,7 @@ import { useTestConfiguration } from "./useTestConfiguration";
 import type { TestInitialState } from "../interfaces/testConfiguration";
 import type { Stats } from "../interfaces/Test";
 import { toast } from "react-toastify";
+import { UI_LABELS } from "../constants/uiLabels";
 
 interface CurrentUserData {
   uid: string;
@@ -51,8 +52,9 @@ export const useAuth = () => {
     isPending,
     stats,
   } = useAppSelector(({ auth }) => auth);
-  const { setCurrentUserTestConfiguration, resetConfiguration } =
+  const { setCurrentUserTestConfiguration, resetConfiguration, language } =
     useTestConfiguration();
+  const labels = UI_LABELS[language];
 
   const handleCurrentUser = async (currentUser: CurrentUserData) => {
     console.log("handleCurrentUser called with:", currentUser);
@@ -80,7 +82,7 @@ export const useAuth = () => {
     dispatch(setIsPending(value));
   };
 
-  const setLogout = (errorMsg = "Sign Out") => {
+  const setLogout = (errorMsg = labels.userMenu.signOut) => {
     dispatch(logout(errorMsg));
     resetConfiguration();
     firebaseSignOut(auth);
@@ -222,26 +224,26 @@ export const useAuth = () => {
         errorMessage?.includes("verified") ||
         errorMessage?.includes("confirm")
       ) {
-        toast.warn("Please verify your email before signing in.");
+        toast.warn(labels.auth.toasts.verifyEmailBeforeSignIn);
       } else if (errorMessage?.includes("(auth/invalid-credential)")) {
-        toast.error("Invalid email or password. Please try again.");
+        toast.error(labels.auth.toasts.invalidCredentials);
       } else {
-        toast.error(errorMessage || "Sign in failed");
+        toast.error(errorMessage || labels.auth.toasts.signInFailed);
       }
-      dispatch(logout(errorMessage || "Sign in failed"));
+      dispatch(logout(errorMessage || labels.auth.toasts.signInFailed));
       return;
     }
 
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      toast.error("Sign in failed. Please try again.");
+      toast.error(labels.auth.toasts.signInFailed);
       return;
     }
 
     const user = await checkUserExist(currentUser.uid);
     
     if (!user.exist || !user.data) {
-      toast.error("User not found. Please try again.");
+      toast.error(labels.auth.toasts.userNotFound);
       return;
     }
 

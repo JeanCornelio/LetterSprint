@@ -16,6 +16,7 @@ import { TestResult } from "../../components/TestResult";
 import { Tooltip } from "../../components/Tooltip";
 import { getTest } from "../../service/generateTest";
 import { useAuth } from "../../hooks/useAuth";
+import { UI_LABELS } from "../../constants/uiLabels";
 
 interface Letters {
   letter: string;
@@ -89,7 +90,8 @@ export const WritingTestPage = () => {
     handleTimerTime,
     timeSelected,
   } = useTimer();
-  const { mode, words: wordSelected, puntuation, number, difficulty, soundEffects } = useTestConfiguration();
+  const { mode, words: wordSelected, puntuation, number, difficulty, soundEffects, language } = useTestConfiguration();
+  const labels = UI_LABELS[language];
   const testContent = useRef(null);
   const { incorrectRepeted, correctRepeted, correct, incorrect, } = lettersStates;
 
@@ -97,7 +99,15 @@ export const WritingTestPage = () => {
 
   const createTest = () => {
     handleLoading(true); // Loanding
-    const words: Word[] = getTest({ puntuation, number, wordSelected, mode, timeSelected, difficulty });
+    const words: Word[] = getTest({
+      puntuation,
+      number,
+      wordSelected,
+      mode,
+      timeSelected,
+      difficulty,
+      language,
+    });
     //words of the tets
     setTest(words);
     setOriginalTest(words);
@@ -111,7 +121,7 @@ export const WritingTestPage = () => {
     //Reset TIMER and Create Game
 
     resestTest();
-  }, [mode, wordSelected, timeSelected, puntuation, number, difficulty]);
+  }, [mode, wordSelected, timeSelected, puntuation, number, difficulty, language]);
 
   const toCheckWordCorreclyCompleted = (word: Word) => {
     const lettersStates = word.letters.some(
@@ -504,8 +514,8 @@ export const WritingTestPage = () => {
                     totalWords: testResult.totalWords,
                     modeResult:
                       mode === "time"
-                        ? `${timeSelected} Seconds`
-                        : `${wordSelected} Words`,
+                        ? labels.results.modeResultSeconds(timeSelected)
+                        : labels.results.modeResultWords(wordSelected),
                     precision: testResult.precision,
                     raw: testResult.raw,
                     mode,
@@ -544,8 +554,8 @@ export const WritingTestPage = () => {
                 <Tooltip
                   label={
                     timerState === TIMER["finished"]
-                      ? "Repeat test"
-                      : "Restar test"
+                      ? labels.utility.repeatTest
+                      : labels.utility.restartTest
                   }
                 >
                   <span className="text-sprint-foreground hover:text-sprint-blue transition font-semibold">

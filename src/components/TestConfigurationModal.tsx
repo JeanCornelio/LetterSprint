@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTestConfiguration } from "../hooks/useTestConfiguration";
 import { MODES, TIMES, WORDS } from "../constants";
 import { MODE, TIME, WORD } from "../types/Text";
+import { UI_LABELS } from "../constants/uiLabels";
 
 export const TestConfigurationModal = () => {
   const [isOpen, setOpen] = useState(false);
@@ -20,19 +21,21 @@ export const TestConfigurationModal = () => {
     isNumberactive,
     difficulty,
     setDifficulty,
+    language,
   } = useTestConfiguration();
 
   const defaultClass =
     "hover:bg-sprint-blue hover:text-white py-2 rounded-md transition";
   const active = " bg-sprint-blue text-white ";
+  const labels = UI_LABELS[language];
 
   return (
     <>
       <Button
-        className="flex gap-5 md:hidden p-2 px-5 rounded-md justify-center w-72 transition bg-sprint-config text-sprint-foreground hover:bg-sprint-blue hover:text-white"
+        className="flex gap-5 lg:hidden p-2 px-5 rounded-md justify-center w-72 transition bg-sprint-config text-sprint-foreground hover:bg-sprint-blue hover:text-white"
         onPress={() => setOpen(true)}>
         <span className="flex items-center gap-1">
-          <SettingsIcon className="text-lg" /> Test settings
+          <SettingsIcon className="text-lg" /> {labels.testSettings}
         </span>
       </Button>
       <Modal isDismissable isOpen={isOpen} onOpenChange={setOpen}>
@@ -42,14 +45,14 @@ export const TestConfigurationModal = () => {
               defaultClass + (isPuntuatioActive ? active : " bg-sprint-config")
             }
             onClick={puntuationToggle}>
-            Puntuation
+            {labels.punctuation}
           </button>
           <button
             className={
               defaultClass + (isNumberactive ? active : " bg-sprint-config")
             }
             onClick={numberToggle}>
-            Numbers
+            {labels.numbers}
           </button>
 
           <div className="flex flex-col gap-2 mt-5">
@@ -61,7 +64,7 @@ export const TestConfigurationModal = () => {
                   (difficulty === level ? active : " bg-sprint-config")
                 }
                 onClick={() => setDifficulty(level)}>
-                {level.charAt(0).toUpperCase() + level.slice(1)}
+                {labels.difficulties[level]}
               </button>
             ))}
           </div>
@@ -73,7 +76,7 @@ export const TestConfigurationModal = () => {
                 (MODES["time"] === mode ? active : " bg-sprint-config")
               }
               onClick={() => setMode("time")}>
-              Time
+              {labels.time}
             </button>
             <button
               className={
@@ -81,7 +84,7 @@ export const TestConfigurationModal = () => {
                 (MODES["words"] === mode ? active : " bg-sprint-config")
               }
               onClick={() => setMode("words")}>
-              Word
+              {labels.words}
             </button>
           </div>
 

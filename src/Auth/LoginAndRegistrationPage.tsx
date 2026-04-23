@@ -6,11 +6,15 @@ import { UsernameModal } from "../components/UserNameModal";
 
 import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
+import { useTestConfiguration } from "../hooks/useTestConfiguration";
+import { UI_LABELS } from "../constants/uiLabels";
 
 type formState = "signIn" | "signUp";
 
 export const LoginAndRegistrationPage = () => {
   const [formState, setFormState] = useState<formState>("signIn");
+  const { language } = useTestConfiguration();
+  const labels = UI_LABELS[language];
   const {
     signInWithGoogle,
     state,
@@ -28,12 +32,14 @@ export const LoginAndRegistrationPage = () => {
       <section className=" flex flex-col justify-center items-center md:gap-10 animate-fade-in ">
         <div className="text-center mb-auto">
           <h2 className="text-4xl font-bold">
-            {formState === "signUp" ? "Create an Account" : "Login to Your Account"}
+            {formState === "signUp"
+              ? labels.auth.createAccountTitle
+              : labels.auth.loginTitle}
           </h2>
           <p className="mb-3 font-normal text-sprint-muted mt-8 text-lg lg:text-center lg:text-xl xl:px-60">
             {formState === "signUp"
-              ? "Join LetterSprint and start improving your typing speed today!"
-              : "Challenge yourself by testing your typing speed and accuracy. Push your limits, beat your personal bests, and climb to the top of the leaderboard."}
+              ? labels.auth.createAccountSubtitle
+              : labels.auth.loginSubtitle}
           </p>
         </div>
 

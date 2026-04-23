@@ -1,8 +1,13 @@
-import { TestInitialState, Difficulty } from "../interfaces/testConfiguration";
+import {
+  TestInitialState,
+  Difficulty,
+  TypingLanguage,
+} from "../interfaces/testConfiguration";
 import {
   resetTestConfiguration,
   setTestConfiguration,
   setTestDifficulty,
+  setTestLanguage,
   setTestMode,
   setTestNumber,
   setTestPuntuation,
@@ -16,7 +21,7 @@ import { useAppDispatch, useAppSelector } from "./useStore";
 
 export const useTestConfiguration = () => {
 
-  const { mode, time, words, puntuation, number, difficulty, soundEffects } = useAppSelector(
+  const { mode, time, words, puntuation, number, difficulty, soundEffects, language } = useAppSelector(
     ({ test }) => test
   );
 
@@ -50,6 +55,10 @@ export const useTestConfiguration = () => {
     dispatch(setTestDifficulty(difficulty));
   };
 
+  const setLanguage = (language: TypingLanguage) => {
+    dispatch(setTestLanguage(language));
+  };
+
   const setCurrentUserTestConfiguration = (config: TestInitialState) =>{
       dispatch(setTestConfiguration(config))
   }
@@ -66,6 +75,7 @@ export const useTestConfiguration = () => {
     numberToggle,
     soundEffectsToggle,
     setDifficulty,
+    setLanguage,
     mode,
     timeActive: time,
     words,
@@ -73,6 +83,7 @@ export const useTestConfiguration = () => {
     number,
     soundEffects,
     difficulty,
+    language,
     isPuntuatioActive: puntuation,
     isNumberactive: number,
     setCurrentUserTestConfiguration,

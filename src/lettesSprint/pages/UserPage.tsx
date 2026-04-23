@@ -4,6 +4,8 @@ import { ScoreModeTable } from "../../components/ScoreModeTable";
 import { useAuth } from "../../hooks/useAuth";
 import { useResult } from "../../hooks/useResult";
 import { AvatarIcon } from "../../icons/Icons";
+import { useTestConfiguration } from "../../hooks/useTestConfiguration";
+import { UI_LABELS } from "../../constants/uiLabels";
 
 
 /* const timeRecord = [
@@ -71,6 +73,8 @@ const wordRecord = [
 export const UserPage = () => {
     const { photoURL, username, displayName, stats } = useAuth();
     const { tests, setLmt } = useResult();
+    const { language } = useTestConfiguration();
+    const labels = UI_LABELS[language];
 
     return (
         <ProtectedRoute>
@@ -81,7 +85,7 @@ export const UserPage = () => {
                             <img
                                 className="w-20 md:w-32 p-1 rounded-full ring-2 ring-sprint-ring "
                                 src={photoURL}
-                                alt="Bordered avatar"
+                                alt={labels.utility.avatarAlt}
                             />
                         ) : (
                             <div className="relative overflow-hidden w-28 h-28 p-1 rounded-full ring-2 ring-sprint-ring">
@@ -96,33 +100,37 @@ export const UserPage = () => {
                     <div className="border-r-4 rounded-full border-x-sprint-home hidden sm:flex"></div>
                     <div className=" flex-1 flex flex-wrap  sm:items-center gap-5 md:justify-evenly ">
                         <div>
-                            <h2 className="text-1xl">Test completed</h2>
+                            <h2 className="text-1xl">{labels.userPage.testsCompleted}</h2>
                             <h2 className="text-3xl text-sprint-blue font-bold">{stats.testsCompleted}</h2>
                         </div>
                         <div>
-                            <h2 className="text-1xl">Total words</h2> {/* Remember implement a pipe to number */}
+                            <h2 className="text-1xl">{labels.userPage.totalWords}</h2>
                             <h2 className="text-3xl text-sprint-blue font-bold">{stats.wordsWritten}</h2>
                         </div>
                         <div>
-                            <h2 className="text-1xl">Time typing</h2>
+                            <h2 className="text-1xl">{labels.userPage.timeTyping}</h2>
                             <h2 className="text-3xl text-sprint-blue font-bold">{stats.timeTyping}</h2>
                         </div>
                     </div>
                 </div>
                 {
                     stats.testsCompleted > 0 && <div className="grid grid-col-1  lg:grid-cols-2 gap-5">
-                        <ScoreModeTable records={stats.timeRecord} />
-                        <ScoreModeTable records={stats.wordRecord} />
+                        <ScoreModeTable records={stats.timeRecord} title={labels.userPage.timeRecords} />
+                        <ScoreModeTable records={stats.wordRecord} title={labels.userPage.wordRecords} />
                     </div>
                 }
 
                 {
-
-                    stats.testsCompleted > 0 ? <HistoricalScoreTable tests={tests} /> : <h2 className="text-2xl text-center mt-5">No tests completed yet</h2>
+                    stats.testsCompleted > 0 ? (
+                        <div className="flex flex-col gap-3">
+                            <h3 className="text-lg font-semibold text-sprint-muted">{labels.userPage.historyTitle}</h3>
+                            <HistoricalScoreTable tests={tests} />
+                        </div>
+                    ) : <h2 className="text-2xl text-center mt-5">{labels.userPage.noTestsCompleted}</h2>
                 }
 
                 {
-                    stats.testsCompleted > tests.length && <button className="p-3 rounded-md bg-sprint-config cursor-pointer hover:opacity-80 hover:bg-sprint-surface-hover/35 transition" onClick={() => setLmt()}>Load More</button>
+                    stats.testsCompleted > tests.length && <button className="p-3 rounded-md bg-sprint-config cursor-pointer hover:opacity-80 hover:bg-sprint-surface-hover/35 transition" onClick={() => setLmt()}>{labels.userPage.loadMore}</button>
                 }
 
             </section>

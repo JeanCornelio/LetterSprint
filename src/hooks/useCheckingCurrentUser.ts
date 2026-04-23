@@ -4,8 +4,13 @@ import { auth, checkUserExist } from "../utils/firebaseAuth.utils";
 import { useAuth } from "./useAuth";
 import { useUpdateConfig } from "./useUpdateConfig";
 import { toast } from "react-toastify";
+import { useTestConfiguration } from "./useTestConfiguration";
+import { UI_LABELS } from "../constants/uiLabels";
 
 export const useCheckingCurrentUser = () => {
+  const { language } = useTestConfiguration();
+  const labels = UI_LABELS[language];
+
   const {
     checkingCurrentUser,
     handleCurrentUser,
@@ -47,7 +52,7 @@ export const useCheckingCurrentUser = () => {
         handleCurrentUser(currentUser.data);
       } catch (error) {
         console.error("Error checking user:", error);
-        toast.error("Error loading user data. Please try again.");
+        toast.error(labels.auth.toasts.loadingUserError);
         if (isMounted) {
           checkingCurrentUser(false);
         }
