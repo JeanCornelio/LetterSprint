@@ -59,13 +59,27 @@ export const getTest = (config: Config) => {
   const randomIndex = Math.floor(Math.random() * filteredByDifficulty.length);
   let modifiedText = filteredByDifficulty[randomIndex].text;
 
+  // PUNTUATION FILTER
   if (!puntuation) {
-    modifiedText = modifiedText.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()¿?¡""'<>[\]@+|]/g, "");
+    // Remove ALL punctuation signs
+    modifiedText = modifiedText.replace(/[.,:;"'!?()\[\]{}]/g, "");
+  } else {
+    // Keep signs based on difficulty
+    if (difficulty === 'easy') {
+      // Keep only . ! ? - remove , : ; ' " [ ] { }
+      modifiedText = modifiedText.replace(/[,:;"'"\[\]{}]/g, "");
+    } else if (difficulty === 'medium') {
+      // Keep . , : ; ! ? ' - remove " [ ] { }
+      modifiedText = modifiedText.replace(/["\[\]{}]/g, "");
+    }
+    // Hard keeps all punctuation
   }
 
+  // NUMBER FILTER
   if (!number) {
-    modifiedText = modifiedText.replace(/\s?\d+\s?/g, " ");
+    modifiedText = modifiedText.replace(/\d+/g, "");
   }
+  // If number = true, keep all numbers (already in paragraphs)
 
   modifiedText = modifiedText.replace(/\s+/g, " ").trim().toLowerCase();
 
