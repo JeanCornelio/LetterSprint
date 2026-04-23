@@ -23,9 +23,9 @@ const formatDate = (dateValue: string): string => {
 
 export const HistoricalScoreTable = ({ tests }: HistoricalScoreTableProps) => {
   return (
-    <div className="relative overflow-x-auto  rounded-md bg-sprint-config">
-      <table className="w-full text-sm text-left rtl:text-right">
-        <thead className="text-xs">
+    <div className="relative overflow-x-auto rounded-md bg-sprint-config">
+      <table className="w-full text-sm text-left rtl:text-right text-sprint-foreground">
+        <thead className="text-xs text-sprint-muted">
           <tr>
             <th scope="col" className="px-6 py-3">
               Wpm
@@ -49,7 +49,7 @@ export const HistoricalScoreTable = ({ tests }: HistoricalScoreTableProps) => {
         </thead>
         <tbody>
           {tests.map((test) => (
-            <tr className="odd:bg-sprint-home text-lg" key={test.uid}>
+            <tr className="odd:bg-sprint-home/70 text-lg" key={test.uid}>
               <td
                 scope="row"
                 className="px-6 py-1 md:py-4 font-medium   whitespace-nowrap"
