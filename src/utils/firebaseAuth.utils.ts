@@ -13,11 +13,14 @@ import {
   addDoc,
   collection,
   doc,
+  type Firestore,
   getDoc,
   getDocs,
   query,
+  type Query,
   setDoc,
   updateDoc,
+  type WhereFilterOp,
   where,
 } from "firebase/firestore";
 import type { TestInitialState } from "../interfaces/testConfiguration";
@@ -32,6 +35,30 @@ interface UserData {
   testConfig: TestInitialState;
   stats: Stats;
 }
+
+interface AuthPayload {
+  email: string;
+  password: string;
+}
+
+interface CreateAccountPayload extends AuthPayload {
+  username: string;
+}
+
+interface CreateUserAccountPayload {
+  uid: string;
+  email: string;
+  displayName: string | null;
+  photoURL: string | null;
+  username: string;
+}
+
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return "Unexpected error";
+};
 
 const normalizeTimestamp = (value: unknown): unknown => {
   if (value && typeof value === 'object' && 'seconds' in value && 'nanoseconds' in value) {
@@ -55,17 +82,17 @@ export const githubProvider = new GithubAuthProvider();
 export const auth = getAuth();
 
 const handleQuery = (
-  db,
+  db: Firestore,
   collectionName: string,
   input: string,
-  rule: string,
+  rule: WhereFilterOp,
   value: string | number
-) => {
+) : Query | null => {
   try {
     const q = query(collection(db, collectionName), where(input, rule, value));
     return q;
-  } catch (error) {
-    return;
+  } catch {
+    return null;
   }
 };
 
@@ -77,7 +104,7 @@ export const signInGooglePopup = async () => {
 
     return { uid, email, displayName, photoURL, ok: true, errorMessage: null };
   } catch (error) {
-    const errorMessage = error.message;
+    const errorMessage = getErrorMessage(error);
 
     return {
       ok: false,
@@ -94,7 +121,7 @@ export const signInGithub = async () => {
 
     return { uid, email, displayName, photoURL, ok: true, errorMessage: null };
   } catch (error) {
-    const errorMessage = error.message;
+    const errorMessage = getErrorMessage(error);
 
     return {
       ok: false,
@@ -107,7 +134,7 @@ export const createAccountWithEmailAndPassword = async ({
   email: userEmail,
   password,
   username,
-}) => {
+}: CreateAccountPayload) => {
   try {
     const resp = await createUserWithEmailAndPassword(
       auth,
@@ -134,7 +161,7 @@ export const createAccountWithEmailAndPassword = async ({
       errorMessage: null,
     };
   } catch (error) {
-    const errorMessage = error.message;
+    const errorMessage = getErrorMessage(error);
 
     return {
       ok: false,
@@ -146,7 +173,7 @@ export const createAccountWithEmailAndPassword = async ({
 export const signInEmailAndPassword = async ({
   email: userEmail,
   password,
-}) => {
+}: AuthPayload) => {
   try {
     await signInWithEmailAndPassword(auth, userEmail, password);
 
@@ -161,7 +188,7 @@ export const signInEmailAndPassword = async ({
 
     return { ok: true, errorMessage: "" };
   } catch (error) {
-    const errorMessage = error.message;
+    const errorMessage = getErrorMessage(error);
     return {
       ok: false,
       errorMessage,
@@ -193,7 +220,7 @@ const userEmailVerify = async () => {
   return emailVerified;
 };
 
-export const createUserAccount = async (user) => {
+export const createUserAccount = async (user: CreateUserAccountPayload) => {
   try {
    
 
@@ -222,7 +249,7 @@ export const createUserAccount = async (user) => {
       errorMessage: "",
     };
   } catch (error) {
-    const errorMessage = error.message;
+    const errorMessage = getErrorMessage(error);
 
     return {
       ok: false,
@@ -249,7 +276,7 @@ export const updateUserSettings = async (uid: string, testConfig: TestInitialSta
       errorMessage: "",
     };
   } catch (error) {
-    const errorMessage = error.message;
+    const errorMessage = getErrorMessage(error);
 
     return {
       ok: false,
@@ -276,24 +303,29 @@ export const checkUserExist = async (uid: string) => {
   }
 
   const data = normalizeData(userDoc.data() as Record<string, unknown>);
-  return { exist: true, data: data as UserData };
+  return { exist: true, data: data as unknown as UserData };
 };
 
 export const checkUsernameExist = async (username: string) => {
-  const query = handleQuery(firebaseBD, "users", "username", "==", username);
+  const usersQuery = handleQuery(firebaseBD, "users", "username", "==", username);
 
-  const querySnapshot = await getDocs(query);
+  if (!usersQuery) {
+    return false;
+  }
+
+  const querySnapshot = await getDocs(usersQuery);
 
   return querySnapshot.empty;
 };
 
 export const saveUserStats = async (stats: Stats) => {
-    const currentUser = await getCurrentUser()
-    const {uid} = currentUser
+    const currentUser = await getCurrentUser();
+    if (!currentUser.uid) return;
+    const { uid } = currentUser;
 
    try {
         const userRef = doc(firebaseBD, "users", uid);
-       await setDoc(userRef, {stats}, { merge: true });
+       await setDoc(userRef, { stats }, { merge: true });
 
     } catch (error) {
         console.error("Error guardando las stats", error);
@@ -303,8 +335,9 @@ export const saveUserStats = async (stats: Stats) => {
 };
 
 export const saveTest = async (test: Test) => {
-  const currentUser = await getCurrentUser()
-  const {uid} = currentUser
+  const currentUser = await getCurrentUser();
+  if (!currentUser.uid) return;
+  const { uid } = currentUser;
   
     try {
          const testsRef = collection(firebaseBD, "users", uid, "tests");
@@ -314,6 +347,5 @@ export const saveTest = async (test: Test) => {
         console.error("Error guardando el test", error);
     }
 }
-
 
 

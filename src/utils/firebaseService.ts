@@ -1,6 +1,5 @@
 import { collection, query, orderBy, limit, getDocs, where, collectionGroup } from "firebase/firestore";
 import { firebaseBD } from "./firebase.utils";
-import { MODES } from "../constants";
 
 const normalizeTimestamp = (value: unknown): unknown => {
   if (value && typeof value === 'object' && 'seconds' in value && 'nanoseconds' in value) {
@@ -80,7 +79,6 @@ export const getBestTimesAndWords = async (uid : string) => {
 
   return { timeRecord, wordRecord };
 };
-
 
 
 
