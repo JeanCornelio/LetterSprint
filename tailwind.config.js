@@ -7,9 +7,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        'sprint-home': '#222831',
-        'sprint-config': '#1D222A',
-        'sprint-blue':'#3194D1'
+        'sprint-home': 'rgb(var(--sprint-home) / <alpha-value>)',
+        'sprint-config': 'rgb(var(--sprint-config) / <alpha-value>)',
+        'sprint-blue':'#3194D1',
+        'sprint-foreground': 'rgb(var(--sprint-foreground) / <alpha-value>)',
+        'sprint-muted': 'rgb(var(--sprint-muted) / <alpha-value>)',
+        'sprint-border': 'rgb(var(--sprint-border) / <alpha-value>)',
+        'sprint-input-border': 'rgb(var(--sprint-input-border) / <alpha-value>)',
+        'sprint-ring': 'rgb(var(--sprint-ring) / <alpha-value>)',
+        'sprint-surface-hover': 'rgb(var(--sprint-surface-hover) / <alpha-value>)',
+        'sprint-switch-off': 'rgb(var(--sprint-switch-off) / <alpha-value>)',
+        'sprint-elevated-border': 'rgb(var(--sprint-elevated-border) / <alpha-value>)',
+        'sprint-overlay': 'rgb(var(--sprint-overlay) / <alpha-value>)'
       },
       keyframes: {
         'fade-in-bottom': {
@@ -60,4 +69,3 @@ export default {
   },
   plugins: [],
 }
-

@@ -1,4 +1,3 @@
-
 import { MODES, TIMER, TIMES, WORDS } from "../constants";
 import { useTestConfiguration } from "../hooks/useTestConfiguration";
 import {
@@ -34,8 +33,6 @@ export const TestConfiguration = () => {
   const active = " text-sprint-blue font-bold";
   const { timerState } = useTimer();
 
-
-
   return (
     <section
       id="testConfig"
@@ -43,15 +40,13 @@ export const TestConfiguration = () => {
         (timerState === TIMER["start"] || timerState === TIMER["finished"]
           ? "animate-fade-out"
           : "animate-fade-in") + " flex  justify-center transition-all "
-      }
-    >
-      <div className="hidden  md:flex gap-5 bg-sprint-config p-2 px-5 rounded-md justify-center md:w-100  ">
+      }>
+      <div className="hidden md:flex gap-5 p-2 px-5 rounded-md justify-center md:w-100 bg-sprint-config text-sprint-foreground ">
         <ul className="flex gap-5">
           <li className={defaultClass + (isPuntuatioActive ? active : "")}>
             <button
               className="flex items-center gap-1"
-              onClick={puntuationToggle}
-            >
+              onClick={puntuationToggle}>
               {" "}
               <AtIcon className="text-md" /> Puntuation
             </button>
@@ -65,18 +60,13 @@ export const TestConfiguration = () => {
         </ul>
         <div className="border-r-2 rounded-full border-gray-400"></div>
         <ul className="flex gap-2 items-center">
-          {(['easy', 'medium', 'hard'] as const).map((level) => (
+          {(["easy", "medium", "hard"] as const).map((level) => (
             <li
               key={level}
-              className={
-                defaultClass +
-                (difficulty === level ? active : "")
-              }
-            >
+              className={defaultClass + (difficulty === level ? active : "")}>
               <button
                 onClick={() => setDifficulty(level)}
-                className="flex items-center gap-1 text-sm capitalize"
-              >
+                className="flex items-center gap-1 text-sm capitalize">
                 {level}
               </button>
             </li>
@@ -87,19 +77,16 @@ export const TestConfiguration = () => {
           <li className={defaultClass + (MODES["time"] === mode ? active : "")}>
             <button
               onClick={() => setMode("time")}
-              className="flex items-center gap-1"
-            >
+              className="flex items-center gap-1">
               {" "}
               <ClockIcon className="text-sm" /> Time
             </button>
           </li>
           <li
-            className={defaultClass + (MODES["words"] === mode ? active : "")}
-          >
+            className={defaultClass + (MODES["words"] === mode ? active : "")}>
             <button
               onClick={() => setMode("words")}
-              className="flex items-center gap-1"
-            >
+              className="flex items-center gap-1">
               <HealthiconsAIcon className="text-md" /> Words
             </button>
           </li>
@@ -116,12 +103,10 @@ export const TestConfiguration = () => {
                   className={
                     defaultClass +
                     (TIMES[timeActive as TIME] === time ? active : "")
-                  }
-                >
+                  }>
                   <button
                     onClick={() => setTime(Number(key) as TIME)}
-                    className="flex items-center gap-1 text-sm"
-                  >
+                    className="flex items-center gap-1 text-sm">
                     {time}
                   </button>
                 </li>
@@ -137,12 +122,10 @@ export const TestConfiguration = () => {
                 className={
                   defaultClass +
                   (WORDS[words as WORD] === quantity ? active : "")
-                }
-              >
+                }>
                 <button
                   onClick={() => setWordQuantity(Number(key) as WORD)}
-                  className="flex items-center gap-1 text-sm"
-                >
+                  className="flex items-center gap-1 text-sm">
                   {quantity}
                 </button>
               </li>

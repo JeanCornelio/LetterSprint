@@ -107,7 +107,7 @@ export const FormSignUp = ({
                 userNameNotAvailable: async () => await checkUsername(username || ""),
               },
             })}
-            className="bg-sprint-config p-4 outline-none rounded-md w-full"
+            className="bg-sprint-config p-4 outline-none rounded-md w-full text-sprint-foreground placeholder:text-sprint-muted focus:ring-2 focus:ring-sprint-ring/50"
           />
         </div>
         <div>
@@ -132,7 +132,7 @@ export const FormSignUp = ({
               required: true,
               pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
             })}
-            className="bg-sprint-config p-4 outline-none rounded-md w-full"
+            className="bg-sprint-config p-4 outline-none rounded-md w-full text-sprint-foreground placeholder:text-sprint-muted focus:ring-2 focus:ring-sprint-ring/50"
           />
         </div>
         <div>
@@ -161,7 +161,7 @@ export const FormSignUp = ({
                 emailEqual: () => email === verifyEmail,
               },
             })}
-            className="bg-sprint-config p-4 outline-none rounded-md w-full"
+            className="bg-sprint-config p-4 outline-none rounded-md w-full text-sprint-foreground placeholder:text-sprint-muted focus:ring-2 focus:ring-sprint-ring/50"
           />
         </div>
         <div>
@@ -183,7 +183,7 @@ export const FormSignUp = ({
             defaultValue=""
             placeholder="Password"
             {...register("password", { required: true, minLength: 6 })}
-            className="bg-sprint-config p-4 outline-none rounded-md w-full"
+            className="bg-sprint-config p-4 outline-none rounded-md w-full text-sprint-foreground placeholder:text-sprint-muted focus:ring-2 focus:ring-sprint-ring/50"
           />
         </div>
         <div>
@@ -210,7 +210,7 @@ export const FormSignUp = ({
                 passwordEqual: () => password === verifyPassword,
               },
             })}
-            className="bg-sprint-config p-4 outline-none rounded-md w-full"
+            className="bg-sprint-config p-4 outline-none rounded-md w-full text-sprint-foreground placeholder:text-sprint-muted focus:ring-2 focus:ring-sprint-ring/50"
           />
         </div>
 

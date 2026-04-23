@@ -30,7 +30,7 @@ export const LoginAndRegistrationPage = () => {
           <h2 className="text-4xl font-bold">
             {formState === "signUp" ? "Create an Account" : "Login to Your Account"}
           </h2>
-          <p className=" mb-3  font-normal text-gray-700 dark:text-gray-400 mt-8  text-lg lg:text-center lg:text-xl xl:px-60">
+          <p className="mb-3 font-normal text-sprint-muted mt-8 text-lg lg:text-center lg:text-xl xl:px-60">
             {formState === "signUp"
               ? "Join LetterSprint and start improving your typing speed today!"
               : "Challenge yourself by testing your typing speed and accuracy. Push your limits, beat your personal bests, and climb to the top of the leaderboard."}
