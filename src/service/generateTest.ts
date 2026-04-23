@@ -33,6 +33,42 @@ interface Config {
   timeSelected?: number;
 }
 
+const ALL_PUNCTUATION_AND_SYMBOLS_REGEX = /[^\p{L}\p{N}\s]/gu;
+
+const getRandomParagraphText = (difficulty: Difficulty) => {
+  const filteredByDifficulty = paragraphs.en.filter((paragraph) => paragraph.difficulty === difficulty);
+  const randomIndex = Math.floor(Math.random() * filteredByDifficulty.length);
+
+  return filteredByDifficulty[randomIndex].text;
+};
+
+const applyParagraphFilters = (text: string, puntuation: boolean, number: boolean, difficulty: Difficulty) => {
+  let modifiedText = text;
+
+  // PUNTUATION FILTER
+  if (!puntuation) {
+    // Remove every punctuation/symbol character, including %, - and +
+    modifiedText = modifiedText.replace(ALL_PUNCTUATION_AND_SYMBOLS_REGEX, "");
+  } else {
+    // Keep signs based on difficulty
+    if (difficulty === 'easy') {
+      // Keep only . ! ? - remove , : ; ' " [ ] { }
+      modifiedText = modifiedText.replace(/[,:;"'"\[\]{}]/g, "");
+    } else if (difficulty === 'medium') {
+      // Keep . , : ; ! ? ' - remove " [ ] { }
+      modifiedText = modifiedText.replace(/["\[\]{}]/g, "");
+    }
+    // Hard keeps all punctuation
+  }
+
+  // NUMBER FILTER
+  if (!number) {
+    modifiedText = modifiedText.replace(/\d+/g, "");
+  }
+
+  return modifiedText.replace(/\s+/g, " ").trim().toLowerCase();
+};
+
 const createWordFormat = (text: string[]) => {
   const words: Word[] = text.map((word, index) => {
     return {
@@ -55,37 +91,25 @@ const createWordFormat = (text: string[]) => {
 export const getTest = (config: Config) => {
   const { mode, wordSelected, number, puntuation, difficulty = 'medium' } = config;
 
-  const filteredByDifficulty = paragraphs.en.filter(p => p.difficulty === difficulty);
-  const randomIndex = Math.floor(Math.random() * filteredByDifficulty.length);
-  let modifiedText = filteredByDifficulty[randomIndex].text;
-
-  // PUNTUATION FILTER
-  if (!puntuation) {
-    // Remove ALL punctuation signs
-    modifiedText = modifiedText.replace(/[.,:;"'!?()\[\]{}]/g, "");
-  } else {
-    // Keep signs based on difficulty
-    if (difficulty === 'easy') {
-      // Keep only . ! ? - remove , : ; ' " [ ] { }
-      modifiedText = modifiedText.replace(/[,:;"'"\[\]{}]/g, "");
-    } else if (difficulty === 'medium') {
-      // Keep . , : ; ! ? ' - remove " [ ] { }
-      modifiedText = modifiedText.replace(/["\[\]{}]/g, "");
-    }
-    // Hard keeps all punctuation
-  }
-
-  // NUMBER FILTER
-  if (!number) {
-    modifiedText = modifiedText.replace(/\d+/g, "");
-  }
-  // If number = true, keep all numbers (already in paragraphs)
-
-  modifiedText = modifiedText.replace(/\s+/g, " ").trim().toLowerCase();
-
-  let words = modifiedText.split(" ");
+  let words = applyParagraphFilters(
+    getRandomParagraphText(difficulty),
+    puntuation,
+    number,
+    difficulty,
+  ).split(" ");
 
   if (mode === MODES.words) {
+    while (words.length < wordSelected) {
+      const extraWords = applyParagraphFilters(
+        getRandomParagraphText(difficulty),
+        puntuation,
+        number,
+        difficulty,
+      ).split(" ");
+
+      words = [...words, ...extraWords];
+    }
+
     words = words.slice(0, wordSelected);
   }
 
