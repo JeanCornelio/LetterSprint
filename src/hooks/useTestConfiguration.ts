@@ -6,6 +6,7 @@ import {
   setTestMode,
   setTestNumber,
   setTestPuntuation,
+  setTestSoundEffects,
   setTestTime,
   setTestWords,
 } from "../store/test/slice";
@@ -15,7 +16,7 @@ import { useAppDispatch, useAppSelector } from "./useStore";
 
 export const useTestConfiguration = () => {
 
-  const { mode, time, words, puntuation, number, difficulty } = useAppSelector(
+  const { mode, time, words, puntuation, number, difficulty, soundEffects } = useAppSelector(
     ({ test }) => test
   );
 
@@ -41,6 +42,10 @@ export const useTestConfiguration = () => {
     dispatch(setTestNumber());
   };
 
+  const soundEffectsToggle = () => {
+    dispatch(setTestSoundEffects());
+  };
+
   const setDifficulty = (difficulty: Difficulty) => {
     dispatch(setTestDifficulty(difficulty));
   };
@@ -50,7 +55,7 @@ export const useTestConfiguration = () => {
   }
 
   const resetConfiguration = () =>{
-       dispatch(resetTestConfiguration)
+       dispatch(resetTestConfiguration())
   }
 
   return {
@@ -59,12 +64,14 @@ export const useTestConfiguration = () => {
     setWordQuantity,
     puntuationToggle,
     numberToggle,
+    soundEffectsToggle,
     setDifficulty,
     mode,
     timeActive: time,
     words,
     puntuation,
     number,
+    soundEffects,
     difficulty,
     isPuntuatioActive: puntuation,
     isNumberactive: number,
