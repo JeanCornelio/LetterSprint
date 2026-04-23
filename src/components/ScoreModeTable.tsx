@@ -7,7 +7,7 @@ interface ScoreModeTableProps {
 
 export const ScoreModeTable = ({ records }: ScoreModeTableProps) => {
   return (
-    <div className="bg-sprint-config  rounded-md flex overflow-hidden">
+    <div className="rounded-md flex overflow-hidden bg-sprint-config">
       <div className=" justify-around w-min flex-1 p-5 grid grid-cols-2 md:grid-cols-4 gap-2 ">
         {
           records.map(({ uid, modeSelected, wpm, precision }) => (
@@ -20,7 +20,7 @@ export const ScoreModeTable = ({ records }: ScoreModeTableProps) => {
         }
       </div>
 
-      <div className="text-center  flex justify-center flex-col cursor-pointer hover:opacity-80 hover:bg-white transition">
+      <div className="text-center flex justify-center flex-col cursor-pointer hover:opacity-80 hover:bg-sprint-surface-hover/35 transition">
         <OptionsVerticalIcons className="text-2xl " />
       </div>
     </div>

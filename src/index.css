@@ -2,8 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color-scheme: dark;
+  --sprint-home: 34 40 49;
+  --sprint-config: 29 34 42;
+  --sprint-foreground: 248 250 252;
+  --sprint-muted: 148 163 184;
+  --sprint-border: 71 85 105;
+  --sprint-input-border: 55 65 81;
+  --sprint-ring: 100 116 139;
+  --sprint-surface-hover: 148 163 184;
+  --sprint-switch-off: 107 114 128;
+  --sprint-elevated-border: 34 40 49;
+  --sprint-overlay: 0 0 0;
+  --word-active-bg: 50 126 176;
+  --word-active-text: 203 213 225;
+  --correct-color: 255 255 255;
+  --tooltip-bg: 2 6 23;
+  --tooltip-fg: 248 250 252;
+}
+
 body {
   font-family: "Iosevka Curly", monospace;
+  background-color: rgb(var(--sprint-home));
+  color: rgb(var(--sprint-foreground));
 }
 
 .tooltip {

@@ -34,16 +34,16 @@ export const UsernameModal = () => {
   };
 
   return (
-    <div className="flex bg-[#00000080]  overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-10 justify-center items-center w-full md:inset-0  h-full ">
+    <div className="flex bg-sprint-overlay/50 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-10 justify-center items-center w-full md:inset-0 h-full ">
       <div className="relative p-4 w-full max-w-md max-h-full ">
-        <div className="relative bg-sprint-home rounded-lg animate-fade-in ">
+        <div className="relative rounded-lg animate-fade-in bg-sprint-home text-sprint-foreground">
           <div className="flex items-center justify-between p-4 md:p-5">
-            <h3 className="text-xl font-semibold text-gray-500">
+              <h3 className="text-xl font-semibold text-sprint-muted">
               Account name
             </h3>
             <button
               type="button"
-              className="text-gray-500 bg-transparent  rounded-lg text-sm  ms-auto inline-flex justify-center items-center "
+              className="text-slate-500 bg-transparent rounded-lg text-sm ms-auto inline-flex justify-center items-center"
               data-modal-hide="default-modal">
               <button
                 className="hover:text-sprint-blue"
@@ -86,7 +86,7 @@ export const UsernameModal = () => {
                   The username {username} is not available
                 </h3>
               )}
-              <input
+               <input
                 type="text"
                 placeholder=""
                 defaultValue=""
@@ -100,14 +100,14 @@ export const UsernameModal = () => {
                       await checkUsername(username || ""),
                   },
                 })}
-                className="bg-sprint-config p-2 rounded-md w-full "
-              />
-              <button
-                data-modal-hide="default-modal"
-                type="submit"
-                className=" w-full border border-gray-700 p-2 rounded-md hover:bg-sprint-blue hover:text-white">
-                OK
-              </button>
+                 className="p-2 rounded-md w-full bg-sprint-config text-sprint-foreground placeholder:text-sprint-muted focus:ring-2 focus:ring-sprint-ring/50"
+               />
+               <button
+                 data-modal-hide="default-modal"
+                 type="submit"
+                 className="w-full p-2 rounded-md hover:bg-sprint-blue hover:text-white transition">
+                 OK
+               </button>
             </form>
           </div>
         </div>

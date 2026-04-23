@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { KeyBoardIcon, UserIcon } from "../icons/Icons";
 import { UserOptions } from "./UserOptions";
 import { useCheckingCurrentUser } from "../hooks/useCheckingCurrentUser";
+import { ToolsOptions } from "./ToolsOptions";
 
 export const Nav = () => {
   const { photoURL, username, setLogout, isPending, state } =
@@ -20,6 +21,8 @@ export const Nav = () => {
           {/* <button className="me-auto  p-1 mt-1 rounded-full hover:text-sprint-blue transition">
             <CrownIcon className="text-2xl" />
           </button> */}
+
+          <ToolsOptions />
 
           {state !== "authenticated" ? (
             <Link

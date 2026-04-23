@@ -6,12 +6,14 @@ import { useAuth } from "./useAuth";
 
 export const useUpdateConfig = () => {
 
-    const {mode, timeActive, words, isPuntuatioActive, isNumberactive, difficulty} = useTestConfiguration()
-    const {uid, setMessage} = useAuth()
+    const {mode, timeActive, words, isPuntuatioActive, isNumberactive, difficulty, soundEffects} = useTestConfiguration()
+    const {uid, setMessage, state} = useAuth()
 
   useEffect(() => {
+    if (state !== "authenticated" || !uid) return;
+
   const saveConfig = async () => {
-       const data = await  updateUserSettings(uid, {mode,number:isNumberactive,puntuation:isPuntuatioActive ,time:timeActive, words, difficulty});
+       const data = await  updateUserSettings(uid, {mode,number:isNumberactive,puntuation:isPuntuatioActive ,time:timeActive, words, difficulty, soundEffects});
 
        const {ok, errorMessage} = data
        
@@ -22,7 +24,7 @@ export const useUpdateConfig = () => {
   saveConfig(); 
   
     
-  }, [mode, timeActive, words, isPuntuatioActive, isNumberactive, difficulty])
+  }, [mode, timeActive, words, isPuntuatioActive, isNumberactive, difficulty, soundEffects, uid, state])
 
 
   return {

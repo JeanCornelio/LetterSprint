@@ -4,13 +4,13 @@ import { MODES, TIMES, WORDS } from "../../constants";
 import { MODE, TIME, WORD } from "../../types/Text";
 import { TestInitialState, Difficulty } from "../../interfaces/testConfiguration";
 
-
 const initialState: TestInitialState = {
   time: TIMES["15"],
   mode: MODES["time"], // time | words | quote
   words: WORDS["100"],
   puntuation: false,
   number: false,
+  soundEffects: true,
   difficulty: 'medium',
 };
 
@@ -40,6 +40,10 @@ export const testSlice = createSlice({
       state.number = !state.number;
     },
 
+    setTestSoundEffects: (state) => {
+      state.soundEffects = !state.soundEffects;
+    },
+
     setTestDifficulty: (state, action: PayloadAction<Difficulty>) => {
       state.difficulty = action.payload;
     },
@@ -51,6 +55,7 @@ export const testSlice = createSlice({
       state.words = payload.words;
       state.puntuation = payload.puntuation;
       state.number = payload.number;
+      state.soundEffects = payload.soundEffects ?? true;
       state.difficulty = payload.difficulty || 'medium';
     },
 
@@ -61,6 +66,7 @@ resetTestConfiguration:(state) =>{
       state.words = WORDS["100"];
       state.puntuation = false
       state.number = false
+      state.soundEffects = true
       state.difficulty = 'medium'
     }
 
@@ -74,6 +80,7 @@ export const {
   setTestWords,
   setTestPuntuation,
   setTestNumber,
+  setTestSoundEffects,
   setTestDifficulty,
   setTestConfiguration,
   resetTestConfiguration
