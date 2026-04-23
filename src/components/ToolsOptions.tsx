@@ -2,11 +2,13 @@ import { useRef, useState } from "react";
 import { Button, Dialog, DialogTrigger, Popover } from "react-aria-components";
 import { useTestConfiguration } from "../hooks/useTestConfiguration";
 import { ToolsIcon } from "../icons/Icons";
+import { UI_LABELS } from "../constants/uiLabels";
 
 export const ToolsOptions = () => {
-  const { soundEffects, soundEffectsToggle } = useTestConfiguration();
+  const { soundEffects, soundEffectsToggle, language } = useTestConfiguration();
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const labels = UI_LABELS[language];
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
@@ -22,15 +24,15 @@ export const ToolsOptions = () => {
     <DialogTrigger isOpen={isOpen} onOpenChange={handleOpenChange}>
       <Button
         ref={triggerRef}
-        aria-label="Open tools"
-        className="p-1 rounded-full hover:text-sprint-blue transition">
+        aria-label={labels.openTools}
+        className="p-1 rounded-full hover:text-sprint-blue transition  hidden md:block ">
         <ToolsIcon className="text-2xl" />
       </Button>
 
       <Popover>
-        <Dialog className="rounded-md w-44 overflow-hidden  bg-sprint-config text-sprint-foreground shadow-lg shadow-black/5 ">
+        <Dialog className="rounded-md w-32 overflow-hidden  bg-sprint-config text-sprint-foreground shadow-lg shadow-black/5 ">
           <div className="px-3 py-2 flex items-center justify-between text-sm">
-            <span>Sound</span>
+            <span>{labels.sound}</span>
             <button
               type="button"
               role="switch"
@@ -48,7 +50,6 @@ export const ToolsOptions = () => {
               />
             </button>
           </div>
-
         </Dialog>
       </Popover>
     </DialogTrigger>

@@ -2,7 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { MODES, TIMES, WORDS } from "../../constants";
 import { MODE, TIME, WORD } from "../../types/Text";
-import { TestInitialState, Difficulty } from "../../interfaces/testConfiguration";
+import {
+  TestInitialState,
+  Difficulty,
+  TypingLanguage,
+} from "../../interfaces/testConfiguration";
 
 const initialState: TestInitialState = {
   time: TIMES["15"],
@@ -12,6 +16,7 @@ const initialState: TestInitialState = {
   number: false,
   soundEffects: true,
   difficulty: 'medium',
+  language: 'en',
 };
 
 export const testSlice = createSlice({
@@ -48,6 +53,10 @@ export const testSlice = createSlice({
       state.difficulty = action.payload;
     },
 
+    setTestLanguage: (state, action: PayloadAction<TypingLanguage>) => {
+      state.language = action.payload;
+    },
+
     setTestConfiguration:(state, action: PayloadAction<TestInitialState>) =>{
       const {payload} = action
       state.time = payload.time;
@@ -57,6 +66,7 @@ export const testSlice = createSlice({
       state.number = payload.number;
       state.soundEffects = payload.soundEffects ?? true;
       state.difficulty = payload.difficulty || 'medium';
+      state.language = payload.language || 'en';
     },
 
 resetTestConfiguration:(state) =>{
@@ -68,6 +78,7 @@ resetTestConfiguration:(state) =>{
       state.number = false
       state.soundEffects = true
       state.difficulty = 'medium'
+      state.language = 'en'
     }
 
   },
@@ -82,6 +93,7 @@ export const {
   setTestNumber,
   setTestSoundEffects,
   setTestDifficulty,
+  setTestLanguage,
   setTestConfiguration,
   resetTestConfiguration
 } = testSlice.actions;

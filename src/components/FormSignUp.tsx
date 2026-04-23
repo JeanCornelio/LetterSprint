@@ -3,6 +3,8 @@ import { useAuth } from "../hooks/useAuth";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { useTestConfiguration } from "../hooks/useTestConfiguration";
+import { UI_LABELS } from "../constants/uiLabels";
 
 interface Form {
   email: string;
@@ -29,6 +31,9 @@ export const FormSignUp = ({
   handleFormState,
   onCreateUserWithEmailAndPassword,
 }: FormSignUpProps) => {
+  const { language } = useTestConfiguration();
+  const labels = UI_LABELS[language];
+
   const {
     handleSubmit,
     register,
@@ -55,7 +60,7 @@ export const FormSignUp = ({
     
     try {
       await onCreateUserWithEmailAndPassword({ email, password, username });
-      toast.success("Account created successfully! Please check your email to verify your account.");
+      toast.success(labels.auth.toasts.accountCreated);
       handleFormState("signIn");
     } catch (error) {
       console.error("Error creating account:", error);
@@ -72,33 +77,29 @@ export const FormSignUp = ({
         <div className="">
           {errors.username?.type === "required" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              Username is required, cannot be empty
+              {labels.auth.errors.usernameRequired}
             </h3>
           )}
           {errors.username?.type === "minLength" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              Username cannot be less than 3 characters
+              {labels.auth.errors.usernameMinLength}
             </h3>
           )}
           {errors.username?.type === "maxLength" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              Username cannot be longer than 15 characters
+              {labels.auth.errors.usernameMaxLength}
             </h3>
           )}
           {errors.username?.type === "userNameNotAvailable" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              The username {username} is not available
+              {labels.auth.errors.usernameNotAvailable(username || "")}
             </h3>
           )}
           <input
             autoComplete="off"
             type="text"
             defaultValue=""
-            placeholder="Username"
+            placeholder={labels.auth.usernamePlaceholder}
             {...register("username", {
               required: true,
               minLength: 3,
@@ -113,21 +114,19 @@ export const FormSignUp = ({
         <div>
           {errors.email?.type === "required" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              Email is required, cannot be empty
+              {labels.auth.errors.emailRequired}
             </h3>
           )}
           {errors.email?.type === "pattern" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              Email is not valid
+              {labels.auth.errors.emailInvalid}
             </h3>
           )}
           <input
             autoComplete="off"
             type="email"
             defaultValue=""
-            placeholder="Email@example.com"
+            placeholder={labels.auth.emailPlaceholder}
             {...register("email", {
               required: true,
               pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
@@ -138,15 +137,13 @@ export const FormSignUp = ({
         <div>
           {errors.verifyEmail?.type === "required" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              Email is not valid
+              {labels.auth.errors.emailInvalid}
             </h3>
           )}
 
           {errors.verifyEmail?.type === "emailEqual" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              emails not match
+              {labels.auth.errors.emailsNotMatch}
             </h3>
           )}
 
@@ -154,7 +151,7 @@ export const FormSignUp = ({
             autoComplete="off"
             type="email"
             defaultValue=""
-            placeholder="Verify Email"
+            placeholder={labels.auth.verifyEmailPlaceholder}
             {...register("verifyEmail", {
               required: true,
               validate: {
@@ -167,21 +164,19 @@ export const FormSignUp = ({
         <div>
           {errors.password?.type === "required" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              Password is required
+              {labels.auth.errors.passwordRequired}
             </h3>
           )}
           {errors.password?.type === "minLength" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              Password cannot be less than 6 characters
+              {labels.auth.errors.passwordMinLength}
             </h3>
           )}
           <input
             autoComplete="off"
             type="password"
             defaultValue=""
-            placeholder="Password"
+            placeholder={labels.auth.passwordPlaceholder}
             {...register("password", { required: true, minLength: 6 })}
             className="bg-sprint-config p-4 outline-none rounded-md w-full text-sprint-foreground placeholder:text-sprint-muted focus:ring-2 focus:ring-sprint-ring/50"
           />
@@ -189,21 +184,19 @@ export const FormSignUp = ({
         <div>
           {errors.verifyPassword?.type === "required" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              Password is required
+              {labels.auth.errors.passwordRequired}
             </h3>
           )}
           {errors.verifyPassword?.type === "passwordEqual" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              passwords not match
+              {labels.auth.errors.passwordsNotMatch}
             </h3>
           )}
           <input
             autoComplete="off"
             type="password"
             defaultValue=""
-            placeholder="Verify Password"
+            placeholder={labels.auth.verifyPasswordPlaceholder}
             {...register("verifyPassword", {
               required: true,
               validate: {
@@ -220,7 +213,7 @@ export const FormSignUp = ({
         >
           <span className="flex gap-3 items-center justify-center font-bold ">
             <UserAdd01Icon className="text-xl" />
-            Sign Up
+            {labels.auth.signUp}
           </span>
         </button>
         <button
@@ -229,7 +222,7 @@ export const FormSignUp = ({
           onClick={() => handleFormState("signIn")}
         >
           <BackIcon className="text-xl" />
-          Back
+          {labels.auth.back}
         </button>
       </div>
     </form>

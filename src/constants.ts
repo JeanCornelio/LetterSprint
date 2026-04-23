@@ -22,6 +22,11 @@ export const  WORDS =  {
     50: 50,
     100: 100,
 }
+
+export const LANGUAGES = {
+    en: "English",
+    es: "Español",
+}
     
 export const CORRECT_SOUND = new Audio('src/assets/sounds/correct.mp3')
 export const ERROR_SOUND = new Audio('src/assets/sounds/error.mp3')

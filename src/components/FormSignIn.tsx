@@ -1,5 +1,7 @@
 import { SignInIcon } from "../icons/Icons";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useTestConfiguration } from "../hooks/useTestConfiguration";
+import { UI_LABELS } from "../constants/uiLabels";
 
 interface Form {
   email: string;
@@ -12,6 +14,9 @@ interface FormSignInProps {
 }
 
 export const FormSignIn = ({ handleFormState, onSignIn }: FormSignInProps) => {
+  const { language } = useTestConfiguration();
+  const labels = UI_LABELS[language];
+
   const {
     handleSubmit,
     register,
@@ -32,20 +37,18 @@ export const FormSignIn = ({ handleFormState, onSignIn }: FormSignInProps) => {
         <div>
           {errors.email?.type === "required" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              Email is required, cannot be empty
+              {labels.auth.errors.emailRequired}
             </h3>
           )}
           {errors.email?.type === "pattern" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              {" "}
-              Email is not valid
+              {labels.auth.errors.emailInvalid}
             </h3>
           )}
           <input
             className="p-3 rounded-md w-full bg-sprint-config text-sprint-foreground placeholder:text-sprint-muted focus:outline-none focus:ring-2 focus:ring-sprint-ring/50"
             type="email"
-            placeholder="Email"
+            placeholder={labels.auth.emailPlaceholder}
             {...register("email", {
               required: true,
               pattern: /^\S+@\S+$/i,
@@ -55,13 +58,13 @@ export const FormSignIn = ({ handleFormState, onSignIn }: FormSignInProps) => {
         <div>
           {errors.password?.type === "required" && (
             <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-              password is required
+              {labels.auth.errors.passwordRequired}
             </h3>
           )}
           <input
             className="p-3 rounded-md w-full bg-sprint-config text-sprint-foreground placeholder:text-sprint-muted focus:outline-none focus:ring-2 focus:ring-sprint-ring/50"
             type="password"
-            placeholder="Password"
+            placeholder={labels.auth.passwordPlaceholder}
             {...register("password", { required: true })}
           />
         </div>
@@ -71,16 +74,16 @@ export const FormSignIn = ({ handleFormState, onSignIn }: FormSignInProps) => {
           type="submit">
           <span className="flex gap-3 items-center justify-center font-bold ">
             <SignInIcon className="text-xl " />
-            Sign In
+            {labels.auth.signIn}
           </span>
         </button>
       </form>
       <div className="flex gap-2 mt-4 ">
-        <h3>or</h3>
+        <h3>{labels.auth.or}</h3>
         <button
           className="text-sprint-blue font-bold"
           onClick={() => handleFormState("signUp")}>
-          Sign Up
+          {labels.auth.signUp}
         </button>
       </div>
     </article>

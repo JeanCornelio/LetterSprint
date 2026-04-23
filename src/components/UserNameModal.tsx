@@ -2,6 +2,8 @@ import { CloseIcon } from "../icons/Icons";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAuth } from "../hooks/useAuth";
 import { useEffect } from "react";
+import { useTestConfiguration } from "../hooks/useTestConfiguration";
+import { UI_LABELS } from "../constants/uiLabels";
 
 interface Form {
   username?: string;
@@ -13,6 +15,9 @@ const initialForm = {
 
 export const UsernameModal = () => {
   const { setLogout, createAccountName, checkUsername } = useAuth();
+  const { language } = useTestConfiguration();
+  const labels = UI_LABELS[language];
+
   const {
     handleSubmit,
     register,
@@ -38,8 +43,8 @@ export const UsernameModal = () => {
       <div className="relative p-4 w-full max-w-md max-h-full ">
         <div className="relative rounded-lg animate-fade-in bg-sprint-home text-sprint-foreground">
           <div className="flex items-center justify-between p-4 md:p-5">
-              <h3 className="text-xl font-semibold text-sprint-muted">
-              Account name
+            <h3 className="text-xl font-semibold text-sprint-muted">
+              {labels.auth.accountName}
             </h3>
             <button
               type="button"
@@ -50,7 +55,7 @@ export const UsernameModal = () => {
                 onClick={() => setLogout()}>
                 <CloseIcon />
               </button>
-              <span className="sr-only">Close modal</span>
+              <span className="sr-only">{labels.auth.closeModal}</span>
             </button>
           </div>
 
@@ -60,35 +65,31 @@ export const UsernameModal = () => {
               onSubmit={handleSubmit(onSubmit)}
               className="flex flex-col gap-4">
               <h3 className="text-xs font-semibold">
-                Please enter a username before continuing
+                {labels.auth.enterUsernameBeforeContinue}
               </h3>
               {errors.username?.type === "required" && (
                 <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-                  {" "}
-                  Username is required, cannot be empty
+                  {labels.auth.errors.usernameRequired}
                 </h3>
               )}
               {errors.username?.type === "minLength" && (
                 <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-                  {" "}
-                  Username cannot be less than 3 characters
+                  {labels.auth.errors.usernameMinLength}
                 </h3>
               )}
               {errors.username?.type === "maxLength" && (
                 <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-                  {" "}
-                  Username cannot be longer than 15 characters
+                  {labels.auth.errors.usernameMaxLength}
                 </h3>
               )}
               {errors.username?.type === "userNameNotAvailable" && (
                 <h3 className="text-xs font-semibold text-red-500 opacity-8 mb-2">
-                  {" "}
-                  The username {username} is not available
+                  {labels.auth.errors.usernameNotAvailable(username || "")}
                 </h3>
               )}
-               <input
+              <input
                 type="text"
-                placeholder=""
+                placeholder={labels.auth.usernamePlaceholder}
                 defaultValue=""
                 value={username}
                 {...register("username", {
@@ -100,14 +101,14 @@ export const UsernameModal = () => {
                       await checkUsername(username || ""),
                   },
                 })}
-                 className="p-2 rounded-md w-full bg-sprint-config text-sprint-foreground placeholder:text-sprint-muted focus:ring-2 focus:ring-sprint-ring/50"
-               />
-               <button
-                 data-modal-hide="default-modal"
-                 type="submit"
-                 className="w-full p-2 rounded-md hover:bg-sprint-blue hover:text-white transition">
-                 OK
-               </button>
+                className="p-2 rounded-md w-full bg-sprint-config text-sprint-foreground placeholder:text-sprint-muted focus:ring-2 focus:ring-sprint-ring/50"
+              />
+              <button
+                data-modal-hide="default-modal"
+                type="submit"
+                className="w-full p-2 rounded-md hover:bg-sprint-blue hover:text-white transition">
+                {labels.auth.ok}
+              </button>
             </form>
           </div>
         </div>

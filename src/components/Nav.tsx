@@ -3,10 +3,15 @@ import { KeyBoardIcon, UserIcon } from "../icons/Icons";
 import { UserOptions } from "./UserOptions";
 import { useCheckingCurrentUser } from "../hooks/useCheckingCurrentUser";
 import { ToolsOptions } from "./ToolsOptions";
+import { useTestConfiguration } from "../hooks/useTestConfiguration";
+import { UI_LABELS } from "../constants/uiLabels";
+import { LanguageOptions } from "./LanguageOptions";
 
 export const Nav = () => {
   const { photoURL, username, setLogout, isPending, state } =
     useCheckingCurrentUser();
+  const { language } = useTestConfiguration();
+  const labels = UI_LABELS[language];
 
   return (
     <nav className="flex  py-3 md:py-7 justify-between items-center ">
@@ -18,15 +23,13 @@ export const Nav = () => {
       </Link>
       {!isPending && (
         <div className="flex gap-2 items-center transition animate-fade-in">
-          {/* <button className="me-auto  p-1 mt-1 rounded-full hover:text-sprint-blue transition">
-            <CrownIcon className="text-2xl" />
-          </button> */}
-
           <ToolsOptions />
+          <LanguageOptions />
 
           {state !== "authenticated" ? (
             <Link
               to="/login"
+              aria-label={labels.nav.goToLogin}
               className="  p-1 rounded-full hover:text-sprint-blue transition">
               <UserIcon className="text-2xl" />
             </Link>
