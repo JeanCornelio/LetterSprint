@@ -12,7 +12,7 @@ A modern typing speed test application built with React, TypeScript, and Firebas
 ### Core Functionality
 
 - **Typing Speed Test**: Measure your Words Per Minute (WPM) with standard ISO calculations
-- **Multiple Test Modes**: 
+- **Multiple Test Modes**:
   - Time-based (15, 30, 60, 120 seconds)
   - Word-based (10, 25, 50, 100 words)
 - **Difficulty Levels**:
@@ -46,16 +46,16 @@ A modern typing speed test application built with React, TypeScript, and Firebas
 
 ## Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| React 18 | UI Framework |
-| TypeScript | Type Safety |
-| Redux Toolkit | State Management |
-| React Router DOM | Routing |
+| Technology                 | Purpose                  |
+| -------------------------- | ------------------------ |
+| React 18                   | UI Framework             |
+| TypeScript                 | Type Safety              |
+| Redux Toolkit              | State Management         |
+| React Router DOM           | Routing                  |
 | Firebase (Firestore, Auth) | Backend & Authentication |
-| Tailwind CSS | Styling |
-| React Toastify | Notifications |
-| Vite | Build Tool |
+| Tailwind CSS               | Styling                  |
+| React Toastify             | Notifications            |
+| Vite                       | Build Tool               |
 
 ## Project Structure
 
@@ -139,19 +139,21 @@ LetterSprint/
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 - Firebase project (for authentication and database)
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd LetterSprint
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
@@ -161,6 +163,7 @@ npm install
    - Enable Authentication (Google, GitHub, Email/Password)
    - Enable Firestore Database
    - Create a `.env` file with your Firebase config:
+
 ```env
 VITE_FIREBASE_API_KEY=your_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
@@ -171,6 +174,7 @@ VITE_FIREBASE_APP_ID=your_app_id
 ```
 
 4. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -185,13 +189,13 @@ npm run build
 
 LetterSprint uses industry-standard typing speed calculations:
 
-| Metric | Formula |
-|--------|---------|
-| **Raw WPM** | `(Total Characters Typed / 5) / Minutes` |
-| **Net WPM** | `Raw WPM - (Uncorrected Errors / Minutes)` |
+| Metric       | Formula                                         |
+| ------------ | ----------------------------------------------- |
+| **Raw WPM**  | `(Total Characters Typed / 5) / Minutes`        |
+| **Net WPM**  | `Raw WPM - (Uncorrected Errors / Minutes)`      |
 | **Accuracy** | `(Correct Characters / Total Characters) × 100` |
 
-*Note: 1 word = 5 characters (including spaces) - the international standard*
+_Note: 1 word = 5 characters (including spaces) - the international standard_
 
 ## Roadmap
 
@@ -214,15 +218,8 @@ LetterSprint uses industry-standard typing speed calculations:
 ### Future Enhancements
 
 - [ ] Multi-language support (Spanish, French, etc.)
-- [ ] Leaderboard/global rankings
 - [ ] Theme customization (dark/light mode)
-- [ ] Sound effects toggle
-- [ ] Custom text input
-- [ ] Challenge mode (race against others)
-- [ ] Typing certificates
-- [ ] Export results to CSV
-- [ ] Keyboard shortcuts
-- [ ] Progress charts and graphs
+- [x] Sound effects toggle
 
 ## Contributing
 
