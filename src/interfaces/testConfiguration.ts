@@ -6,5 +6,6 @@ export interface TestInitialState {
   words: number;
   puntuation: boolean; // true or false
   number: boolean; // true or false
+  soundEffects: boolean;
   difficulty: Difficulty;
 }

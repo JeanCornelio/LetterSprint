@@ -89,7 +89,7 @@ export const WritingTestPage = () => {
     handleTimerTime,
     timeSelected,
   } = useTimer();
-  const { mode, words: wordSelected, puntuation, number, difficulty } = useTestConfiguration();
+  const { mode, words: wordSelected, puntuation, number, difficulty, soundEffects } = useTestConfiguration();
   const testContent = useRef(null);
   const { incorrectRepeted, correctRepeted, correct, incorrect, } = lettersStates;
 
@@ -145,12 +145,14 @@ export const WritingTestPage = () => {
   }, [timerState, handleTimerState]);
 
   const playCorrect = () => {
-    const clone = CORRECT_SOUND.cloneNode();
-    clone.play();
+    if (!soundEffects) return;
+    const clone = CORRECT_SOUND.cloneNode() as HTMLAudioElement;
+    void clone.play();
   };
   const playError = () => {
-    const clone = ERROR_SOUND.cloneNode();
-    clone.play();
+    if (!soundEffects) return;
+    const clone = ERROR_SOUND.cloneNode() as HTMLAudioElement;
+    void clone.play();
   };
 
   const rowPosition = (wordPosition: number) => {
@@ -377,7 +379,7 @@ export const WritingTestPage = () => {
     document.addEventListener("keydown", handleKeyDown);
 
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [test, wordPosition, seconds, timerState]);
+  }, [test, wordPosition, seconds, timerState, soundEffects]);
 
   useEffect(() => {
     if (seconds === 0 && test.length > 0 && mode === MODES["time"]) {
@@ -401,7 +403,10 @@ export const WritingTestPage = () => {
   };
 
   const getTetsResult = () => {
-    TIME_OVER.play();
+    if (soundEffects) {
+      const clone = TIME_OVER.cloneNode() as HTMLAudioElement;
+      void clone.play();
+    }
     handleLoading(true); // Loanding
     handleTimerState(TIMER["finished"]);
 
@@ -510,7 +515,7 @@ export const WritingTestPage = () => {
                 />
               ) : (
                 <div
-                  className="w-full flex flex-wrap animate-fade-in text-pretty content-start h-44  overflow-x-visible overflow-y-clip text-gray-600"
+                  className="w-full flex flex-wrap animate-fade-in text-pretty content-start h-44 overflow-x-visible overflow-y-clip text-sprint-muted"
                   ref={testContent}
                 >
                   {test.map(({ id, letters, state }) => (
@@ -533,7 +538,7 @@ export const WritingTestPage = () => {
               )}
             <div className="flex justify-center mt-20">
               <button
-                className="text-xl  text-white"
+                className="text-xl text-sprint-foreground"
                 onClick={() => resestTest()}
               >
                 <Tooltip
@@ -543,7 +548,7 @@ export const WritingTestPage = () => {
                       : "Restar test"
                   }
                 >
-                  <span className="text-white hover:text-sprint-blue transition font-semibold ">
+                  <span className="text-sprint-foreground hover:text-sprint-blue transition font-semibold">
                     <ReloadIcon />
                   </span>
                 </Tooltip>
