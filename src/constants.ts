@@ -1,3 +1,7 @@
+import correctSoundSrc from './assets/sounds/correct.mp3'
+import errorSoundSrc from './assets/sounds/error.mp3'
+import timeOverSoundSrc from './assets/sounds/time_over.mp3'
+
 export const  MODES =  {
     time: 'time',
     words: 'words',
@@ -28,6 +32,6 @@ export const LANGUAGES = {
     es: "Español",
 }
     
-export const CORRECT_SOUND = new Audio('src/assets/sounds/correct.mp3')
-export const ERROR_SOUND = new Audio('src/assets/sounds/error.mp3')
-export const TIME_OVER = new Audio('src/assets/sounds/time_over.mp3')
+export const CORRECT_SOUND = new Audio(correctSoundSrc)
+export const ERROR_SOUND = new Audio(errorSoundSrc)
+export const TIME_OVER = new Audio(timeOverSoundSrc)
